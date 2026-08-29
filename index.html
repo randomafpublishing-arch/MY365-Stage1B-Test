@@ -1,0 +1,1484 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07030b">
+<meta name="my365-engine-version" content="2">
+<meta name="my365-theme-architecture" content="single-engine-multi-theme">
+<meta name="my365-master" content="HAWAIIAN BUILD 8 — COMPLETE 25 THEMES">
+<title>STAGE 1B HTTPS TEST — My 365 Moments — Hawaiian Build 8 — Complete 25 Themes</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+ --gold:#f2d47a;--gold2:#b9872b;--gold3:#6f4b10;--ivory:#fff5d2;
+ --purple:#c24eff;--purple2:#6e20a5;--glass:rgba(7,3,11,.69);--line:rgba(242,212,122,.48);
+}
+html,body{margin:0;min-height:100%;background:#050208;color:var(--ivory);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{overflow-x:hidden}
+button,input,textarea,select{font:inherit}
+button{touch-action:manipulation}
+
+/* BLANK ENGINE: prevent accidental text selection/search popups in the app UI.
+   Form controls remain selectable/editable for captions, search, and settings. */
+.app, .app *{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+.app input,.app textarea,.app select,.app [contenteditable="true"]{
+  -webkit-user-select:text;
+  user-select:text;
+  -webkit-touch-callout:default;
+}
+.app{
+ min-height:100vh;max-width:760px;margin:auto;position:relative;overflow:hidden;
+ background-image:
+   linear-gradient(180deg,rgba(14,2,20,.03),rgba(6,1,10,.10) 58%,rgba(5,1,8,.28)),
+   none;
+ background-size:cover;
+ background-position:center top;
+ background-attachment:fixed;
+}
+
+.scrim{position:fixed;inset:0;max-width:760px;margin:auto;pointer-events:none;z-index:1;background:linear-gradient(180deg,rgba(5,1,9,.08),rgba(5,1,9,.02) 28%,rgba(5,1,9,.12) 72%,rgba(5,1,9,.48))}
+.shell{position:relative;z-index:10;padding:16px 14px calc(102px + env(safe-area-inset-bottom))}
+.brand{text-align:center;padding:16px 52px 10px;position:relative}
+.brand .kicker{font-size:10px;letter-spacing:.28em;color:#e2c26b;text-transform:uppercase;text-shadow:0 1px 9px #000}
+.brand h1{margin:1px 0 0;font-family:Georgia,serif;font-weight:500;font-size:clamp(34px,10vw,58px);line-height:.95;color:#ffeaa0;text-shadow:0 0 5px #fff3,0 0 15px #d59b28,0 3px 4px #000}
+.brand h1 em{display:block;font-size:.72em;font-weight:400;color:#e7b7ff;text-shadow:0 0 12px #b83cff;font-style:italic}
+.top-actions{position:absolute;top:18px;left:10px;right:10px;display:flex;justify-content:space-between;z-index:25}
+.jewel-btn,.gold-btn{
+ border:1px solid #d5ad4f;background:linear-gradient(180deg,rgba(24,12,29,.94),rgba(6,3,9,.94));
+ color:var(--gold);border-radius:14px;box-shadow:inset 0 0 0 1px #fff1,0 0 13px #0009;padding:10px 12px;font-weight:800;
+}
+.jewel-btn{width:42px;height:42px;border-radius:50%;padding:0;font-size:18px;box-shadow:inset 0 0 12px #7c1fa8,0 0 12px #b93df577}
+.view{display:none}.view.active{display:block}
+.calendar-card,.panel{
+ position:relative;background:linear-gradient(180deg,rgba(7,3,10,.91),rgba(3,1,5,.88));
+ border:1px solid #d3a84a;border-radius:24px;padding:12px;
+ box-shadow:0 18px 45px #000b,inset 0 0 28px #9a5c221f,0 0 14px #c7932e33;
+ backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+ overflow:hidden;
+}
+.calendar-card:before,.panel:before{content:"";position:absolute;inset:4px;border:1px solid rgba(246,209,109,.24);border-radius:19px;pointer-events:none}
+.monthbar{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:5px 2px 10px;border-bottom:1px solid var(--line)}
+.monthtitle{text-align:center;font-family:Georgia,serif;color:#ffe394;font-size:clamp(23px,7vw,34px);text-shadow:0 0 10px #c99636}
+.monthbar button{border:0;background:transparent;color:#f2d47a;font-size:36px;line-height:1}
+.week,.days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
+.week{font-size:10px;letter-spacing:.08em;color:#e7b3ff;padding:10px 0 5px;text-shadow:0 0 8px #a22ee2}
+.day{
+ min-height:48px;border:0;border-bottom:1px solid rgba(215,171,66,.11);background:transparent;color:#fff3c9;position:relative;border-radius:10px;
+ font-family:Georgia,serif;font-size:16px;text-shadow:0 1px 3px #000;
+}
+.day:not(.off):active{transform:scale(.96)}
+.day.off{opacity:.22}
+.day.locked{opacity:.25}
+.day.today{box-shadow:inset 0 0 0 1px #d7ad48}
+.day.selected{background:radial-gradient(circle,#7d2db0aa,#39134f99);box-shadow:0 0 12px #c448ff,inset 0 0 0 1px #d278ff;color:#fff}
+.day.has:after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:#e454ff;bottom:4px;left:50%;transform:translateX(-50%);box-shadow:0 0 7px #e454ff}
+.termline{text-align:center;color:#e5d5ac;font-size:11px;margin:10px 0 1px;letter-spacing:.04em}
+.quick-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.gold-btn{border-radius:12px;padding:11px}
+.section-title{margin:0 0 12px;font-family:Georgia,serif;font-size:27px;color:#ffe394;text-align:center}
+.moment-list{display:grid;gap:10px}
+.memory{background:rgba(8,4,12,.72);border:1px solid #6f5626;border-radius:14px;padding:10px;min-height:84px}
+.memory img{width:74px;height:74px;object-fit:cover;border-radius:10px;float:left;margin-right:10px;border:1px solid #b88934}
+.memory b{color:#f5d678;font-family:Georgia,serif}.memory p{color:#eee0c4;font-size:13px;margin:4px 0}
+.memory:after{content:"";display:block;clear:both}
+.searchbox,textarea,select{
+ width:100%;border:1px solid #8f6d2b;background:rgba(4,2,7,.86);color:#fff6dd;border-radius:12px;padding:12px;outline:none
+}
+.searchbox:focus,textarea:focus{border-color:#d65aff;box-shadow:0 0 12px #ad36e755}
+.player-image{width:100%;height:48vh;max-height:430px;object-fit:cover;border-radius:16px;border:1px solid #cfa042;display:none}
+.player-empty{height:240px;display:grid;place-items:center;border:1px dashed #8d6b2b;border-radius:16px;color:#ae9c77;text-align:center}
+.player-meta{text-align:center}.player-meta h3{font-family:Georgia,serif;color:#ffe394;margin:10px 0 4px}.player-meta p{color:#eee0c4;margin:0 0 10px}
+.player-controls{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.player-controls button{padding:11px 4px}
+.speed-row{display:flex;gap:8px;justify-content:center;margin-top:9px}.speed-row button{padding:7px 10px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{border:1px solid #6f5626;background:#08040cbf;border-radius:14px;text-align:center;padding:18px 8px}.stat strong{display:block;font:32px Georgia,serif;color:#ffe394}
+.setting{margin:12px 0}.setting label{display:block;color:#f0dba7;margin-bottom:6px;font-size:13px}
+.swatches{display:flex;gap:9px;flex-wrap:wrap}.swatch{width:34px;height:34px;border-radius:50%;border:2px solid #e6c468;box-shadow:0 0 10px #000}.swatch.active{outline:2px solid #fff;outline-offset:2px}
+.help p{color:#eadfc5;line-height:1.5;font-size:14px}
+.nav{
+ position:fixed;z-index:60;bottom:0;left:0;right:0;max-width:760px;margin:auto;
+ display:grid;grid-template-columns:repeat(5,1fr);background:linear-gradient(180deg,rgba(8,3,12,.92),rgba(3,1,5,.98));
+ border-top:1px solid #cf9f40;padding:7px 4px calc(7px + env(safe-area-inset-bottom));backdrop-filter:blur(8px)
+}
+.nav button{border:0;background:transparent;color:#ad9970;padding:5px 1px;font-size:9px;font-weight:700}.nav button.active{color:#ffe394;text-shadow:0 0 8px #d044ff}
+.nav .ico{display:block;font-size:19px;margin-bottom:3px}
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;justify-content:center;background:#000b}
+.modal.open{display:flex}
+.sheet{width:100%;max-width:760px;max-height:94vh;overflow:auto;background:linear-gradient(180deg,#120818,#060309);border:1px solid #d0a34a;border-radius:26px 26px 0 0;padding:14px 14px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -15px 50px #000}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.sheet-head h2{margin:0;font:25px Georgia,serif;color:#ffe394}
+.photoBox{min-height:220px;border:1px dashed #80612b;border-radius:16px;display:grid;place-items:center;overflow:hidden;background:#050208}
+.photoBox img{display:none;width:100%;height:300px;object-fit:cover}.emptyPhoto{text-align:center;color:#9e8d69;padding:20px}
+.sheet textarea{min-height:100px;margin-top:10px}
+.save-state{text-align:center;font-size:12px;color:#b8aa8d;margin-top:8px}
+.hidden{display:none!important}
+.toast{position:fixed;z-index:150;left:50%;bottom:95px;transform:translateX(-50%);background:#120818e8;color:#ffe394;border:1px solid #b58832;border-radius:999px;padding:9px 15px;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}
+@media(min-width:760px){.app{min-height:100vh;box-shadow:0 0 60px #000}.nav{border-left:1px solid #cf9f40;border-right:1px solid #cf9f40}}
+
+.shell{position:relative;z-index:20;padding:16px 14px calc(102px + env(safe-area-inset-bottom))}
+
+.calendar-card,.panel{
+ position:relative;
+ background:linear-gradient(180deg,rgba(7,3,10,.82),rgba(3,1,5,.78));
+ border:1px solid rgba(242,212,122,.86);
+ border-radius:24px;
+ padding:12px;
+ box-shadow:
+   0 18px 45px rgba(0,0,0,.72),
+   inset 0 0 26px rgba(190,136,39,.10),
+   0 0 12px rgba(220,170,55,.22);
+ backdrop-filter:blur(1.5px);
+ -webkit-backdrop-filter:blur(1.5px);
+ overflow:hidden;
+}
+
+.layer-gold-shimmer{
+ position:fixed;inset:0;max-width:760px;margin:auto;z-index:38;pointer-events:none;
+}
+.layer-gold-shimmer:before{
+ content:"";
+ position:absolute;inset:8px;
+ border:1px solid rgba(247,208,101,.82);
+ border-radius:22px;
+ box-shadow:
+   inset 0 0 0 1px rgba(255,246,197,.18),
+   0 0 14px rgba(255,190,49,.20);
+ background:
+   linear-gradient(105deg,
+     transparent 0%,
+     transparent 41%,
+     rgba(255,247,196,.08) 46%,
+     rgba(255,225,132,.34) 49%,
+     rgba(255,255,255,.22) 50%,
+     rgba(255,213,102,.28) 52%,
+     transparent 57%,
+     transparent 100%);
+ background-size:220% 100%;
+ animation:goldSweep 6s linear infinite;
+}
+.layer-gold-shimmer:after{
+ content:"◆";
+ position:absolute;top:5px;left:50%;transform:translateX(-50%);
+ color:#d454ff;
+ text-shadow:0 0 8px #d454ff,0 0 14px #f2d47a;
+ font-size:15px;
+ background:rgba(5,2,8,.72);
+ padding:0 10px;
+}
+@keyframes goldSweep{0%{background-position:130% 0}100%{background-position:-130% 0}}
+
+.brand h1,.monthtitle,.section-title{
+ background:linear-gradient(90deg,#a66b13,#ffeaa0 22%,#fff8ce 45%,#f0c75e 68%,#a86d16);
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+ text-shadow:0 0 8px rgba(235,182,62,.16),0 2px 2px rgba(0,0,0,.75);
+}
+
+.gold-btn,.jewel-btn{
+ position:relative;overflow:hidden;
+ background:linear-gradient(180deg,rgba(24,12,29,.94),rgba(6,3,9,.94));
+ border:1px solid #d8b45b;
+}
+.gold-btn:before,.jewel-btn:before{
+ content:"";position:absolute;inset:0;
+ background:linear-gradient(110deg,transparent 0 38%,rgba(255,246,198,.26) 47%,rgba(255,255,255,.34) 50%,rgba(255,232,147,.18) 54%,transparent 62%);
+ transform:translateX(-130%);
+ animation:buttonShine 5.5s ease-in-out infinite;
+ pointer-events:none;
+}
+@keyframes buttonShine{0%,62%{transform:translateX(-130%)}80%,100%{transform:translateX(130%)}}
+
+/* BUTTON FIX BUILD — working customer accent color */
+:root{--accent:#c24eff}
+.day.selected{
+  box-shadow:0 0 13px var(--accent),inset 0 0 0 1px var(--accent)!important;
+}
+.day.has:after{
+  background:var(--accent)!important;
+  box-shadow:0 0 7px var(--accent)!important;
+}
+.nav button.active{
+  text-shadow:0 0 10px var(--accent)!important;
+}
+.jewel-btn{
+  box-shadow:inset 0 0 12px color-mix(in srgb,var(--accent) 48%,transparent),0 0 12px color-mix(in srgb,var(--accent) 42%,transparent)!important;
+}
+.swatch.active{
+  outline:2px solid #fff;
+  outline-offset:2px;
+  box-shadow:0 0 14px var(--accent);
+}
+#settingsModal .sheet{max-height:70vh}
+
+
+/* DAYLIGHT BRIGHTNESS PASS — interface tuning, functions unchanged */
+.scrim{
+  background:linear-gradient(
+    180deg,
+    rgba(20,3,24,.015),
+    rgba(20,3,24,0) 34%,
+    rgba(15,2,20,.025) 72%,
+    rgba(8,1,12,.14)
+  ) !important;
+}
+.calendar-card,.panel{
+  background:linear-gradient(
+    180deg,
+    rgba(18,8,24,.64),
+    rgba(7,3,11,.59)
+  ) !important;
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.48),
+    inset 0 0 26px rgba(255,214,112,.09),
+    0 0 15px rgba(236,185,67,.26) !important;
+}
+.brand h1{
+  filter:brightness(1.18) saturate(1.12);
+}
+.brand .kicker,.monthtitle,.termline{
+  filter:brightness(1.18);
+}
+.gold-btn,.jewel-btn{
+  background:linear-gradient(180deg,rgba(48,22,54,.83),rgba(16,7,22,.83)) !important;
+  border-color:#f0ca6a !important;
+  color:#ffe89b !important;
+}
+.day{
+  color:#fff8df !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.62);
+}
+.week{
+  color:#f0c7ff !important;
+}
+.nav{
+  background:linear-gradient(180deg,rgba(24,9,29,.78),rgba(8,3,12,.88)) !important;
+}
+
+.app{
+  background-blend-mode:screen,normal !important;
+  filter:none !important;
+}
+
+
+/* FULLY TRANSLUCENT CALENDAR PASS — functions unchanged */
+.calendar-card{
+  background:rgba(7,3,11,.18) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  box-shadow:
+    0 10px 26px rgba(0,0,0,.18),
+    inset 0 0 18px rgba(255,220,130,.035),
+    0 0 12px rgba(236,185,67,.20) !important;
+}
+.calendar-card:before{
+  background:transparent !important;
+}
+.monthbar{
+  background:rgba(5,2,9,.08) !important;
+}
+.day{
+  background:transparent !important;
+}
+.day.selected{
+  background:color-mix(in srgb,var(--accent) 22%,transparent) !important;
+}
+
+
+/* Calendar photo thumbnails — only change in this build */
+.day.has-photo{
+  overflow:hidden;
+  color:#fff !important;
+  text-shadow:0 2px 4px rgba(0,0,0,.95),0 0 3px rgba(0,0,0,.9) !important;
+  box-shadow:inset 0 0 0 1px rgba(241,207,112,.28);
+}
+.day.has-photo span{
+  position:relative;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:100%;
+  min-height:48px;
+  font-weight:700;
+}
+.day.has-photo.selected{
+  box-shadow:0 0 13px var(--accent),inset 0 0 0 2px var(--accent) !important;
+}
+
+
+/* FIRST-OPEN PRIVACY / HOW THIS WORKS POPUP */
+#privacyWelcome{
+  position:fixed;inset:0;z-index:9999;
+  display:none;align-items:center;justify-content:center;
+  padding:22px;
+  background:rgba(4,1,7,.72);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+#privacyWelcome.open{display:flex}
+#privacyWelcome .welcome-card{
+  width:min(92vw,560px);
+  max-height:86vh;overflow:auto;
+  padding:24px 20px;
+  border:1px solid #e4c166;
+  border-radius:24px;
+  background:linear-gradient(180deg,rgba(31,11,37,.97),rgba(8,3,12,.98));
+  box-shadow:0 0 26px rgba(222,176,62,.28),inset 0 0 24px rgba(194,78,255,.10);
+  color:#fff8df;
+  text-align:center;
+}
+#privacyWelcome h2{margin:0 0 14px;color:#ffe392;font-size:30px}
+#privacyWelcome p{font-size:16px;line-height:1.48;margin:10px 0}
+#privacyWelcome .privacy-strong{color:#ffe392;font-weight:800}
+#privacyWelcome .dont-show{
+  display:flex;gap:10px;align-items:center;justify-content:center;
+  margin:18px 0 14px;font-size:15px;
+}
+#privacyWelcome .dont-show input{width:20px;height:20px}
+#privacyWelcome .got-it{width:100%;min-height:54px;font-size:18px}
+
+
+/* =========================================================
+   MY365 MASTER THEME ENGINE v2
+   Functional engine stays shared. Themes change visuals only.
+   ========================================================= */
+:root{
+  --my365-theme-accent:#c24eff;
+  --my365-theme-gold:#f2d47a;
+  --my365-theme-gold2:#b9872b;
+  --my365-theme-ivory:#fff5d2;
+  --my365-theme-panel-alpha:.18;
+  --my365-theme-bg-position:center top;
+}
+body[data-my365-theme] .app{
+  background-position:var(--my365-theme-bg-position) !important;
+}
+body[data-my365-theme] .day.selected{
+  box-shadow:0 0 13px var(--my365-theme-accent),inset 0 0 0 1px var(--my365-theme-accent) !important;
+}
+body[data-my365-theme] .day.has:after{
+  background:var(--my365-theme-accent) !important;
+  box-shadow:0 0 7px var(--my365-theme-accent) !important;
+}
+body[data-my365-theme] .nav button.active{
+  text-shadow:0 0 10px var(--my365-theme-accent) !important;
+}
+
+
+/* =========================================================
+   MY365 THEME LIBRARY v1 — CUSTOMER INTERFACE
+   Engine/memories/functions unchanged.
+   ========================================================= */
+#themeLibraryModal{
+  position:fixed;inset:0;z-index:10020;display:none;
+  align-items:flex-end;justify-content:center;
+  background:rgba(3,1,5,.72);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+#themeLibraryModal.open{display:flex}
+.theme-library-card{
+  width:min(100%,620px);max-height:88vh;overflow:auto;
+  border:1px solid rgba(242,205,104,.92);
+  border-radius:26px 26px 0 0;
+  padding:20px 16px 28px;
+  background:linear-gradient(180deg,rgba(26,10,31,.98),rgba(7,3,10,.99));
+  box-shadow:0 -10px 35px rgba(0,0,0,.55),0 0 22px rgba(226,181,62,.18);
+}
+.theme-library-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.theme-library-head h2{margin:0;color:#ffe293;font-size:27px}
+.theme-library-close{min-width:46px}
+.theme-library-sub{margin:8px 0 16px;color:#fff1c6;font-size:14px;line-height:1.4}
+.theme-collection-title{
+  margin:18px 0 10px;color:#f6d475;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;font-size:13px;
+}
+.theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.theme-card{
+  min-height:112px;border:1px solid rgba(238,197,83,.68);border-radius:18px;
+  padding:14px 12px;display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(0,0,0,.28));
+  color:#fff7db;text-align:left;box-shadow:inset 0 0 18px rgba(255,219,113,.035);
+}
+.theme-card strong{font-size:17px;color:#ffe29a}
+.theme-card small{margin-top:5px;opacity:.82}
+.theme-card.active{
+  border-color:var(--my365-theme-accent);
+  box-shadow:0 0 15px var(--my365-theme-accent),inset 0 0 0 1px var(--my365-theme-accent);
+}
+.theme-card.locked-theme{opacity:.48}
+
+
+/* Engine6 temporary direct theme buttons are retained internally as fallback,
+   but customer now uses Theme Library. */
+#themeSetting .quick-row{display:none !important}
+#openThemeLibrary{width:100%}
+
+
+/* THEME LIBRARY v2 — VISUAL PREVIEW CARDS */
+.theme-card{
+  min-height:172px !important;
+  position:relative;overflow:hidden;
+  justify-content:flex-end !important;
+  background-size:cover !important;
+  background-position:center !important;
+  isolation:isolate;
+}
+.theme-card::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(5,2,7,.03) 25%,rgba(5,2,7,.90) 100%);
+}
+.theme-card strong,.theme-card small{
+  position:relative;z-index:1;
+  text-shadow:0 2px 7px rgba(0,0,0,.9);
+}
+
+
+.theme-card.locked-theme{display:none !important}
+
+
+/* =========================================================
+   MY365 BLANK ENGINE — NO THEME ARTWORK
+   Core calendar/interface/functions only.
+   Theme artwork is added later as separate standardized layers.
+   ========================================================= */
+.app{background:#050208 !important;background-image:none !important;}
+body[data-my365-theme="blank_base"] .brand .kicker::after{content:"" !important;}
+
+
+.library-theme[data-library-theme="blank_base"]{background:linear-gradient(180deg,#141016,#080609) !important;}
+
+/* HAWAIIAN BUILD 2 — reliable dedicated artwork layer */
+.my365-theme-art{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+  z-index:0;
+  pointer-events:none;
+  display:none;
+}
+.app>.scrim,.app>.shell,.app>.layer-gold-shimmer{position:relative;z-index:1}
+body[data-my365-theme^="hawaiian_"] .my365-theme-art,
+body[data-my365-theme^="dog_"] .my365-theme-art,
+body[data-my365-theme^="country_"] .my365-theme-art,
+body[data-my365-theme^="armed_forces_"] .my365-theme-art,
+body[data-my365-theme^="zodiac_celestial_"] .my365-theme-art{display:block}
+body[data-my365-theme^="hawaiian_"] .app,
+body[data-my365-theme^="dog_"] .app,
+body[data-my365-theme^="country_"] .app,
+body[data-my365-theme^="armed_forces_"] .app,
+body[data-my365-theme^="zodiac_celestial_"] .app{
+  background:#050208 !important;
+  background-image:none !important;
+}
+body[data-my365-theme^="hawaiian_"] .scrim,
+body[data-my365-theme^="dog_"] .scrim,
+body[data-my365-theme^="country_"] .scrim,
+body[data-my365-theme^="armed_forces_"] .scrim,
+body[data-my365-theme^="zodiac_celestial_"] .scrim{
+  background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.06) 35%,rgba(0,0,0,.28));
+}
+body[data-my365-theme^="hawaiian_"] .calendar-card{
+  background:linear-gradient(180deg,rgba(5,5,8,.56),rgba(5,5,8,.44)) !important;
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  border-color:rgba(242,212,122,.62) !important;
+}
+.library-theme[data-library-theme="hawaiian_iwa"]{
+  background-size:cover !important;
+  background-position:center center !important;
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+<img id="my365ThemeArt" class="my365-theme-art" src="" alt="" aria-hidden="true">
+<div class="layer-gold-shimmer" aria-hidden="true"></div>
+<div class="scrim"></div>
+<div class="shell">
+  <div class="top-actions"><span></span><button class="jewel-btn" id="settingsTop" title="Settings">⚙</button></div>
+  <header class="brand"><div class="kicker">Random AF Publishing</div><h1>My 365 <em>Moments</em></h1></header>
+
+  <section id="calendarView" class="view active">
+    <div class="calendar-card">
+      <div class="monthbar"><button id="prevMonth">‹</button><div id="monthTitle" class="monthtitle"></div><button id="nextMonth">›</button></div>
+      <div class="week"><div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div></div>
+      <div id="days" class="days"></div>
+      <div id="termLine" class="termline"></div>
+      <div class="quick-row"><button class="gold-btn" id="todayBtn">TODAY</button><button class="gold-btn" id="openTodayBtn">+ TODAY'S MOMENT</button></div>
+    </div>
+  </section>
+
+  <section id="momentsView" class="view"><div class="panel"><h2 class="section-title">My Moments</h2><div id="momentsList" class="moment-list"></div></div></section>
+
+  <section id="playView" class="view"><div class="panel"><h2 class="section-title">Play My Year</h2>
+    <img id="playerImage" class="player-image"><div id="playerEmpty" class="player-empty">Add photos to your days and they will appear here.</div>
+    <div class="player-meta"><h3 id="playerDate"></h3><p id="playerCaption"></p></div>
+    <div class="player-controls"><button class="gold-btn" id="playerPrev">◀</button><button class="gold-btn" id="playerPlay">▶</button><button class="gold-btn" id="playerNext">▶|</button><button class="gold-btn" id="playerRandom">⤨</button></div>
+    <div class="speed-row"><button class="gold-btn speed" data-speed="3000">1×</button><button class="gold-btn speed" data-speed="1800">1.5×</button><button class="gold-btn speed" data-speed="1000">2×</button></div>
+
+    <div class="quick-row" style="margin-top:10px">
+      <button class="gold-btn" id="addMusicBtn">ADD MUSIC</button>
+      <button class="gold-btn hidden" id="removeMusicBtn">REMOVE MUSIC</button>
+    </div>
+    <input id="musicInput" type="file" accept="audio/*" hidden>
+    <audio id="yearAudio" preload="metadata"></audio>
+
+  </div></section>
+
+  <section id="searchView" class="view"><div class="panel"><h2 class="section-title">Search</h2><input id="searchBox" class="searchbox" placeholder="Search captions or dates..."><div id="searchList" class="moment-list" style="margin-top:10px"></div></div></section>
+
+  <section id="moreView" class="view"><div class="panel"><h2 class="section-title">More</h2>
+    <div class="stats"><div class="stat"><strong id="statDays">0</strong>Saved Days</div><div class="stat"><strong id="statPhotos">0</strong>Photos</div><div class="stat"><strong id="statCaptions">0</strong>Captions</div><div class="stat"><strong id="statRemain">365</strong>Days Remaining</div></div>
+    <div class="quick-row"><button class="gold-btn" id="reopenPrivacy">HOW THIS WORKS</button></div>
+<div class="quick-row"><button class="gold-btn" id="backupBtn">BACKUP</button><button class="gold-btn" id="restoreBtn">RESTORE</button></div>
+    <input type="file" id="restoreInput" accept=".json,application/json" hidden>
+    
+    <div class="help"><p><b>How it works:</b> Tap any available date to open that day's Moment. Add or change one photo, write a caption, and it autosaves locally on this device. Backup regularly so your year can be restored if needed.</p><p>Your year starts the first time this calendar is opened and runs for 365 days. Changing the visual accent does not change your saved Moments.</p></div>
+  </div></section>
+</div>
+
+<nav class="nav">
+ <button class="active" data-view="calendarView"><span class="ico">▦</span>CALENDAR</button>
+ <button data-view="momentsView"><span class="ico">♥</span>MOMENTS</button>
+ <button data-view="playView"><span class="ico">▶</span>PLAY YEAR</button>
+ <button data-view="searchView"><span class="ico">⌕</span>SEARCH</button>
+ <button data-view="moreView"><span class="ico">✦</span>MORE</button>
+</nav>
+
+<div id="momentModal" class="modal">
+ <div class="sheet">
+  <div class="sheet-head"><button class="jewel-btn" id="closeMoment">×</button><h2 id="momentDate"></h2><button class="jewel-btn" id="removeMoment" title="Clear day">⌫</button></div>
+  <div class="photoBox"><img id="momentPhoto"><div id="emptyPhoto" class="emptyPhoto">Tap below to add a photo for this day.</div></div>
+  <div class="quick-row"><button class="gold-btn" id="addPhotoBtn">ADD / CHANGE PHOTO</button><button class="gold-btn" id="removePhotoBtn">REMOVE PHOTO</button></div>
+  <input id="photoInput" type="file" accept="image/*" hidden>
+  <textarea id="caption" placeholder="Write the memory you want to keep..."></textarea>
+  <div id="saveState" class="save-state">Autosave is ON.</div>
+ </div>
+</div>
+
+<div id="settingsModal" class="modal">
+ <div class="sheet">
+  <div class="sheet-head">
+   <button class="jewel-btn" id="closeSettings">×</button>
+   <h2>Settings</h2>
+   <span style="width:42px"></span>
+  </div>
+
+  
+  <div class="setting" id="themeSetting">
+   <label>Theme</label>
+   <button class="gold-btn" id="openThemeLibrary">OPEN THEME LIBRARY</button>
+   <div class="quick-row"><button class="gold-btn theme-choice" data-theme-choice="blank_base">BLANK</button></div>
+   <div id="activeThemeName" class="save-state" style="margin-top:8px"></div>
+  </div>
+
+<div class="setting">
+   <label>Accent Color</label>
+   <div class="swatches" id="settingsSwatches">
+    <button class="swatch" data-accent="#c24eff" style="background:#c24eff" aria-label="Purple"></button>
+    <button class="swatch" data-accent="#f255a8" style="background:#f255a8" aria-label="Pink"></button>
+    <button class="swatch" data-accent="#43b7ff" style="background:#43b7ff" aria-label="Blue"></button>
+    <button class="swatch" data-accent="#42e0c0" style="background:#42e0c0" aria-label="Teal"></button>
+    <button class="swatch" data-accent="#f2d47a" style="background:#f2d47a" aria-label="Gold"></button>
+   </div>
+  </div>
+
+  <div class="help">
+   <p><b>Settings</b> changes the look of MY365. Your saved photos, captions, and Moments stay the same.</p>
+  </div>
+ </div>
+</div>
+
+
+<div id="privacyWelcome" role="dialog" aria-modal="true" aria-labelledby="privacyWelcomeTitle">
+ <div class="welcome-card">
+  <h2 id="privacyWelcomeTitle">Your Memories Stay Yours</h2>
+  <p>Your photos, captions, music, and memories are stored locally on your device.</p>
+  <p class="privacy-strong">Random AF Publishing does not receive, view, collect, or store your personal MY365 content.</p>
+  <p>Because we do not store your memories for you, you are responsible for keeping your backup safe. Clearing browser/app data, deleting stored MY365 data, or losing your device may result in lost memories.</p>
+  <p>MY365 is for your personal use. You can reopen this information anytime from <b>More → How This Works</b>.</p>
+  <label class="dont-show"><input type="checkbox" id="privacyDontShow"> Don’t show this again</label>
+  <button class="gold-btn got-it" id="privacyGotIt">GOT IT</button>
+ </div>
+</div>
+
+
+<div id="themeLibraryModal" role="dialog" aria-modal="true" aria-labelledby="themeLibraryTitle">
+ <div class="theme-library-card">
+  <div class="theme-library-head">
+   <h2 id="themeLibraryTitle">Theme Library</h2>
+   <button class="gold-btn theme-library-close" id="closeThemeLibrary">✕</button>
+  </div>
+  <p class="theme-library-sub">Change your look anytime. Your dates, photos, captions, memories, music, and progress stay with you.</p>
+
+  <div class="theme-collection-title">Engine Base</div>
+  <div class="theme-grid">
+   
+   <button class="theme-card library-theme" data-library-theme="hawaiian_iwa">
+    <strong>ʻIwa Bird</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+  </div>
+  <div class="theme-collection-title">Dog Luxury Collection</div>
+  <div class="theme-grid">
+<button class="theme-card library-theme" data-library-theme="dog_golden_retriever"><strong>Golden Retriever</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_aries"><strong>Aries</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+  </div>
+ </div>
+</div>
+
+<div id="toast" class="toast"></div>
+</div>
+
+<script>
+(()=>{
+'use strict';
+const META_KEY='my365_master_meta_v1';
+const ENTRY_KEY='my365_master_entries_v1';
+let meta, entries={};
+try{meta=JSON.parse(localStorage.getItem(META_KEY)||'null')}catch(e){}
+if(!meta){meta={startDate:new Date().toISOString().slice(0,10),accent:'#c24eff'};localStorage.setItem(META_KEY,JSON.stringify(meta))}
+try{entries=JSON.parse(localStorage.getItem(ENTRY_KEY)||'{}')||{}}catch(e){entries={}}
+document.documentElement.style.setProperty('--purple',meta.accent||'#c24eff');document.documentElement.style.setProperty('--accent',meta.accent||'#c24eff');
+
+
+/* =========================================================
+   MY365 MASTER THEME ENGINE v2
+   One app engine. Unlimited visual theme definitions.
+   Customer memories remain in the same shared data store.
+   ========================================================= */
+const MY365_THEME_KEY='my365_selected_theme_v2';
+
+/*
+  IMPORTANT:
+  Add future customer themes here.
+  A theme can override only what it needs.
+  Functional code must NOT be copied into a theme.
+*/
+const MY365_THEMES={
+  blank_base:{
+    id:'blank_base',
+    name:'BLANK',
+    accent:meta.accent||'#c24eff',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_iwa:{
+    id:'hawaiian_iwa',
+    name:'ʻIwa Bird',
+    collection:'Hawaiian Luxury',
+    accent:'#d9ad3b',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_puakenikeni:{
+    id:'hawaiian_puakenikeni',
+    name:'Puakenikeni',
+    collection:'Hawaiian Luxury',
+    accent:'#f0dfb0',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_kalo:{
+    id:'hawaiian_kalo',
+    name:'Kalo / Taro',
+    collection:'Hawaiian Luxury',
+    accent:'#63b77b',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_ahuula:{
+    id:'hawaiian_ahuula',
+    name:'ʻAhuʻula / Hawaiian Feather Cloak',
+    collection:'Hawaiian Luxury',
+    accent:'#d54b3e',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_lehua:{
+    id:'hawaiian_lehua',
+    name:'Lehua Blossoms',
+    collection:'Hawaiian Luxury',
+    accent:'#d93c42',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_fish_hooks:{
+    id:'hawaiian_fish_hooks',
+    name:'Fish Scales + Fish Hooks',
+    collection:'Hawaiian Luxury',
+    accent:'#35b8b1',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_kapa:{
+    id:'hawaiian_kapa',
+    name:'Kapa / Tapa',
+    collection:'Hawaiian Luxury',
+    accent:'#c58b52',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_hula:{
+    id:'hawaiian_hula',
+    name:'Hula',
+    collection:'Hawaiian Luxury',
+    accent:'#708b54',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_tahitian:{
+    id:'hawaiian_tahitian',
+    name:'Tahitian',
+    collection:'Hawaiian Luxury',
+    accent:'#c93638',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_pohaku:{
+    id:'hawaiian_pohaku',
+    name:'Pōhaku Kuʻi ʻAi',
+    collection:'Hawaiian Luxury',
+    accent:'#8b8178',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_hae:{
+    id:'hawaiian_hae',
+    name:'Hae Hawaiʻi',
+    collection:'Hawaiian Luxury',
+    accent:'#4169b2',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_ferns:{
+    id:'hawaiian_ferns',
+    name:'Ferns',
+    collection:'Hawaiian Luxury',
+    accent:'#4f9961',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_lauhala:{
+    id:'hawaiian_lauhala',
+    name:'Lauhala',
+    collection:'Hawaiian Luxury',
+    accent:'#c89450',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_ipu:{
+    id:'hawaiian_ipu',
+    name:'Ipu / Hawaiian Gourd',
+    collection:'Hawaiian Luxury',
+    accent:'#b97b3e',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_awapuhi:{
+    id:'hawaiian_awapuhi',
+    name:'ʻAwapuhi',
+    collection:'Hawaiian Luxury',
+    accent:'#c74747',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_weapons:{
+    id:'hawaiian_weapons',
+    name:'Hawaiian Weapons',
+    collection:'Hawaiian Luxury',
+    accent:'#8a7047',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_upena:{
+    id:'hawaiian_upena',
+    name:'ʻUpena',
+    collection:'Hawaiian Luxury',
+    accent:'#35aeb5',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_spearfishing:{
+    id:'hawaiian_spearfishing',
+    name:'Spearfishing',
+    collection:'Hawaiian Luxury',
+    accent:'#258ca8',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_hokulea:{
+    id:'hawaiian_hokulea',
+    name:'Hōkūleʻa',
+    collection:'Hawaiian Luxury',
+    accent:'#315c94',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_boar_jaw:{
+    id:'hawaiian_boar_jaw',
+    name:'Boar Jaw',
+    collection:'Hawaiian Luxury',
+    accent:'#817158',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_opihi:{
+    id:'hawaiian_opihi',
+    name:'ʻOpihi',
+    collection:'Hawaiian Luxury',
+    accent:'#5576a9',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_quilt:{
+    id:'hawaiian_quilt',
+    name:'Hawaiian Quilt Patterns',
+    collection:'Hawaiian Luxury',
+    accent:'#8b3548',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_pu:{
+    id:'hawaiian_pu',
+    name:'Pū / Conch Shell',
+    collection:'Hawaiian Luxury',
+    accent:'#7d5aa6',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_hammah:{
+    id:'hawaiian_hammah',
+    name:'HAMMAH',
+    collection:'Hawaiian Luxury',
+    accent:'#b99a35',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_hula_instruments:{
+    id:'hawaiian_hula_instruments',
+    name:'Hula Instruments',
+    collection:'Hawaiian Luxury',
+    accent:'#a86f39',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  dog_golden_retriever:{id:'dog_golden_retriever',name:'Golden Retriever',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_miniature_pinscher:{id:'dog_miniature_pinscher',name:'Miniature Pinscher',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_red_labrador:{id:'dog_red_labrador',name:'Red Labrador — Blue Eyes',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_rottweiler:{id:'dog_rottweiler',name:'Rottweiler — Golden Eyes',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_german_shepherd:{id:'dog_german_shepherd',name:'German Shepherd',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_blue_pitbull:{id:'dog_blue_pitbull',name:'Blue Pitbull — White Eyes',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_cane_corso:{id:'dog_cane_corso',name:'Cane Corso — Gray Eyes',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_black_bullmastiff:{id:'dog_black_bullmastiff',name:'Black Bullmastiff — Blue Eyes',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_chocolate_doberman:{id:'dog_chocolate_doberman',name:'Chocolate Doberman',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_alaskan_malamute:{id:'dog_alaskan_malamute',name:'Alaskan Malamute',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_siberian_husky:{id:'dog_siberian_husky',name:'Siberian Husky',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_great_dane:{id:'dog_great_dane',name:'Great Dane',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_belgian_malinois:{id:'dog_belgian_malinois',name:'Belgian Malinois',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_american_bully:{id:'dog_american_bully',name:'American Bully',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_boxer:{id:'dog_boxer',name:'Boxer',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_akita:{id:'dog_akita',name:'Akita',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_great_pyrenees:{id:'dog_great_pyrenees',name:'Great Pyrenees',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_dalmatian:{id:'dog_dalmatian',name:'Dalmatian',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_saint_bernard:{id:'dog_saint_bernard',name:'Saint Bernard',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_bernese:{id:'dog_bernese',name:'Bernese Mountain Dog',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_english_bulldog:{id:'dog_english_bulldog',name:'English Bulldog',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_australian_shepherd:{id:'dog_australian_shepherd',name:'Australian Shepherd',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_pomeranian:{id:'dog_pomeranian',name:'Pomeranian',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_corgi:{id:'dog_corgi',name:'Corgi',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_newfoundland:{id:'dog_newfoundland',name:'Newfoundland',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_luxury_estate:{id:'country_luxury_estate',name:"Country Luxury Estate",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_golden_estate:{id:'country_golden_estate',name:"Golden Country Estate",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_midnight_leather_boots:{id:'country_midnight_leather_boots',name:"Midnight Leather Boots",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_turquoise_tooled_leather:{id:'country_turquoise_tooled_leather',name:"Turquoise & Tooled Leather",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_pearl_western_saddle:{id:'country_pearl_western_saddle',name:"Pearl Western Saddle",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_ruby_western_buckle:{id:'country_ruby_western_buckle',name:"Ruby Western Buckle",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_sage_leather_gear:{id:'country_sage_leather_gear',name:"Sage Leather Gear",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_copper_spurs_leather:{id:'country_copper_spurs_leather',name:"Copper Spurs & Leather",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_rustic_guitar_leather:{id:'country_rustic_guitar_leather',name:"Rustic Guitar & Leather",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_silver_horseshoe:{id:'country_silver_horseshoe',name:"Silver Horseshoe",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_denim_leather:{id:'country_denim_leather',name:"Denim & Leather",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_emerald_western_trunk:{id:'country_emerald_western_trunk',name:"Emerald Western Trunk",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_mountain_ranch_overlook:{id:'country_mountain_ranch_overlook',name:"Mountain Ranch Overlook",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_porch_sunset:{id:'country_porch_sunset',name:"Country Porch Sunset",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_rainy_barn_door:{id:'country_rainy_barn_door',name:"Rainy Country Barn Door",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_music_porch:{id:'country_music_porch',name:"Country Music Porch",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_cowboy_fence_blue_hour:{id:'country_cowboy_fence_blue_hour',name:"Cowboy Fence at Blue Hour",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_desert_ranch_sunrise:{id:'country_desert_ranch_sunrise',name:"Desert Ranch Sunrise",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_mountain_cowboy_morning:{id:'country_mountain_cowboy_morning',name:"Mountain Cowboy Morning",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_texas_longhorn:{id:'country_texas_longhorn',name:"Texas Longhorn",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_canyon_ranch_horse:{id:'country_canyon_ranch_horse',name:"Canyon Ranch Horse",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_bull_cowboy_ranch_gear:{id:'country_bull_cowboy_ranch_gear',name:"Bull & Cowboy Ranch Gear",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_horse_cowboy_tack:{id:'country_horse_cowboy_tack',name:"Horse & Cowboy Tack",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_black_horse_stable:{id:'country_black_horse_stable',name:"Black Horse at the Stable",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_rafp_black_tie_cowboy:{id:'country_rafp_black_tie_cowboy',name:"RAFP Black-Tie Cowboy Finale",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_army_obsidian_field_gear:{id:'armed_forces_army_obsidian_field_gear',name:"Army Obsidian Field Gear",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_navy_carrier_blue_hour:{id:'armed_forces_navy_carrier_blue_hour',name:"Navy Carrier at Blue Hour",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_air_force_fighter_hangar:{id:'armed_forces_air_force_fighter_hangar',name:"Air Force Fighter Hangar",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_marine_corps_dress_blues:{id:'armed_forces_marine_corps_dress_blues',name:"Marine Corps Dress Blues",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_coast_guard_cutter_rough_seas:{id:'armed_forces_coast_guard_cutter_rough_seas',name:"Coast Guard Cutter in Rough Seas",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_space_force_orbital_operations:{id:'armed_forces_space_force_orbital_operations',name:"Space Force Orbital Operations",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_army_main_battle_tank:{id:'armed_forces_army_main_battle_tank',name:"Army Main Battle Tank",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_navy_submarine_dawn:{id:'armed_forces_navy_submarine_dawn',name:"Navy Submarine at Dawn",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_air_force_bomber_runway:{id:'armed_forces_air_force_bomber_runway',name:"Air Force Bomber Runway",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_marine_corps_desert_field_kit:{id:'armed_forces_marine_corps_desert_field_kit',name:"Marine Corps Desert Field Kit",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_army_black_hawk_mountain_landing:{id:'armed_forces_army_black_hawk_mountain_landing',name:"Army Black Hawk Mountain Landing",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_navy_deep_sea_diver:{id:'armed_forces_navy_deep_sea_diver',name:"Navy Deep Sea Diver",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_air_force_pilot_ready_room:{id:'armed_forces_air_force_pilot_ready_room',name:"Air Force Pilot Ready Room",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_marine_corps_amphibious_training:{id:'armed_forces_marine_corps_amphibious_training',name:"Marine Corps Amphibious Training",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_coast_guard_rescue_helicopter:{id:'armed_forces_coast_guard_rescue_helicopter',name:"Coast Guard Rescue Helicopter",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_space_force_night_operations:{id:'armed_forces_space_force_night_operations',name:"Space Force Night Operations",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_army_mountain_humvee:{id:'armed_forces_army_mountain_humvee',name:"Army Mountain Humvee",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_navy_anchor_naval_chain:{id:'armed_forces_navy_anchor_naval_chain',name:"Navy Anchor and Naval Chain",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_air_force_cargo_aircraft:{id:'armed_forces_air_force_cargo_aircraft',name:"Air Force Cargo Aircraft",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_marine_corps_ceremonial_sword:{id:'armed_forces_marine_corps_ceremonial_sword',name:"Marine Corps Ceremonial Sword",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_coast_guard_search_rescue_station:{id:'armed_forces_coast_guard_search_rescue_station',name:"Coast Guard Search and Rescue Station",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_space_force_guardian_uniform_operations:{id:'armed_forces_space_force_guardian_uniform_operations',name:"Space Force Guardian Uniform Operations",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_navy_special_operations_heritage:{id:'armed_forces_navy_special_operations_heritage',name:"Navy Special Operations Heritage",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_military_medical_medevac:{id:'armed_forces_military_medical_medevac',name:"Military Medical Medevac",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_us_luxury_finale:{id:'armed_forces_us_luxury_finale',name:"US Armed Forces Luxury Finale",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_aries:{
+    id:'zodiac_celestial_aries',
+    name:'Aries',
+    collection:'Zodiac + Celestial Luxury',
+    accent:'#d9ad3b',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  }
+};
+
+function applyMy365Theme(themeId,save=true){
+  const theme=MY365_THEMES[themeId]||MY365_THEMES.blank_base;
+  document.body.dataset.my365Theme=theme.id;
+  document.documentElement.style.setProperty('--my365-theme-accent',theme.accent||'#c24eff');
+  document.documentElement.style.setProperty('--my365-theme-gold',theme.gold||'#f2d47a');
+  document.documentElement.style.setProperty('--my365-theme-gold2',theme.gold2||'#b9872b');
+  document.documentElement.style.setProperty('--my365-theme-ivory',theme.ivory||'#fff5d2');
+  document.documentElement.style.setProperty('--my365-theme-bg-position',theme.backgroundPosition||'center top');
+
+  /* Preserve the existing approved accent behavior. */
+  document.documentElement.style.setProperty('--accent',theme.accent||meta.accent||'#c24eff');
+  document.documentElement.style.setProperty('--purple',theme.accent||meta.accent||'#c24eff');
+
+  if(save)localStorage.setItem(MY365_THEME_KEY,theme.id);
+  return theme;
+}
+
+function registerMy365Theme(theme){
+  if(!theme||!theme.id)throw new Error('Theme requires an id');
+  MY365_THEMES[theme.id]=theme;
+}
+
+/* Shared-memory proof helpers:
+   switching themes never changes entries, start date, photos, captions, music, or backup data. */
+function getMy365ThemeList(){
+  return Object.values(MY365_THEMES).map(t=>({id:t.id,name:t.name}));
+}
+
+applyMy365Theme(localStorage.getItem(MY365_THEME_KEY)||'blank_base',false);
+
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const keyOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const dateFromKey=k=>{const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)};
+const start=dateFromKey(meta.startDate);
+const end=new Date(start);end.setDate(end.getDate()+364);
+let view=new Date(start.getFullYear(),start.getMonth(),1);
+let selectedKey=keyOf(start),playIndex=0,playTimer=null,playDelay=3000;
+
+function notify(t){const x=$('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1600)}
+function persist(){try{localStorage.setItem(ENTRY_KEY,JSON.stringify(entries));$('saveState').textContent='Saved locally ✓';return true}catch(e){$('saveState').textContent='Storage is full. Backup now and remove some test photos.';return false}}
+function getEntry(k){if(!entries[k])entries[k]={caption:'',photo:''};return entries[k]}
+function hasEntry(k){const e=entries[k];return !!(e&&((e.caption||'').trim()||e.photo))}
+function inTerm(d){const t=new Date(d.getFullYear(),d.getMonth(),d.getDate());return t>=start&&t<=end}
+function pretty(k){return dateFromKey(k).toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+
+function renderCalendar(){
+ $('monthTitle').textContent=view.toLocaleString(undefined,{month:'long',year:'numeric'}).toUpperCase();
+ const y=view.getFullYear(),m=view.getMonth(),first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate(),prevLast=new Date(y,m,0).getDate();
+ let out='';
+ for(let i=first-1;i>=0;i--)out+=`<div class="day off">${prevLast-i}</div>`;
+ const todayK=keyOf(new Date());
+ for(let d=1;d<=last;d++){
+   const dt=new Date(y,m,d),k=keyOf(dt),allowed=inTerm(dt);
+   const photo=(entries[k]&&entries[k].photo)||'';
+   const photoStyle=photo?` style="background:linear-gradient(rgba(5,2,8,.28),rgba(5,2,8,.42)),url('${photo}') center/cover no-repeat !important;"`:'';
+   out+=`<button class="day${k===todayK?' today':''}${k===selectedKey?' selected':''}${hasEntry(k)?' has':''}${photo?' has-photo':''}${allowed?'':' locked'}" ${allowed?'':'disabled'} data-date="${k}"${photoStyle}><span>${d}</span></button>`;
+ }
+ const trail=(7-(first+last)%7)%7;for(let d=1;d<=trail;d++)out+=`<div class="day off">${d}</div>`;
+ $('days').innerHTML=out;
+ document.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>openMoment(b.dataset.date));
+ const done=Math.min(365,Math.max(1,Math.floor((new Date()-start)/86400000)+1));
+ $('termLine').textContent=`YOUR 365 • ${meta.startDate} → ${keyOf(end)} • DAY ${done} OF 365`;
+}
+function openMoment(k){
+ selectedKey=k;$('momentDate').textContent=pretty(k);
+ const e=entries[k]||{caption:'',photo:''};$('caption').value=e.caption||'';
+ if(e.photo){$('momentPhoto').src=e.photo;$('momentPhoto').style.display='block';$('emptyPhoto').style.display='none'}
+ else{$('momentPhoto').removeAttribute('src');$('momentPhoto').style.display='none';$('emptyPhoto').style.display='block'}
+ $('saveState').textContent='Autosave is ON.';$('momentModal').classList.add('open');renderCalendar();
+}
+$('closeMoment').onclick=()=>{$('momentModal').classList.remove('open');refreshAll()}
+$('momentModal').onclick=e=>{if(e.target===$('momentModal'))$('closeMoment').click()}
+$('caption').oninput=()=>{const e=getEntry(selectedKey);e.caption=$('caption').value;if(!e.caption.trim()&&!e.photo)delete entries[selectedKey];persist();renderCalendar();refreshStats()}
+$('addPhotoBtn').onclick=()=>{$('photoInput').value='';$('photoInput').click()}
+function compressImage(file){
+ return new Promise((resolve,reject)=>{
+   const r=new FileReader();r.onerror=reject;r.onload=()=>{
+    const im=new Image();im.onerror=reject;im.onload=()=>{
+      const MAX=900;let w=im.width,h=im.height;
+      if(w>MAX||h>MAX){const s=Math.min(MAX/w,MAX/h);w=Math.round(w*s);h=Math.round(h*s)}
+      const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);
+      resolve(c.toDataURL('image/jpeg',.68));
+    };im.src=r.result;
+   };r.readAsDataURL(file);
+ });
+}
+$('photoInput').onchange=async()=>{
+ const f=$('photoInput').files&&$('photoInput').files[0];if(!f)return;
+ $('saveState').textContent='Loading photo...';
+ try{const small=await compressImage(f);getEntry(selectedKey).photo=small;if(persist())openMoment(selectedKey)}
+ catch(e){$('saveState').textContent='That photo could not be loaded.'}
+}
+$('removePhotoBtn').onclick=()=>{if(entries[selectedKey]){entries[selectedKey].photo='';if(!(entries[selectedKey].caption||'').trim())delete entries[selectedKey];persist();openMoment(selectedKey)}}
+$('removeMoment').onclick=()=>{if(confirm('Clear this day’s photo and caption?')){delete entries[selectedKey];persist();openMoment(selectedKey)}}
+
+$('prevMonth').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);renderCalendar()}
+$('nextMonth').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);renderCalendar()}
+$('todayBtn').onclick=()=>{const t=new Date();view=new Date(t.getFullYear(),t.getMonth(),1);renderCalendar()}
+$('openTodayBtn').onclick=()=>{const t=new Date();openMoment(inTerm(t)?keyOf(t):meta.startDate)}
+
+function rows(){return Object.entries(entries).filter(([k,e])=>hasEntry(k)).sort((a,b)=>a[0].localeCompare(b[0]))}
+function safe(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function memoryHTML([k,e]){
+ return `<div class="memory" data-open="${k}">${e.photo?`<img src="${e.photo}">`:''}<b>${safe(pretty(k))}</b><p>${safe(e.caption||'(photo only)')}</p></div>`
+}
+function renderMoments(){const r=rows();$('momentsList').innerHTML=r.length?r.slice().reverse().map(memoryHTML).join(''):'<div class="memory">Your saved Moments will appear here.</div>';wireMemory()}
+function wireMemory(){document.querySelectorAll('[data-open]').forEach(x=>x.onclick=()=>openMoment(x.dataset.open))}
+function renderSearch(){
+ const q=($('searchBox').value||'').toLowerCase().trim();
+ const r=rows().filter(([k,e])=>!q||k.includes(q)||(e.caption||'').toLowerCase().includes(q)||pretty(k).toLowerCase().includes(q));
+ $('searchList').innerHTML=r.length?r.slice().reverse().map(memoryHTML).join(''):'<div class="memory">No matching Moments.</div>';wireMemory()
+}
+$('searchBox').oninput=renderSearch;
+function refreshStats(){
+ const r=rows(),today=new Date();const elapsed=Math.max(0,Math.floor((today-start)/86400000)+1);
+ $('statDays').textContent=r.length;$('statPhotos').textContent=r.filter(([k,e])=>e.photo).length;$('statCaptions').textContent=r.filter(([k,e])=>(e.caption||'').trim()).length;$('statRemain').textContent=Math.max(0,365-elapsed);
+}
+function playRows(){return rows().filter(([k,e])=>e.photo)}
+function renderPlayer(){
+ const r=playRows();if(!r.length){$('playerImage').style.display='none';$('playerEmpty').style.display='grid';$('playerDate').textContent='';$('playerCaption').textContent='';return}
+ if(playIndex>=r.length)playIndex=0;if(playIndex<0)playIndex=r.length-1;const [k,e]=r[playIndex];
+ $('playerImage').src=e.photo;$('playerImage').style.display='block';$('playerEmpty').style.display='none';$('playerDate').textContent=pretty(k);$('playerCaption').textContent=e.caption||'';
+}
+function stopPlay(){if(playTimer){clearInterval(playTimer);playTimer=null}$('playerPlay').textContent='▶';if($('yearAudio'))$('yearAudio').pause()}
+$('playerPlay').onclick=()=>{
+ if(playTimer){
+   stopPlay();
+   $('yearAudio').pause();
+   return;
+ }
+ if(!playRows().length)return;
+ playTimer=setInterval(()=>{playIndex++;renderPlayer()},playDelay);
+ $('playerPlay').textContent='❚❚';
+ if($('yearAudio').src){$('yearAudio').play().catch(()=>{})}
+}
+$('playerPrev').onclick=()=>{stopPlay();playIndex--;renderPlayer()}
+$('playerNext').onclick=()=>{stopPlay();playIndex++;renderPlayer()}
+$('playerRandom').onclick=()=>{stopPlay();const r=playRows();if(r.length){playIndex=Math.floor(Math.random()*r.length);renderPlayer()}}
+document.querySelectorAll('.speed').forEach(b=>b.onclick=()=>{playDelay=+b.dataset.speed;if(playTimer){stopPlay();$('playerPlay').click()}notify(`Playback speed ${b.textContent}`)})
+
+function backup(){
+ const payload={product:'My 365 Moments',version:1,meta,entries,createdAt:new Date().toISOString()};
+ const blob=new Blob([JSON.stringify(payload)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`MY365 BACKUP ${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);notify('Backup exported')
+}
+$('backupBtn').onclick=backup;
+$('restoreBtn').onclick=()=>{$('restoreInput').value='';$('restoreInput').click()}
+$('restoreInput').onchange=()=>{
+ const f=$('restoreInput').files&&$('restoreInput').files[0];if(!f)return;const r=new FileReader();
+ r.onload=()=>{try{const p=JSON.parse(r.result);if(!p.entries||typeof p.entries!=='object')throw 0;entries=p.entries;if(p.meta){meta=p.meta;localStorage.setItem(META_KEY,JSON.stringify(meta))}localStorage.setItem(ENTRY_KEY,JSON.stringify(entries));notify('Backup restored');location.reload()}catch(e){notify('Restore failed')}};r.readAsText(f)
+}
+$('settingsTop').onclick=()=>{$('settingsModal').classList.add('open')};
+$('closeSettings').onclick=()=>{$('settingsModal').classList.remove('open')};
+$('settingsModal').onclick=e=>{if(e.target===$('settingsModal'))$('settingsModal').classList.remove('open')};
+function applyAccent(color){
+ const currentThemeId=localStorage.getItem(MY365_THEME_KEY)||'blank_base';
+ if(MY365_THEMES[currentThemeId])MY365_THEMES[currentThemeId].accent=color;
+ document.documentElement.style.setProperty('--my365-theme-accent',color);
+ meta.accent=color;
+ localStorage.setItem(META_KEY,JSON.stringify(meta));
+ document.documentElement.style.setProperty('--accent',color);
+ document.documentElement.style.setProperty('--purple',color);
+ document.querySelectorAll('.swatch').forEach(x=>x.classList.toggle('active',x.dataset.accent.toLowerCase()===color.toLowerCase()));
+ notify('Accent changed');
+}
+document.querySelectorAll('.swatch').forEach(s=>s.onclick=()=>applyAccent(s.dataset.accent));
+applyAccent(meta.accent||'#c24eff');
+
+
+/* PLAY MY YEAR — LOCAL MUSIC */
+const audioDBName='my365_audio_db_v1';
+function openAudioDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(audioDBName,1);
+    req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('audio'))db.createObjectStore('audio')};
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function saveAudioBlob(blob,name){
+  const db=await openAudioDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction('audio','readwrite');
+    tx.objectStore('audio').put({blob,name},'yearMusic');
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+async function loadAudioBlob(){
+  const db=await openAudioDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction('audio','readonly');
+    const req=tx.objectStore('audio').get('yearMusic');
+    req.onsuccess=()=>resolve(req.result||null);
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function deleteAudioBlob(){
+  const db=await openAudioDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction('audio','readwrite');
+    tx.objectStore('audio').delete('yearMusic');
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+let currentAudioURL=null;
+function setMusicUI(name){
+  $('addMusicBtn').textContent=name?'CHANGE MUSIC':'ADD MUSIC';
+  $('removeMusicBtn').classList.toggle('hidden',!name);
+}
+async function restoreSavedMusic(){
+  try{
+    const saved=await loadAudioBlob();
+    if(saved&&saved.blob){
+      if(currentAudioURL)URL.revokeObjectURL(currentAudioURL);
+      currentAudioURL=URL.createObjectURL(saved.blob);
+      $('yearAudio').src=currentAudioURL;
+      $('yearAudio').loop=true;
+      setMusicUI(saved.name||'Music');
+    }else setMusicUI('');
+  }catch(e){setMusicUI('')}
+}
+$('addMusicBtn').onclick=()=>{$('musicInput').value='';$('musicInput').click()};
+$('musicInput').onchange=async()=>{
+  const f=$('musicInput').files&&$('musicInput').files[0];
+  if(!f)return;
+  try{
+    await saveAudioBlob(f,f.name);
+    if(currentAudioURL)URL.revokeObjectURL(currentAudioURL);
+    currentAudioURL=URL.createObjectURL(f);
+    $('yearAudio').src=currentAudioURL;
+    $('yearAudio').loop=true;
+    setMusicUI(f.name);
+    notify('Music added');
+  }catch(e){notify('Music could not be saved')}
+};
+$('removeMusicBtn').onclick=async()=>{
+  try{
+    $('yearAudio').pause();
+    $('yearAudio').removeAttribute('src');
+    if(currentAudioURL){URL.revokeObjectURL(currentAudioURL);currentAudioURL=null}
+    await deleteAudioBlob();
+    setMusicUI('');
+    notify('Music removed');
+  }catch(e){notify('Music could not be removed')}
+};
+restoreSavedMusic();
+
+
+/* FIRST-OPEN PRIVACY ACKNOWLEDGMENT */
+const PRIVACY_ACK_KEY='my365_privacy_welcome_hidden_v1';
+function openPrivacyWelcome(){
+  $('privacyWelcome').classList.add('open');
+}
+function closePrivacyWelcome(){
+  if($('privacyDontShow').checked)localStorage.setItem(PRIVACY_ACK_KEY,'1');
+  $('privacyWelcome').classList.remove('open');
+}
+$('privacyGotIt').onclick=closePrivacyWelcome;
+if($('reopenPrivacy'))$('reopenPrivacy').onclick=()=>{ $('privacyDontShow').checked=false; openPrivacyWelcome(); };
+if(localStorage.getItem(PRIVACY_ACK_KEY)!=='1'){
+  setTimeout(openPrivacyWelcome,120);
+}
+
+
+/* ENGINE 3 — THEME SELECTOR */
+function refreshThemeChoiceUI(){
+  const current=localStorage.getItem(MY365_THEME_KEY)||'blank_base';
+  document.querySelectorAll('.theme-choice').forEach(btn=>{
+    btn.style.boxShadow=btn.dataset.themeChoice===current
+      ? '0 0 14px var(--my365-theme-accent), inset 0 0 0 1px var(--my365-theme-accent)'
+      : '';
+  });
+  const t=MY365_THEMES[current]||MY365_THEMES.blank_base;
+  if($('activeThemeName'))$('activeThemeName').textContent='Current theme: '+t.name;
+}
+document.querySelectorAll('.theme-choice').forEach(btn=>{
+  btn.onclick=()=>{
+    const id=btn.dataset.themeChoice;
+    applyMy365Theme(id,true);
+    refreshThemeChoiceUI();
+    notify('Theme changed');
+  };
+});
+refreshThemeChoiceUI();
+
+
+/* THEME LIBRARY CUSTOMER CONTROLS */
+function refreshThemeLibraryUI(){
+  const current=localStorage.getItem(MY365_THEME_KEY)||'blank_base';
+  document.querySelectorAll('.library-theme').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.libraryTheme===current);
+  });
+  refreshThemeChoiceUI();
+}
+function openThemeLibrary(){
+  refreshThemeLibraryUI();
+  $('themeLibraryModal').classList.add('open');
+}
+function closeThemeLibrary(){
+  $('themeLibraryModal').classList.remove('open');
+}
+$('openThemeLibrary').onclick=openThemeLibrary;
+$('closeThemeLibrary').onclick=closeThemeLibrary;
+$('themeLibraryModal').onclick=e=>{
+  if(e.target===$('themeLibraryModal'))closeThemeLibrary();
+};
+document.querySelectorAll('.library-theme').forEach(btn=>{
+  btn.onclick=()=>{
+    applyMy365Theme(btn.dataset.libraryTheme,true);
+    refreshThemeLibraryUI();
+    notify('Theme changed');
+    closeThemeLibrary();
+  };
+});
+refreshThemeLibraryUI();
+
+/* BUILD 8: COMPLETE Hawaiian Luxury Collection — 25 themes */
+
+
+
+
+const MY365_STAGE1_EXTERNAL_ART={
+  'hawaiian_iwa':'themes/hawaiian/01_iwa.png',
+  'dog_golden_retriever':'themes/dog/01_golden_retriever.png',
+  'zodiac_celestial_aries':'themes/zodiac-celestial/01_Aries.png'
+};
+function syncMy365ThemeArtwork(){
+  const id=document.body.dataset.my365Theme||'blank_base';
+  const art=$('my365ThemeArt');
+  if(!art)return;
+  art.src=MY365_STAGE1_EXTERNAL_ART[id]||'';
+}
+const MY365_ALL_THEME_ART=Object.assign({},MY365_STAGE1_EXTERNAL_ART);
+Object.entries(MY365_ALL_THEME_ART).forEach(([id,uri])=>{
+  const card=document.querySelector('.library-theme[data-library-theme="'+id+'"]');
+  if(card){
+    card.style.setProperty('background-image',
+      'linear-gradient(180deg,rgba(5,2,7,.03) 25%,rgba(5,2,7,.90) 100%), url("'+uri+'")',
+      'important');
+  }
+});
+const _applyMy365ThemeBuild3=applyMy365Theme;
+applyMy365Theme=function(themeId,save=true){
+  _applyMy365ThemeBuild3(themeId,save);
+  syncMy365ThemeArtwork();
+};
+syncMy365ThemeArtwork();
+if($('themeLibraryModal')){
+  $('themeLibraryModal').addEventListener('click',e=>{
+    const btn=e.target.closest('.library-theme');
+    if(!btn)return;
+    e.preventDefault();
+    e.stopPropagation();
+    const id=btn.dataset.libraryTheme;
+    applyMy365Theme(id,true);
+    refreshThemeLibraryUI();
+    notify('Theme changed');
+    closeThemeLibrary();
+  },true);
+}
+
+function switchView(id){
+ document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+ if(id==='momentsView')renderMoments();if(id==='searchView')renderSearch();if(id==='playView'){stopPlay();renderPlayer()}if(id==='moreView')refreshStats();window.scrollTo({top:0,behavior:'smooth'})
+}
+document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
+function refreshAll(){renderMoments();renderSearch();refreshStats();renderPlayer()}
+renderCalendar();refreshAll();
+})();
+</script>
+</body>
+</html>
