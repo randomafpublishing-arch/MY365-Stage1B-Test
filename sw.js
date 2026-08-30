@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my365-stage-production-hdca-v1';
+const CACHE_NAME = 'my365-stage-production-hdca-zodiac-v2';
 
 const ASSETS = [
   "./index.html",
@@ -104,7 +104,32 @@ const ASSETS = [
   "./themes/armed-forces/22_Space_Force_Guardian_Uniform_Operations.png",
   "./themes/armed-forces/23_Navy_Special_Operations_Heritage.png",
   "./themes/armed-forces/24_Military_Medical_Medevac.png",
-  "./themes/armed-forces/25_US_Armed_Forces_Luxury_Finale.png"
+  "./themes/armed-forces/25_US_Armed_Forces_Luxury_Finale.png",
+  "./themes/zodiac-celestial/01_Aries.png",
+  "./themes/zodiac-celestial/02_Taurus.png",
+  "./themes/zodiac-celestial/03_Gemini.png",
+  "./themes/zodiac-celestial/04_Cancer.png",
+  "./themes/zodiac-celestial/05_Leo.png",
+  "./themes/zodiac-celestial/06_Virgo.png",
+  "./themes/zodiac-celestial/07_Libra.png",
+  "./themes/zodiac-celestial/08_Scorpio.png",
+  "./themes/zodiac-celestial/09_Sagittarius.png",
+  "./themes/zodiac-celestial/10_Capricorn.png",
+  "./themes/zodiac-celestial/11_Aquarius.png",
+  "./themes/zodiac-celestial/12_Pisces.png",
+  "./themes/zodiac-celestial/13_Diamond_Galaxy.png",
+  "./themes/zodiac-celestial/14_Golden_Lunar_Eclipse.png",
+  "./themes/zodiac-celestial/15_Saturn_Above_the_Clouds.png",
+  "./themes/zodiac-celestial/16_Emerald_Nebula.png",
+  "./themes/zodiac-celestial/17_Moonlit_Cosmic_Ocean_IMAGE_2.png",
+  "./themes/zodiac-celestial/18_Crystal_Ice_Planet_IMAGE_2.png",
+  "./themes/zodiac-celestial/19_Rose_Gold_Star_Birth.png",
+  "./themes/zodiac-celestial/20_Meteor_Shower_Canyon.png",
+  "./themes/zodiac-celestial/21_Twin_Moons_IMAGE_2.png",
+  "./themes/zodiac-celestial/22_Celestial_Aurora.png",
+  "./themes/zodiac-celestial/23_Black_Hole_Luxury.png",
+  "./themes/zodiac-celestial/24_Cosmic_Waterfall.png",
+  "./themes/zodiac-celestial/25_RAFP_Celestial_Finale_Edge_of_the_Universe.png"
 ];
 
 self.addEventListener('install', event => {
