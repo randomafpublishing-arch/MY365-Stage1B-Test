@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my365-stage3-test-v1';
+const CACHE_NAME = 'my365-stage4-test-v1';
 
 const ASSETS = [
   './index.html',
@@ -6,8 +6,20 @@ const ASSETS = [
   './icons/icon-192.png',
   './icons/icon-512.png',
   './themes/hawaiian/01_iwa.png',
+  './themes/hawaiian/02_puakenikeni.png',
+  './themes/hawaiian/03_kalo.png',
+  './themes/hawaiian/04_ahuula.png',
+  './themes/hawaiian/05_lehua.png',
   './themes/dog/01_golden_retriever.png',
-  './themes/zodiac-celestial/01_Aries.png'
+  './themes/dog/02_miniature_pinscher.png',
+  './themes/dog/03_red_labrador.png',
+  './themes/dog/04_rottweiler.png',
+  './themes/dog/05_german_shepherd.png',
+  './themes/zodiac-celestial/01_Aries.png',
+  './themes/zodiac-celestial/02_Taurus.png',
+  './themes/zodiac-celestial/03_Gemini.png',
+  './themes/zodiac-celestial/04_Cancer.png',
+  './themes/zodiac-celestial/05_Leo.png'
 ];
 
 self.addEventListener('install', event => {
@@ -30,7 +42,6 @@ self.addEventListener('activate', event => {
 
 self.addEventListener('fetch', event => {
   if (event.request.method !== 'GET') return;
-
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) return cached;

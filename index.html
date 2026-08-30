@@ -623,115 +623,29 @@ body[data-my365-theme^="hawaiian_"] .calendar-card{
   </div>
   <p class="theme-library-sub">Change your look anytime. Your dates, photos, captions, memories, music, and progress stay with you.</p>
 
-  <div class="theme-collection-title">Engine Base</div>
+  <div class="theme-collection-title">Hawaiian Luxury Collection</div>
   <div class="theme-grid">
-   
-   <button class="theme-card library-theme" data-library-theme="hawaiian_iwa">
-    <strong>ʻIwa Bird</strong><small>Hawaiian Luxury Collection</small>
-   </button>
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
+   <button class="theme-card library-theme" data-library-theme="hawaiian_iwa"><strong>ʻIwa Bird</strong><small>Hawaiian Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_puakenikeni"><strong>Puakenikeni</strong><small>Hawaiian Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_kalo"><strong>Kalo / Taro</strong><small>Hawaiian Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_ahuula"><strong>ʻAhuʻula / Hawaiian Feather Cloak</strong><small>Hawaiian Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_lehua"><strong>Lehua Blossoms</strong><small>Hawaiian Luxury Collection</small></button>
   </div>
   <div class="theme-collection-title">Dog Luxury Collection</div>
   <div class="theme-grid">
-<button class="theme-card library-theme" data-library-theme="dog_golden_retriever"><strong>Golden Retriever</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_golden_retriever"><strong>Golden Retriever</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_miniature_pinscher"><strong>Miniature Pinscher</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_red_labrador"><strong>Red Labrador — Blue Eyes</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_rottweiler"><strong>Rottweiler — Golden Eyes</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_german_shepherd"><strong>German Shepherd</strong><small>Dog Luxury Collection</small></button>
+  </div>
+  <div class="theme-collection-title">Zodiac + Celestial Luxury Collection</div>
+  <div class="theme-grid">
    <button class="theme-card library-theme" data-library-theme="zodiac_celestial_aries"><strong>Aries</strong><small>Zodiac + Celestial Luxury Collection</small></button>
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
-   
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_taurus"><strong>Taurus</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_gemini"><strong>Gemini</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_cancer"><strong>Cancer</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_leo"><strong>Leo</strong><small>Zodiac + Celestial Luxury Collection</small></button>
   </div>
  </div>
 </div>
@@ -1108,7 +1022,11 @@ const MY365_THEMES={
     gold2:'#b9872b',
     ivory:'#fff5d2',
     backgroundPosition:'center top'
-  }
+  },
+  zodiac_celestial_taurus:{id:'zodiac_celestial_taurus',name:'Taurus',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_gemini:{id:'zodiac_celestial_gemini',name:'Gemini',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_cancer:{id:'zodiac_celestial_cancer',name:'Cancer',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_leo:{id:'zodiac_celestial_leo',name:'Leo',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'}
 };
 
 function applyMy365Theme(themeId,save=true){
@@ -1436,8 +1354,20 @@ refreshThemeLibraryUI();
 
 const MY365_STAGE1_EXTERNAL_ART={
   'hawaiian_iwa':'themes/hawaiian/01_iwa.png',
+  'hawaiian_puakenikeni':'themes/hawaiian/02_puakenikeni.png',
+  'hawaiian_kalo':'themes/hawaiian/03_kalo.png',
+  'hawaiian_ahuula':'themes/hawaiian/04_ahuula.png',
+  'hawaiian_lehua':'themes/hawaiian/05_lehua.png',
   'dog_golden_retriever':'themes/dog/01_golden_retriever.png',
-  'zodiac_celestial_aries':'themes/zodiac-celestial/01_Aries.png'
+  'dog_miniature_pinscher':'themes/dog/02_miniature_pinscher.png',
+  'dog_red_labrador':'themes/dog/03_red_labrador.png',
+  'dog_rottweiler':'themes/dog/04_rottweiler.png',
+  'dog_german_shepherd':'themes/dog/05_german_shepherd.png',
+  'zodiac_celestial_aries':'themes/zodiac-celestial/01_Aries.png',
+  'zodiac_celestial_taurus':'themes/zodiac-celestial/02_Taurus.png',
+  'zodiac_celestial_gemini':'themes/zodiac-celestial/03_Gemini.png',
+  'zodiac_celestial_cancer':'themes/zodiac-celestial/04_Cancer.png',
+  'zodiac_celestial_leo':'themes/zodiac-celestial/05_Leo.png'
 };
 function syncMy365ThemeArtwork(){
   const id=document.body.dataset.my365Theme||'blank_base';
