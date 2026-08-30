@@ -818,10 +818,16 @@ body[data-my365-theme^="hawaiian_"] .calendar-card{
 'use strict';
 const META_KEY='my365_master_meta_v1';
 const ENTRY_KEY='my365_master_entries_v1';
-let meta, entries={};
+const CUSTOMER_DB_NAME='my365_customer_db_v1';
+const CUSTOMER_DB_VERSION=1;
+const MOMENTS_STORE='moments';
+const MIGRATION_STORE='migration';
+const LEGACY_MIGRATION_ID='legacy_entries_to_idb_v1';
+let meta, entries={}, legacyEntries={};
+let momentDB=null,momentStorageReady=false;
 try{meta=JSON.parse(localStorage.getItem(META_KEY)||'null')}catch(e){}
 if(!meta){meta={startDate:new Date().toISOString().slice(0,10),accent:'#c24eff'};localStorage.setItem(META_KEY,JSON.stringify(meta))}
-try{entries=JSON.parse(localStorage.getItem(ENTRY_KEY)||'{}')||{}}catch(e){entries={}}
+try{legacyEntries=JSON.parse(localStorage.getItem(ENTRY_KEY)||'{}')||{}}catch(e){legacyEntries={}}
 document.documentElement.style.setProperty('--purple',meta.accent||'#c24eff');document.documentElement.style.setProperty('--accent',meta.accent||'#c24eff');
 
 
@@ -1249,12 +1255,182 @@ let view=new Date(start.getFullYear(),start.getMonth(),1);
 let selectedKey=keyOf(start),playIndex=0,playTimer=null,playDelay=3000;
 
 function notify(t){const x=$('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1600)}
-function persist(){try{localStorage.setItem(ENTRY_KEY,JSON.stringify(entries));$('saveState').textContent='Saved locally ✓';return true}catch(e){$('saveState').textContent='Storage is full. Backup now and remove some test photos.';return false}}
-function getEntry(k){if(!entries[k])entries[k]={caption:'',photo:''};return entries[k]}
-function hasEntry(k){const e=entries[k];return !!(e&&((e.caption||'').trim()||e.photo))}
+
+/* CUSTOMER MOMENT STORAGE — CONTROLLED MIGRATION TEST CANDIDATE
+   Legacy localStorage is COPY-ONLY and remains intact in this candidate. */
+function openCustomerDB(){
+ return new Promise((resolve,reject)=>{
+   const req=indexedDB.open(CUSTOMER_DB_NAME,CUSTOMER_DB_VERSION);
+   req.onupgradeneeded=()=>{
+     const db=req.result;
+     if(!db.objectStoreNames.contains(MOMENTS_STORE))db.createObjectStore(MOMENTS_STORE,{keyPath:'dateKey'});
+     if(!db.objectStoreNames.contains(MIGRATION_STORE))db.createObjectStore(MIGRATION_STORE,{keyPath:'id'});
+   };
+   req.onsuccess=()=>resolve(req.result);
+   req.onerror=()=>reject(req.error);
+ });
+}
+function idbGet(storeName,key){
+ return new Promise((resolve,reject)=>{
+   const tx=momentDB.transaction(storeName,'readonly'),req=tx.objectStore(storeName).get(key);
+   req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error);
+ });
+}
+function idbPut(storeName,value){
+ return new Promise((resolve,reject)=>{
+   const tx=momentDB.transaction(storeName,'readwrite');tx.objectStore(storeName).put(value);
+   tx.oncomplete=()=>resolve(value);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('IndexedDB transaction aborted'));
+ });
+}
+function idbDelete(storeName,key){
+ return new Promise((resolve,reject)=>{
+   const tx=momentDB.transaction(storeName,'readwrite');tx.objectStore(storeName).delete(key);
+   tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('IndexedDB transaction aborted'));
+ });
+}
+function idbGetAll(storeName){
+ return new Promise((resolve,reject)=>{
+   const tx=momentDB.transaction(storeName,'readonly'),req=tx.objectStore(storeName).getAll();
+   req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error);
+ });
+}
+function dataURLToBlob(dataURL){
+ const parts=String(dataURL||'').split(','),head=parts[0]||'',body=parts[1]||'';
+ const m=head.match(/^data:([^;]+);base64$/i);if(!m)throw new Error('Unsupported legacy photo data URL');
+ const binary=atob(body),bytes=new Uint8Array(binary.length);
+ for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+ return new Blob([bytes],{type:m[1]||'image/jpeg'});
+}
+function blobDimensions(blob){
+ return new Promise((resolve,reject)=>{
+   const url=URL.createObjectURL(blob),im=new Image();
+   im.onload=()=>{const out={width:im.naturalWidth||im.width||0,height:im.naturalHeight||im.height||0};URL.revokeObjectURL(url);resolve(out)};
+   im.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Stored photo could not be decoded'))};im.src=url;
+ });
+}
+async function sha256Blob(blob){
+ const buf=await blob.arrayBuffer(),hash=await crypto.subtle.digest('SHA-256',buf);
+ return Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');
+}
+function legacyHasEntry(e){return !!(e&&((e.caption||'').trim()||e.photo))}
+async function verifyMigratedMoment(dateKey,legacy,stored){
+ if(!stored||stored.dateKey!==dateKey)return false;
+ if((stored.caption||'')!==(legacy.caption||''))return false;
+ const hadPhoto=!!legacy.photo,hasBlob=stored.photoBlob instanceof Blob;
+ if(hadPhoto!==hasBlob)return false;
+ if(!hadPhoto)return true;
+ const sourceBlob=dataURLToBlob(legacy.photo);
+ if(stored.photoByteSize!==sourceBlob.size||stored.photoType!==sourceBlob.type)return false;
+ const [a,b]=await Promise.all([sha256Blob(sourceBlob),sha256Blob(stored.photoBlob)]);
+ return a===b;
+}
+async function buildMigratedMoment(dateKey,legacy,existing){
+ const now=new Date().toISOString();let blob=null,dims={width:0,height:0};
+ if(legacy.photo){blob=dataURLToBlob(legacy.photo);dims=await blobDimensions(blob)}
+ return {
+   dateKey,
+   caption:legacy.caption||'',
+   photoBlob:blob,
+   photoType:blob?blob.type:'',
+   photoWidth:blob?dims.width:0,
+   photoHeight:blob?dims.height:0,
+   photoByteSize:blob?blob.size:0,
+   createdAt:(existing&&existing.createdAt)||now,
+   updatedAt:now
+ };
+}
+async function setMigrationState(patch){
+ const prev=await idbGet(MIGRATION_STORE,LEGACY_MIGRATION_ID)||{id:LEGACY_MIGRATION_ID,status:'not_started',verifiedCount:0};
+ const next=Object.assign({},prev,patch,{id:LEGACY_MIGRATION_ID,updatedAt:new Date().toISOString()});
+ await idbPut(MIGRATION_STORE,next);return next;
+}
+async function migrateLegacyEntriesCopyOnly(){
+ const legacyKeys=Object.keys(legacyEntries).filter(k=>legacyHasEntry(legacyEntries[k])).sort();
+ let state=await idbGet(MIGRATION_STORE,LEGACY_MIGRATION_ID);
+ if(state&&state.status==='complete')return state;
+ const startedAt=(state&&state.startedAt)||new Date().toISOString();
+ state=await setMigrationState({status:'copying',startedAt,totalLegacy:legacyKeys.length,verifiedCount:(state&&state.verifiedCount)||0,lastDateKey:(state&&state.lastDateKey)||null,completedAt:null});
+ let verifiedCount=0;
+ for(const dateKey of legacyKeys){
+   const legacy=legacyEntries[dateKey];let stored=await idbGet(MOMENTS_STORE,dateKey);
+   let verified=false;
+   if(stored)verified=await verifyMigratedMoment(dateKey,legacy,stored);
+   if(!verified){
+     const record=await buildMigratedMoment(dateKey,legacy,stored);
+     await idbPut(MOMENTS_STORE,record);
+     stored=await idbGet(MOMENTS_STORE,dateKey);
+     verified=await verifyMigratedMoment(dateKey,legacy,stored);
+   }
+   if(!verified)throw new Error('Migration verification failed for '+dateKey);
+   verifiedCount++;
+   await setMigrationState({status:'copying',startedAt,totalLegacy:legacyKeys.length,verifiedCount,lastDateKey:dateKey,completedAt:null});
+ }
+ return setMigrationState({status:'complete',startedAt,totalLegacy:legacyKeys.length,verifiedCount,completedAt:new Date().toISOString()});
+}
+function momentMeta(record){return record?{caption:record.caption||'',hasPhoto:record.photoBlob instanceof Blob,photoType:record.photoType||'',photoWidth:record.photoWidth||0,photoHeight:record.photoHeight||0,photoByteSize:record.photoByteSize||0,createdAt:record.createdAt||'',updatedAt:record.updatedAt||''}:null}
+async function loadMomentIndex(){
+ const all=await idbGetAll(MOMENTS_STORE),next={};
+ all.forEach(r=>{if(r&&r.dateKey&&((r.caption||'').trim()||r.photoBlob instanceof Blob))next[r.dateKey]=momentMeta(r)});entries=next;
+}
+async function getMomentRecord(k){return idbGet(MOMENTS_STORE,k)}
+const momentWriteQueues=new Map();
+function queueMomentWrite(k,work){
+ const prior=momentWriteQueues.get(k)||Promise.resolve();
+ const next=prior.catch(()=>{}).then(work).finally(()=>{if(momentWriteQueues.get(k)===next)momentWriteQueues.delete(k)});
+ momentWriteQueues.set(k,next);return next;
+}
+async function saveCaptionForDate(k,caption){
+ return queueMomentWrite(k,async()=>{
+   const old=await getMomentRecord(k),now=new Date().toISOString();
+   if(!caption.trim()&&!(old&&old.photoBlob instanceof Blob)){
+     await idbDelete(MOMENTS_STORE,k);delete entries[k];return;
+   }
+   const record={
+     dateKey:k,caption,
+     photoBlob:old&&old.photoBlob instanceof Blob?old.photoBlob:null,
+     photoType:old&&old.photoBlob instanceof Blob?(old.photoType||old.photoBlob.type||'image/jpeg'):'',
+     photoWidth:old&&old.photoBlob instanceof Blob?(old.photoWidth||0):0,
+     photoHeight:old&&old.photoBlob instanceof Blob?(old.photoHeight||0):0,
+     photoByteSize:old&&old.photoBlob instanceof Blob?(old.photoByteSize||old.photoBlob.size||0):0,
+     createdAt:(old&&old.createdAt)||now,updatedAt:now
+   };
+   await idbPut(MOMENTS_STORE,record);entries[k]=momentMeta(record);
+ });
+}
+async function savePhotoForDate(k,blob,width,height){
+ return queueMomentWrite(k,async()=>{
+   const old=await getMomentRecord(k),now=new Date().toISOString(),caption=(entries[k]&&entries[k].caption)||(old&&old.caption)||'';
+   const record={dateKey:k,caption,photoBlob:blob,photoType:blob.type||'image/jpeg',photoWidth:width||0,photoHeight:height||0,photoByteSize:blob.size,createdAt:(old&&old.createdAt)||now,updatedAt:now};
+   await idbPut(MOMENTS_STORE,record);entries[k]=momentMeta(record);return record;
+ });
+}
+async function removePhotoForDate(k){
+ return queueMomentWrite(k,async()=>{
+   const old=await getMomentRecord(k);if(!old)return;
+   const caption=(entries[k]&&entries[k].caption)||(old.caption||'');
+   if(!caption.trim()){await idbDelete(MOMENTS_STORE,k);delete entries[k];return}
+   const record={dateKey:k,caption,photoBlob:null,photoType:'',photoWidth:0,photoHeight:0,photoByteSize:0,createdAt:old.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
+   await idbPut(MOMENTS_STORE,record);entries[k]=momentMeta(record);
+ });
+}
+async function removeMomentForDate(k){return queueMomentWrite(k,async()=>{await idbDelete(MOMENTS_STORE,k);delete entries[k]})}
+function getEntry(k){if(!entries[k])entries[k]={caption:'',hasPhoto:false,photoType:'',photoWidth:0,photoHeight:0,photoByteSize:0,createdAt:'',updatedAt:''};return entries[k]}
+function hasEntry(k){const e=entries[k];return !!(e&&((e.caption||'').trim()||e.hasPhoto))}
 function inTerm(d){const t=new Date(d.getFullYear(),d.getMonth(),d.getDate());return t>=start&&t<=end}
 function pretty(k){return dateFromKey(k).toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
 
+let calendarPhotoURLs=[],currentMomentPhotoURL=null,playerPhotoURL=null,momentsThumbURLs=[],searchThumbURLs=[];
+function revokeURL(url){if(url)try{URL.revokeObjectURL(url)}catch(e){}}
+function clearURLList(list){list.forEach(revokeURL);list.length=0}
+async function photoURLForDate(k){const r=await getMomentRecord(k);return r&&r.photoBlob instanceof Blob?URL.createObjectURL(r.photoBlob):null}
+async function hydrateCalendarPhotos(){
+ clearURLList(calendarPhotoURLs);
+ const nodes=Array.from(document.querySelectorAll('[data-photo-date]'));
+ for(const node of nodes){
+   const k=node.dataset.photoDate;if(!k)continue;const url=await photoURLForDate(k);if(!url||!node.isConnected){revokeURL(url);continue}
+   calendarPhotoURLs.push(url);node.style.background=`linear-gradient(rgba(5,2,8,.28),rgba(5,2,8,.42)),url("${url}") center/cover no-repeat`;
+ }
+}
 function renderCalendar(){
  $('monthTitle').textContent=view.toLocaleString(undefined,{month:'long',year:'numeric'}).toUpperCase();
  const y=view.getFullYear(),m=view.getMonth(),first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate(),prevLast=new Date(y,m,0).getDate();
@@ -1262,27 +1438,33 @@ function renderCalendar(){
  for(let i=first-1;i>=0;i--)out+=`<div class="day off">${prevLast-i}</div>`;
  const todayK=keyOf(new Date());
  for(let d=1;d<=last;d++){
-   const dt=new Date(y,m,d),k=keyOf(dt),allowed=inTerm(dt);
-   const photo=(entries[k]&&entries[k].photo)||'';
-   const photoStyle=photo?` style="background:linear-gradient(rgba(5,2,8,.28),rgba(5,2,8,.42)),url('${photo}') center/cover no-repeat !important;"`:'';
-   out+=`<button class="day${k===todayK?' today':''}${k===selectedKey?' selected':''}${hasEntry(k)?' has':''}${photo?' has-photo':''}${allowed?'':' locked'}" ${allowed?'':'disabled'} data-date="${k}"${photoStyle}><span>${d}</span></button>`;
+   const dt=new Date(y,m,d),k=keyOf(dt),allowed=inTerm(dt),photo=!!(entries[k]&&entries[k].hasPhoto);
+   out+=`<button class="day${k===todayK?' today':''}${k===selectedKey?' selected':''}${hasEntry(k)?' has':''}${photo?' has-photo':''}${allowed?'':' locked'}" ${allowed?'':'disabled'} data-date="${k}"${photo?` data-photo-date="${k}"`:''}><span>${d}</span></button>`;
  }
  const trail=(7-(first+last)%7)%7;for(let d=1;d<=trail;d++)out+=`<div class="day off">${d}</div>`;
  $('days').innerHTML=out;
  document.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>openMoment(b.dataset.date));
+ hydrateCalendarPhotos().catch(()=>{});
  const done=Math.min(365,Math.max(1,Math.floor((new Date()-start)/86400000)+1));
  $('termLine').textContent=`YOUR 365 • ${meta.startDate} → ${keyOf(end)} • DAY ${done} OF 365`;
 }
-function openMoment(k){
- selectedKey=k;$('momentDate').textContent=pretty(k);
- const e=entries[k]||{caption:'',photo:''};$('caption').value=e.caption||'';
- if(e.photo){$('momentPhoto').src=e.photo;$('momentPhoto').style.display='block';$('emptyPhoto').style.display='none'}
- else{$('momentPhoto').removeAttribute('src');$('momentPhoto').style.display='none';$('emptyPhoto').style.display='block'}
+async function openMoment(k){
+ selectedKey=k;$('momentDate').textContent=pretty(k);const e=entries[k]||{caption:'',hasPhoto:false};$('caption').value=e.caption||'';
+ revokeURL(currentMomentPhotoURL);currentMomentPhotoURL=null;
+ if(e.hasPhoto){
+   const url=await photoURLForDate(k);if(url){currentMomentPhotoURL=url;$('momentPhoto').src=url;$('momentPhoto').style.display='block';$('emptyPhoto').style.display='none'}
+   else{$('momentPhoto').removeAttribute('src');$('momentPhoto').style.display='none';$('emptyPhoto').style.display='block'}
+ }else{$('momentPhoto').removeAttribute('src');$('momentPhoto').style.display='none';$('emptyPhoto').style.display='block'}
  $('saveState').textContent='Autosave is ON.';$('momentModal').classList.add('open');renderCalendar();
 }
-$('closeMoment').onclick=()=>{$('momentModal').classList.remove('open');refreshAll()}
+$('closeMoment').onclick=()=>{revokeURL(currentMomentPhotoURL);currentMomentPhotoURL=null;$('momentModal').classList.remove('open');refreshAll()}
 $('momentModal').onclick=e=>{if(e.target===$('momentModal'))$('closeMoment').click()}
-$('caption').oninput=()=>{const e=getEntry(selectedKey);e.caption=$('caption').value;if(!e.caption.trim()&&!e.photo)delete entries[selectedKey];persist();renderCalendar();refreshStats()}
+$('caption').oninput=()=>{
+ const e=getEntry(selectedKey);e.caption=$('caption').value;
+ if(!e.caption.trim()&&!e.hasPhoto)delete entries[selectedKey];
+ $('saveState').textContent='Saving...';renderCalendar();refreshStats();
+ saveCaptionForDate(selectedKey,$('caption').value).then(()=>{$('saveState').textContent='Saved locally ✓'}).catch(()=>{$('saveState').textContent='Moment could not be saved.'});
+}
 $('addPhotoBtn').onclick=()=>{$('photoInput').value='';$('photoInput').click()}
 function compressImage(file){
  return new Promise((resolve,reject)=>{
@@ -1291,19 +1473,18 @@ function compressImage(file){
       const MAX=900;let w=im.width,h=im.height;
       if(w>MAX||h>MAX){const s=Math.min(MAX/w,MAX/h);w=Math.round(w*s);h=Math.round(h*s)}
       const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);
-      resolve(c.toDataURL('image/jpeg',.68));
+      resolve({dataURL:c.toDataURL('image/jpeg',.68),width:w,height:h});
     };im.src=r.result;
    };r.readAsDataURL(file);
  });
 }
 $('photoInput').onchange=async()=>{
- const f=$('photoInput').files&&$('photoInput').files[0];if(!f)return;
- $('saveState').textContent='Loading photo...';
- try{const small=await compressImage(f);getEntry(selectedKey).photo=small;if(persist())openMoment(selectedKey)}
+ const f=$('photoInput').files&&$('photoInput').files[0];if(!f)return;$('saveState').textContent='Loading photo...';
+ try{const processed=await compressImage(f),blob=dataURLToBlob(processed.dataURL);await savePhotoForDate(selectedKey,blob,processed.width,processed.height);$('saveState').textContent='Saved locally ✓';await openMoment(selectedKey);refreshAll()}
  catch(e){$('saveState').textContent='That photo could not be loaded.'}
 }
-$('removePhotoBtn').onclick=()=>{if(entries[selectedKey]){entries[selectedKey].photo='';if(!(entries[selectedKey].caption||'').trim())delete entries[selectedKey];persist();openMoment(selectedKey)}}
-$('removeMoment').onclick=()=>{if(confirm('Clear this day’s photo and caption?')){delete entries[selectedKey];persist();openMoment(selectedKey)}}
+$('removePhotoBtn').onclick=async()=>{try{await removePhotoForDate(selectedKey);await openMoment(selectedKey);refreshAll()}catch(e){$('saveState').textContent='Moment could not be saved.'}}
+$('removeMoment').onclick=async()=>{if(confirm('Clear this day’s photo and caption?')){try{await removeMomentForDate(selectedKey);await openMoment(selectedKey);refreshAll()}catch(e){$('saveState').textContent='Moment could not be cleared.'}}}
 
 $('prevMonth').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);renderCalendar()}
 $('nextMonth').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);renderCalendar()}
@@ -1312,43 +1493,51 @@ $('openTodayBtn').onclick=()=>{const t=new Date();openMoment(inTerm(t)?keyOf(t):
 
 function rows(){return Object.entries(entries).filter(([k,e])=>hasEntry(k)).sort((a,b)=>a[0].localeCompare(b[0]))}
 function safe(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
-function memoryHTML([k,e]){
- return `<div class="memory" data-open="${k}">${e.photo?`<img src="${e.photo}">`:''}<b>${safe(pretty(k))}</b><p>${safe(e.caption||'(photo only)')}</p></div>`
+function memoryHTML([k,e]){return `<div class="memory" data-open="${k}">${e.hasPhoto?`<img data-moment-thumb="${k}" alt="">`:''}<b>${safe(pretty(k))}</b><p>${safe(e.caption||'(photo only)')}</p></div>`}
+function hydrateMemoryThumbnails(container,urlList){
+ clearURLList(urlList);const imgs=Array.from(container.querySelectorAll('[data-moment-thumb]'));
+ const load=async img=>{if(img.dataset.loaded)return;img.dataset.loaded='1';const url=await photoURLForDate(img.dataset.momentThumb);if(!url||!img.isConnected){revokeURL(url);return}urlList.push(url);img.src=url};
+ if('IntersectionObserver'in window){const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){obs.unobserve(e.target);load(e.target).catch(()=>{})}}),{rootMargin:'180px'});imgs.forEach(img=>obs.observe(img))}
+ else imgs.forEach(img=>load(img).catch(()=>{}));
 }
-function renderMoments(){const r=rows();$('momentsList').innerHTML=r.length?r.slice().reverse().map(memoryHTML).join(''):'<div class="memory">Your saved Moments will appear here.</div>';wireMemory()}
+function renderMoments(){const r=rows();$('momentsList').innerHTML=r.length?r.slice().reverse().map(memoryHTML).join(''):'<div class="memory">Your saved Moments will appear here.</div>';wireMemory();hydrateMemoryThumbnails($('momentsList'),momentsThumbURLs)}
 function wireMemory(){document.querySelectorAll('[data-open]').forEach(x=>x.onclick=()=>openMoment(x.dataset.open))}
 function renderSearch(){
  const q=($('searchBox').value||'').toLowerCase().trim();
  const r=rows().filter(([k,e])=>!q||k.includes(q)||(e.caption||'').toLowerCase().includes(q)||pretty(k).toLowerCase().includes(q));
- $('searchList').innerHTML=r.length?r.slice().reverse().map(memoryHTML).join(''):'<div class="memory">No matching Moments.</div>';wireMemory()
+ $('searchList').innerHTML=r.length?r.slice().reverse().map(memoryHTML).join(''):'<div class="memory">No matching Moments.</div>';wireMemory();hydrateMemoryThumbnails($('searchList'),searchThumbURLs)
 }
 $('searchBox').oninput=renderSearch;
 function refreshStats(){
  const r=rows(),today=new Date();const elapsed=Math.max(0,Math.floor((today-start)/86400000)+1);
- $('statDays').textContent=r.length;$('statPhotos').textContent=r.filter(([k,e])=>e.photo).length;$('statCaptions').textContent=r.filter(([k,e])=>(e.caption||'').trim()).length;$('statRemain').textContent=Math.max(0,365-elapsed);
+ $('statDays').textContent=r.length;$('statPhotos').textContent=r.filter(([k,e])=>e.hasPhoto).length;$('statCaptions').textContent=r.filter(([k,e])=>(e.caption||'').trim()).length;$('statRemain').textContent=Math.max(0,365-elapsed);
 }
-function playRows(){return rows().filter(([k,e])=>e.photo)}
-function renderPlayer(){
- const r=playRows();if(!r.length){$('playerImage').style.display='none';$('playerEmpty').style.display='grid';$('playerDate').textContent='';$('playerCaption').textContent='';return}
- if(playIndex>=r.length)playIndex=0;if(playIndex<0)playIndex=r.length-1;const [k,e]=r[playIndex];
- $('playerImage').src=e.photo;$('playerImage').style.display='block';$('playerEmpty').style.display='none';$('playerDate').textContent=pretty(k);$('playerCaption').textContent=e.caption||'';
+function playRows(){return rows().filter(([k,e])=>e.hasPhoto)}
+async function renderPlayer(){
+ const r=playRows();revokeURL(playerPhotoURL);playerPhotoURL=null;
+ if(!r.length){$('playerImage').removeAttribute('src');$('playerImage').style.display='none';$('playerEmpty').style.display='grid';$('playerDate').textContent='';$('playerCaption').textContent='';return}
+ if(playIndex>=r.length)playIndex=0;if(playIndex<0)playIndex=r.length-1;const [k,e]=r[playIndex],url=await photoURLForDate(k);
+ if(url){playerPhotoURL=url;$('playerImage').src=url;$('playerImage').style.display='block';$('playerEmpty').style.display='none'}else{$('playerImage').removeAttribute('src');$('playerImage').style.display='none';$('playerEmpty').style.display='grid'}
+ $('playerDate').textContent=pretty(k);$('playerCaption').textContent=e.caption||'';
 }
 function stopPlay(){if(playTimer){clearInterval(playTimer);playTimer=null}$('playerPlay').textContent='▶';if($('yearAudio'))$('yearAudio').pause()}
 $('playerPlay').onclick=()=>{
- if(playTimer){
-   stopPlay();
-   $('yearAudio').pause();
-   return;
- }
+ if(playTimer){stopPlay();$('yearAudio').pause();return}
  if(!playRows().length)return;
- playTimer=setInterval(()=>{playIndex++;renderPlayer()},playDelay);
- $('playerPlay').textContent='❚❚';
- if($('yearAudio').src){$('yearAudio').play().catch(()=>{})}
+ playTimer=setInterval(()=>{playIndex++;renderPlayer().catch(()=>{})},playDelay);$('playerPlay').textContent='❚❚';if($('yearAudio').src){$('yearAudio').play().catch(()=>{})}
 }
-$('playerPrev').onclick=()=>{stopPlay();playIndex--;renderPlayer()}
-$('playerNext').onclick=()=>{stopPlay();playIndex++;renderPlayer()}
-$('playerRandom').onclick=()=>{stopPlay();const r=playRows();if(r.length){playIndex=Math.floor(Math.random()*r.length);renderPlayer()}}
+$('playerPrev').onclick=()=>{stopPlay();playIndex--;renderPlayer().catch(()=>{})}
+$('playerNext').onclick=()=>{stopPlay();playIndex++;renderPlayer().catch(()=>{})}
+$('playerRandom').onclick=()=>{stopPlay();const r=playRows();if(r.length){playIndex=Math.floor(Math.random()*r.length);renderPlayer().catch(()=>{})}}
 document.querySelectorAll('.speed').forEach(b=>b.onclick=()=>{playDelay=+b.dataset.speed;if(playTimer){stopPlay();$('playerPlay').click()}notify(`Playback speed ${b.textContent}`)})
+
+async function initializeMomentStorage(){
+ momentDB=await openCustomerDB();
+ await migrateLegacyEntriesCopyOnly();
+ legacyEntries={};
+ await loadMomentIndex();
+ momentStorageReady=true;
+}
 
 function backup(){
  const payload={product:'My 365 Moments',version:1,meta,entries,createdAt:new Date().toISOString()};
@@ -1703,8 +1892,11 @@ function switchView(id){
  if(id==='momentsView')renderMoments();if(id==='searchView')renderSearch();if(id==='playView'){stopPlay();renderPlayer()}if(id==='moreView')refreshStats();window.scrollTo({top:0,behavior:'smooth'})
 }
 document.querySelectorAll('.nav button').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
-function refreshAll(){renderMoments();renderSearch();refreshStats();renderPlayer()}
-renderCalendar();refreshAll();
+function refreshAll(){renderMoments();renderSearch();refreshStats();renderPlayer().catch(()=>{})}
+initializeMomentStorage().then(()=>{renderCalendar();refreshAll()}).catch(err=>{
+ console.error('MY365 customer storage initialization failed:',err);
+ $('saveState').textContent='Customer storage could not be opened.';
+});
 })();
 </script>
 

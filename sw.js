@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my365-stage-production-hdca-zodiac-v2-fix2';
+const CACHE_NAME = 'my365-stage-production-hdca-zodiac-storage-migration-test-v1';
 
 const ASSETS = [
   "./index.html",
