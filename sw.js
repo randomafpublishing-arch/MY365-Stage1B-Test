@@ -1,7 +1,10 @@
-const CACHE_NAME = 'my365-stage2-test-v1';
+const CACHE_NAME = 'my365-stage3-test-v1';
 
 const ASSETS = [
   './index.html',
+  './manifest.webmanifest',
+  './icons/icon-192.png',
+  './icons/icon-512.png',
   './themes/hawaiian/01_iwa.png',
   './themes/dog/01_golden_retriever.png',
   './themes/zodiac-celestial/01_Aries.png'
@@ -18,7 +21,7 @@ self.addEventListener('activate', event => {
     caches.keys().then(keys =>
       Promise.all(
         keys
-          .filter(key => key !== CACHE_NAME && key.startsWith('my365-stage2-test-'))
+          .filter(key => key !== CACHE_NAME && key.startsWith('my365-stage'))
           .map(key => caches.delete(key))
       )
     ).then(() => self.clients.claim())
