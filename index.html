@@ -1480,5 +1480,16 @@ function refreshAll(){renderMoments();renderSearch();refreshStats();renderPlayer
 renderCalendar();refreshAll();
 })();
 </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js').catch(function (err) {
+      console.error('MY365 Stage 2 service worker registration failed:', err);
+    });
+  });
+}
+</script>
+
 </body>
 </html>
