@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my365-stage-production-hdca-zodiac-storage-migration-test-v1';
+const CACHE_NAME = 'my365-stage-production-hdca-zodiac-storage-migration-test-v2-calendar-thumbnail-fix';
 
 const ASSETS = [
   "./index.html",
@@ -133,6 +133,7 @@ const ASSETS = [
 ];
 
 self.addEventListener('install', event => {
+  self.skipWaiting();
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
   );
