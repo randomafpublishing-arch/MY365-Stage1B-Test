@@ -1428,7 +1428,7 @@ async function hydrateCalendarPhotos(){
  const nodes=Array.from(document.querySelectorAll('[data-photo-date]'));
  for(const node of nodes){
    const k=node.dataset.photoDate;if(!k)continue;const url=await photoURLForDate(k);if(!url||!node.isConnected){revokeURL(url);continue}
-   calendarPhotoURLs.push(url);node.style.background=`linear-gradient(rgba(5,2,8,.28),rgba(5,2,8,.42)),url("${url}") center/cover no-repeat`;
+   calendarPhotoURLs.push(url);node.style.setProperty('background',`linear-gradient(rgba(5,2,8,.28),rgba(5,2,8,.42)),url("${url}") center/cover no-repeat`,'important');
  }
 }
 function renderCalendar(){
