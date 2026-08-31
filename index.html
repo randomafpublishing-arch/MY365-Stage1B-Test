@@ -1539,15 +1539,88 @@ async function initializeMomentStorage(){
  momentStorageReady=true;
 }
 
-function backup(){
- const payload={product:'My 365 Moments',version:1,meta,entries,createdAt:new Date().toISOString()};
- const blob=new Blob([JSON.stringify(payload)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`MY365 BACKUP ${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000);notify('Backup exported')
+function blobToDataURL(blob){
+ return new Promise((resolve,reject)=>{
+   const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error||new Error('Photo could not be read'));r.readAsDataURL(blob);
+ });
 }
-$('backupBtn').onclick=backup;
+async function flushMomentWrites(){
+ const pending=Array.from(momentWriteQueues.values());if(pending.length)await Promise.all(pending);
+}
+function replaceAllMoments(records){
+ return new Promise((resolve,reject)=>{
+   const tx=momentDB.transaction(MOMENTS_STORE,'readwrite'),store=tx.objectStore(MOMENTS_STORE);
+   store.clear();records.forEach(record=>store.put(record));
+   tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('Restore transaction aborted'));
+ });
+}
+async function backup(){
+ if(!momentStorageReady){notify('Storage is still loading');return}
+ const btn=$('backupBtn'),oldText=btn.textContent;btn.disabled=true;btn.textContent='PREPARING BACKUP…';
+ try{
+   await flushMomentWrites();
+   const stored=(await idbGetAll(MOMENTS_STORE)).filter(r=>r&&r.dateKey).sort((a,b)=>a.dateKey.localeCompare(b.dateKey));
+   const moments=[],backupEntries={};
+   for(const record of stored){
+     let photoData=null,photoSha256=null;
+     if(record.photoBlob instanceof Blob){
+       photoData=await blobToDataURL(record.photoBlob);
+       photoSha256=await sha256Blob(record.photoBlob);
+     }
+     const item={
+       dateKey:record.dateKey,caption:record.caption||'',photoData,
+       photoType:record.photoBlob instanceof Blob?(record.photoType||record.photoBlob.type||'image/jpeg'):'',
+       photoWidth:record.photoWidth||0,photoHeight:record.photoHeight||0,
+       photoByteSize:record.photoBlob instanceof Blob?(record.photoByteSize||record.photoBlob.size||0):0,
+       photoSha256,createdAt:record.createdAt||'',updatedAt:record.updatedAt||''
+     };
+     moments.push(item);
+     backupEntries[record.dateKey]={caption:item.caption,hasPhoto:!!photoData,photoType:item.photoType,photoWidth:item.photoWidth,photoHeight:item.photoHeight,photoByteSize:item.photoByteSize,createdAt:item.createdAt,updatedAt:item.updatedAt};
+   }
+   const payload={product:'My 365 Moments',version:2,storage:'indexeddb-moments-v1',meta,entries:backupEntries,moments,createdAt:new Date().toISOString()};
+   const blob=new Blob([JSON.stringify(payload)],{type:'application/json'}),a=document.createElement('a'),url=URL.createObjectURL(blob);
+   a.href=url;a.download=`MY365 BACKUP ${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);notify(`Backup exported • ${moments.length} Moments`);
+ }catch(e){console.error(e);notify('Backup failed — nothing was changed')}
+ finally{btn.disabled=false;btn.textContent=oldText}
+}
+$('backupBtn').onclick=()=>{backup()};
 $('restoreBtn').onclick=()=>{$('restoreInput').value='';$('restoreInput').click()}
-$('restoreInput').onchange=()=>{
- const f=$('restoreInput').files&&$('restoreInput').files[0];if(!f)return;const r=new FileReader();
- r.onload=()=>{try{const p=JSON.parse(r.result);if(!p.entries||typeof p.entries!=='object')throw 0;entries=p.entries;if(p.meta){meta=p.meta;localStorage.setItem(META_KEY,JSON.stringify(meta))}localStorage.setItem(ENTRY_KEY,JSON.stringify(entries));notify('Backup restored');location.reload()}catch(e){notify('Restore failed')}};r.readAsText(f)
+$('restoreInput').onchange=async()=>{
+ const f=$('restoreInput').files&&$('restoreInput').files[0];if(!f)return;
+ const btn=$('restoreBtn'),oldText=btn.textContent;btn.disabled=true;btn.textContent='CHECKING BACKUP…';
+ try{
+   const p=JSON.parse(await f.text());
+   if(!p||p.product!=='My 365 Moments')throw new Error('Not a MY365 backup');
+   if(!Array.isArray(p.moments)){
+     const claimsPhotos=p.entries&&Object.values(p.entries).some(e=>e&&e.hasPhoto);
+     if(claimsPhotos)throw new Error('This older backup lists photos but does not contain the photo files');
+     throw new Error('This backup uses the older metadata-only format');
+   }
+   const restored=[];
+   for(const item of p.moments){
+     if(!item||typeof item.dateKey!=='string')throw new Error('Invalid Moment record');
+     let photoBlob=null;
+     if(item.photoData){
+       photoBlob=dataURLToBlob(item.photoData);
+       if(item.photoByteSize&&photoBlob.size!==item.photoByteSize)throw new Error('Photo size verification failed for '+item.dateKey);
+       if(item.photoSha256&&await sha256Blob(photoBlob)!==item.photoSha256)throw new Error('Photo verification failed for '+item.dateKey);
+     }
+     restored.push({
+       dateKey:item.dateKey,caption:item.caption||'',photoBlob,
+       photoType:photoBlob?(item.photoType||photoBlob.type||'image/jpeg'):'',
+       photoWidth:photoBlob?(item.photoWidth||0):0,photoHeight:photoBlob?(item.photoHeight||0):0,
+       photoByteSize:photoBlob?photoBlob.size:0,createdAt:item.createdAt||new Date().toISOString(),updatedAt:item.updatedAt||new Date().toISOString()
+     });
+   }
+   if(!confirm(`Restore ${restored.length} MY365 Moments? This will replace the Moments currently saved on this device.`)){notify('Restore cancelled');return}
+   btn.textContent='RESTORING…';
+   await flushMomentWrites();
+   await replaceAllMoments(restored);
+   if(p.meta&&typeof p.meta==='object'){meta=p.meta;localStorage.setItem(META_KEY,JSON.stringify(meta))}
+   await loadMomentIndex();
+   notify(`Backup restored • ${restored.length} Moments`);setTimeout(()=>location.reload(),500);
+ }catch(e){console.error(e);alert(e&&e.message?`Restore stopped: ${e.message}`:'Restore failed. Nothing was restored.');notify('Restore stopped')}
+ finally{btn.disabled=false;btn.textContent=oldText}
 }
 $('settingsTop').onclick=()=>{$('settingsModal').classList.add('open')};
 $('closeSettings').onclick=()=>{$('settingsModal').classList.remove('open')};
