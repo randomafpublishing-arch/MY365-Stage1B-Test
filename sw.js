@@ -1,4 +1,4 @@
-const CACHE_NAME = 'my365-stage-production-hdca-zodiac-storage-migration-test-v2-calendar-thumbnail-fix';
+const CACHE_NAME = 'my365-stage-production-hdca-zodiac-storage-migration-test-v3-backup-restore-fix';
 
 const ASSETS = [
   "./index.html",
