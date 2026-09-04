@@ -1,0 +1,2650 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07030b">
+<meta name="my365-engine-version" content="2">
+<meta name="my365-theme-architecture" content="single-engine-multi-theme">
+<meta name="my365-master" content="HAWAIIAN BUILD 8 — COMPLETE 25 THEMES">
+<title>My 365 Moments — Hawaiian Build 8 — Complete 25 Themes</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+ --gold:#f2d47a;--gold2:#b9872b;--gold3:#6f4b10;--ivory:#fff5d2;
+ --purple:#c24eff;--purple2:#6e20a5;--glass:rgba(7,3,11,.69);--line:rgba(242,212,122,.48);
+}
+html,body{margin:0;min-height:100%;background:#050208;color:var(--ivory);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+body{overflow-x:hidden}
+button,input,textarea,select{font:inherit}
+button{touch-action:manipulation}
+
+/* BLANK ENGINE: prevent accidental text selection/search popups in the app UI.
+   Form controls remain selectable/editable for captions, search, and settings. */
+.app, .app *{
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+.app input,.app textarea,.app select,.app [contenteditable="true"]{
+  -webkit-user-select:text;
+  user-select:text;
+  -webkit-touch-callout:default;
+}
+.app{
+ min-height:100vh;max-width:760px;margin:auto;position:relative;overflow:hidden;
+ background-image:
+   linear-gradient(180deg,rgba(14,2,20,.03),rgba(6,1,10,.10) 58%,rgba(5,1,8,.28)),
+   none;
+ background-size:cover;
+ background-position:center top;
+ background-attachment:fixed;
+}
+
+.scrim{position:fixed;inset:0;max-width:760px;margin:auto;pointer-events:none;z-index:1;background:linear-gradient(180deg,rgba(5,1,9,.08),rgba(5,1,9,.02) 28%,rgba(5,1,9,.12) 72%,rgba(5,1,9,.48))}
+.shell{position:relative;z-index:10;padding:16px 14px calc(102px + env(safe-area-inset-bottom))}
+.brand{text-align:center;padding:16px 52px 10px;position:relative}
+.brand .kicker{font-size:10px;letter-spacing:.28em;color:#e2c26b;text-transform:uppercase;text-shadow:0 1px 9px #000}
+.brand h1{margin:1px 0 0;font-family:Georgia,serif;font-weight:500;font-size:clamp(34px,10vw,58px);line-height:.95;color:#ffeaa0;text-shadow:0 0 5px #fff3,0 0 15px #d59b28,0 3px 4px #000}
+.brand h1 em{display:block;font-size:.72em;font-weight:400;color:#e7b7ff;text-shadow:0 0 12px #b83cff;font-style:italic}
+.top-actions{position:absolute;top:18px;left:10px;right:10px;display:flex;justify-content:space-between;z-index:25}
+.jewel-btn,.gold-btn{
+ border:1px solid #d5ad4f;background:linear-gradient(180deg,rgba(24,12,29,.94),rgba(6,3,9,.94));
+ color:var(--gold);border-radius:14px;box-shadow:inset 0 0 0 1px #fff1,0 0 13px #0009;padding:10px 12px;font-weight:800;
+}
+.jewel-btn{width:42px;height:42px;border-radius:50%;padding:0;font-size:18px;box-shadow:inset 0 0 12px #7c1fa8,0 0 12px #b93df577}
+.view{display:none}.view.active{display:block}
+.calendar-card,.panel{
+ position:relative;background:linear-gradient(180deg,rgba(7,3,10,.91),rgba(3,1,5,.88));
+ border:1px solid #d3a84a;border-radius:24px;padding:12px;
+ box-shadow:0 18px 45px #000b,inset 0 0 28px #9a5c221f,0 0 14px #c7932e33;
+ backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);
+ overflow:hidden;
+}
+.calendar-card:before,.panel:before{content:"";position:absolute;inset:4px;border:1px solid rgba(246,209,109,.24);border-radius:19px;pointer-events:none}
+.monthbar{display:grid;grid-template-columns:48px 1fr 48px;align-items:center;padding:5px 2px 10px;border-bottom:1px solid var(--line)}
+.monthtitle{text-align:center;font-family:Georgia,serif;color:#ffe394;font-size:clamp(23px,7vw,34px);text-shadow:0 0 10px #c99636}
+.monthbar button{border:0;background:transparent;color:#f2d47a;font-size:36px;line-height:1}
+.week,.days{display:grid;grid-template-columns:repeat(7,1fr);text-align:center}
+.week{font-size:10px;letter-spacing:.08em;color:#e7b3ff;padding:10px 0 5px;text-shadow:0 0 8px #a22ee2}
+.day{
+ min-height:48px;border:0;border-bottom:1px solid rgba(215,171,66,.11);background:transparent;color:#fff3c9;position:relative;border-radius:10px;
+ font-family:Georgia,serif;font-size:16px;text-shadow:0 1px 3px #000;
+}
+.day:not(.off):active{transform:scale(.96)}
+.day.off{opacity:.22}
+.day.locked{opacity:.25}
+.day.today{box-shadow:inset 0 0 0 1px #d7ad48}
+.day.selected{background:radial-gradient(circle,#7d2db0aa,#39134f99);box-shadow:0 0 12px #c448ff,inset 0 0 0 1px #d278ff;color:#fff}
+.day.has:after{content:"";position:absolute;width:6px;height:6px;border-radius:50%;background:#e454ff;bottom:4px;left:50%;transform:translateX(-50%);box-shadow:0 0 7px #e454ff}
+.termline{text-align:center;color:#e5d5ac;font-size:11px;margin:10px 0 1px;letter-spacing:.04em}
+.quick-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.gold-btn{border-radius:12px;padding:11px}
+.section-title{margin:0 0 12px;font-family:Georgia,serif;font-size:27px;color:#ffe394;text-align:center}
+.moment-list{display:grid;gap:10px}
+.memory{background:rgba(8,4,12,.72);border:1px solid #6f5626;border-radius:14px;padding:10px;min-height:84px}
+.memory img{width:74px;height:74px;object-fit:cover;border-radius:10px;float:left;margin-right:10px;border:1px solid #b88934}
+.memory b{color:#f5d678;font-family:Georgia,serif}.memory p{color:#eee0c4;font-size:13px;margin:4px 0}
+.memory:after{content:"";display:block;clear:both}
+.searchbox,textarea,select{
+ width:100%;border:1px solid #8f6d2b;background:rgba(4,2,7,.86);color:#fff6dd;border-radius:12px;padding:12px;outline:none
+}
+.searchbox:focus,textarea:focus{border-color:#d65aff;box-shadow:0 0 12px #ad36e755}
+.player-image{width:100%;height:48vh;max-height:430px;object-fit:cover;border-radius:16px;border:1px solid #cfa042;display:none}
+.player-empty{height:240px;display:grid;place-items:center;border:1px dashed #8d6b2b;border-radius:16px;color:#ae9c77;text-align:center}
+.player-meta{text-align:center}.player-meta h3{font-family:Georgia,serif;color:#ffe394;margin:10px 0 4px}.player-meta p{color:#eee0c4;margin:0 0 10px}
+.player-controls{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.player-controls button{padding:11px 4px}
+.speed-row{display:flex;gap:8px;justify-content:center;margin-top:9px}.speed-row button{padding:7px 10px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{border:1px solid #6f5626;background:#08040cbf;border-radius:14px;text-align:center;padding:18px 8px}.stat strong{display:block;font:32px Georgia,serif;color:#ffe394}
+.setting{margin:12px 0}.setting label{display:block;color:#f0dba7;margin-bottom:6px;font-size:13px}
+.swatches{display:flex;gap:9px;flex-wrap:wrap}.swatch{width:34px;height:34px;border-radius:50%;border:2px solid #e6c468;box-shadow:0 0 10px #000}.swatch.active{outline:2px solid #fff;outline-offset:2px}
+.help p{color:#eadfc5;line-height:1.5;font-size:14px}
+.nav{
+ position:fixed;z-index:60;bottom:0;left:0;right:0;max-width:760px;margin:auto;
+ display:grid;grid-template-columns:repeat(5,1fr);background:linear-gradient(180deg,rgba(8,3,12,.92),rgba(3,1,5,.98));
+ border-top:1px solid #cf9f40;padding:7px 4px calc(7px + env(safe-area-inset-bottom));backdrop-filter:blur(8px)
+}
+.nav button{border:0;background:transparent;color:#ad9970;padding:5px 1px;font-size:9px;font-weight:700}.nav button.active{color:#ffe394;text-shadow:0 0 8px #d044ff}
+.nav .ico{display:block;font-size:19px;margin-bottom:3px}
+.modal{position:fixed;inset:0;z-index:100;display:none;align-items:flex-end;justify-content:center;background:#000b}
+.modal.open{display:flex}
+.sheet{width:100%;max-width:760px;max-height:94vh;overflow:auto;background:linear-gradient(180deg,#120818,#060309);border:1px solid #d0a34a;border-radius:26px 26px 0 0;padding:14px 14px calc(20px + env(safe-area-inset-bottom));box-shadow:0 -15px 50px #000}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}.sheet-head h2{margin:0;font:25px Georgia,serif;color:#ffe394}
+.photoBox{min-height:220px;border:1px dashed #80612b;border-radius:16px;display:grid;place-items:center;overflow:hidden;background:#050208}
+.photoBox img{display:none;width:100%;height:300px;object-fit:cover}.emptyPhoto{text-align:center;color:#9e8d69;padding:20px}
+.sheet textarea{min-height:100px;margin-top:10px}
+.save-state{text-align:center;font-size:12px;color:#b8aa8d;margin-top:8px}
+.hidden{display:none!important}
+.toast{position:fixed;z-index:150;left:50%;bottom:95px;transform:translateX(-50%);background:#120818e8;color:#ffe394;border:1px solid #b58832;border-radius:999px;padding:9px 15px;opacity:0;pointer-events:none;transition:.2s}.toast.show{opacity:1}
+@media(min-width:760px){.app{min-height:100vh;box-shadow:0 0 60px #000}.nav{border-left:1px solid #cf9f40;border-right:1px solid #cf9f40}}
+
+.shell{position:relative;z-index:20;padding:16px 14px calc(102px + env(safe-area-inset-bottom))}
+
+.calendar-card,.panel{
+ position:relative;
+ background:linear-gradient(180deg,rgba(7,3,10,.82),rgba(3,1,5,.78));
+ border:1px solid rgba(242,212,122,.86);
+ border-radius:24px;
+ padding:12px;
+ box-shadow:
+   0 18px 45px rgba(0,0,0,.72),
+   inset 0 0 26px rgba(190,136,39,.10),
+   0 0 12px rgba(220,170,55,.22);
+ backdrop-filter:blur(1.5px);
+ -webkit-backdrop-filter:blur(1.5px);
+ overflow:hidden;
+}
+
+.layer-gold-shimmer{
+ position:fixed;inset:0;max-width:760px;margin:auto;z-index:38;pointer-events:none;
+}
+.layer-gold-shimmer:before{
+ content:"";
+ position:absolute;inset:8px;
+ border:1px solid rgba(247,208,101,.82);
+ border-radius:22px;
+ box-shadow:
+   inset 0 0 0 1px rgba(255,246,197,.18),
+   0 0 14px rgba(255,190,49,.20);
+ background:
+   linear-gradient(105deg,
+     transparent 0%,
+     transparent 41%,
+     rgba(255,247,196,.08) 46%,
+     rgba(255,225,132,.34) 49%,
+     rgba(255,255,255,.22) 50%,
+     rgba(255,213,102,.28) 52%,
+     transparent 57%,
+     transparent 100%);
+ background-size:220% 100%;
+ animation:goldSweep 6s linear infinite;
+}
+.layer-gold-shimmer:after{
+ content:"◆";
+ position:absolute;top:5px;left:50%;transform:translateX(-50%);
+ color:#d454ff;
+ text-shadow:0 0 8px #d454ff,0 0 14px #f2d47a;
+ font-size:15px;
+ background:rgba(5,2,8,.72);
+ padding:0 10px;
+}
+@keyframes goldSweep{0%{background-position:130% 0}100%{background-position:-130% 0}}
+
+.brand h1,.monthtitle,.section-title{
+ background:linear-gradient(90deg,#a66b13,#ffeaa0 22%,#fff8ce 45%,#f0c75e 68%,#a86d16);
+ -webkit-background-clip:text;
+ background-clip:text;
+ color:transparent;
+ text-shadow:0 0 8px rgba(235,182,62,.16),0 2px 2px rgba(0,0,0,.75);
+}
+
+.gold-btn,.jewel-btn{
+ position:relative;overflow:hidden;
+ background:linear-gradient(180deg,rgba(24,12,29,.94),rgba(6,3,9,.94));
+ border:1px solid #d8b45b;
+}
+.gold-btn:before,.jewel-btn:before{
+ content:"";position:absolute;inset:0;
+ background:linear-gradient(110deg,transparent 0 38%,rgba(255,246,198,.26) 47%,rgba(255,255,255,.34) 50%,rgba(255,232,147,.18) 54%,transparent 62%);
+ transform:translateX(-130%);
+ animation:buttonShine 5.5s ease-in-out infinite;
+ pointer-events:none;
+}
+@keyframes buttonShine{0%,62%{transform:translateX(-130%)}80%,100%{transform:translateX(130%)}}
+
+/* BUTTON FIX BUILD — working customer accent color */
+:root{--accent:#c24eff}
+.day.selected{
+  box-shadow:0 0 13px var(--accent),inset 0 0 0 1px var(--accent)!important;
+}
+.day.has:after{
+  background:var(--accent)!important;
+  box-shadow:0 0 7px var(--accent)!important;
+}
+.nav button.active{
+  text-shadow:0 0 10px var(--accent)!important;
+}
+.jewel-btn{
+  box-shadow:inset 0 0 12px color-mix(in srgb,var(--accent) 48%,transparent),0 0 12px color-mix(in srgb,var(--accent) 42%,transparent)!important;
+}
+.swatch.active{
+  outline:2px solid #fff;
+  outline-offset:2px;
+  box-shadow:0 0 14px var(--accent);
+}
+#settingsModal .sheet{max-height:70vh}
+
+
+/* DAYLIGHT BRIGHTNESS PASS — interface tuning, functions unchanged */
+.scrim{
+  background:linear-gradient(
+    180deg,
+    rgba(20,3,24,.015),
+    rgba(20,3,24,0) 34%,
+    rgba(15,2,20,.025) 72%,
+    rgba(8,1,12,.14)
+  ) !important;
+}
+.calendar-card,.panel{
+  background:linear-gradient(
+    180deg,
+    rgba(18,8,24,.64),
+    rgba(7,3,11,.59)
+  ) !important;
+  box-shadow:
+    0 14px 34px rgba(0,0,0,.48),
+    inset 0 0 26px rgba(255,214,112,.09),
+    0 0 15px rgba(236,185,67,.26) !important;
+}
+.brand h1{
+  filter:brightness(1.18) saturate(1.12);
+}
+.brand .kicker,.monthtitle,.termline{
+  filter:brightness(1.18);
+}
+.gold-btn,.jewel-btn{
+  background:linear-gradient(180deg,rgba(48,22,54,.83),rgba(16,7,22,.83)) !important;
+  border-color:#f0ca6a !important;
+  color:#ffe89b !important;
+}
+.day{
+  color:#fff8df !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.62);
+}
+.week{
+  color:#f0c7ff !important;
+}
+.nav{
+  background:linear-gradient(180deg,rgba(24,9,29,.78),rgba(8,3,12,.88)) !important;
+}
+
+.app{
+  background-blend-mode:screen,normal !important;
+  filter:none !important;
+}
+
+
+/* FULLY TRANSLUCENT CALENDAR PASS — functions unchanged */
+.calendar-card{
+  background:rgba(7,3,11,.18) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  box-shadow:
+    0 10px 26px rgba(0,0,0,.18),
+    inset 0 0 18px rgba(255,220,130,.035),
+    0 0 12px rgba(236,185,67,.20) !important;
+}
+.calendar-card:before{
+  background:transparent !important;
+}
+.monthbar{
+  background:rgba(5,2,9,.08) !important;
+}
+.day{
+  background:transparent !important;
+}
+.day.selected{
+  background:color-mix(in srgb,var(--accent) 22%,transparent) !important;
+}
+
+
+/* Calendar photo thumbnails — only change in this build */
+.day.has-photo{
+  overflow:hidden;
+  color:#fff !important;
+  text-shadow:0 2px 4px rgba(0,0,0,.95),0 0 3px rgba(0,0,0,.9) !important;
+  box-shadow:inset 0 0 0 1px rgba(241,207,112,.28);
+}
+.day.has-photo span{
+  position:relative;
+  z-index:2;
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:100%;
+  min-height:48px;
+  font-weight:700;
+}
+.day.has-photo.selected{
+  box-shadow:0 0 13px var(--accent),inset 0 0 0 2px var(--accent) !important;
+}
+
+
+/* FIRST-OPEN PRIVACY / HOW THIS WORKS POPUP */
+#privacyWelcome{
+  position:fixed;inset:0;z-index:9999;
+  display:none;align-items:center;justify-content:center;
+  padding:22px;
+  background:rgba(4,1,7,.72);
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+}
+#privacyWelcome.open{display:flex}
+#privacyWelcome .welcome-card{
+  width:min(92vw,560px);
+  max-height:86vh;overflow:auto;
+  padding:24px 20px;
+  border:1px solid #e4c166;
+  border-radius:24px;
+  background:linear-gradient(180deg,rgba(31,11,37,.97),rgba(8,3,12,.98));
+  box-shadow:0 0 26px rgba(222,176,62,.28),inset 0 0 24px rgba(194,78,255,.10);
+  color:#fff8df;
+  text-align:center;
+}
+#privacyWelcome h2{margin:0 0 14px;color:#ffe392;font-size:30px}
+#privacyWelcome p{font-size:16px;line-height:1.48;margin:10px 0}
+#privacyWelcome .privacy-strong{color:#ffe392;font-weight:800}
+#privacyWelcome .dont-show{
+  display:flex;gap:10px;align-items:center;justify-content:center;
+  margin:18px 0 14px;font-size:15px;
+}
+#privacyWelcome .dont-show input{width:20px;height:20px}
+#privacyWelcome .got-it{width:100%;min-height:54px;font-size:18px}
+
+
+/* =========================================================
+   MY365 MASTER THEME ENGINE v2
+   Functional engine stays shared. Themes change visuals only.
+   ========================================================= */
+:root{
+  --my365-theme-accent:#c24eff;
+  --my365-theme-gold:#f2d47a;
+  --my365-theme-gold2:#b9872b;
+  --my365-theme-ivory:#fff5d2;
+  --my365-theme-panel-alpha:.18;
+  --my365-theme-bg-position:center top;
+}
+body[data-my365-theme] .app{
+  background-position:var(--my365-theme-bg-position) !important;
+}
+body[data-my365-theme] .day.selected{
+  box-shadow:0 0 13px var(--my365-theme-accent),inset 0 0 0 1px var(--my365-theme-accent) !important;
+}
+body[data-my365-theme] .day.has:after{
+  background:var(--my365-theme-accent) !important;
+  box-shadow:0 0 7px var(--my365-theme-accent) !important;
+}
+body[data-my365-theme] .nav button.active{
+  text-shadow:0 0 10px var(--my365-theme-accent) !important;
+}
+
+
+/* =========================================================
+   MY365 THEME LIBRARY v1 — CUSTOMER INTERFACE
+   Engine/memories/functions unchanged.
+   ========================================================= */
+#themeLibraryModal{
+  position:fixed;inset:0;z-index:10020;display:none;
+  align-items:flex-end;justify-content:center;
+  background:rgba(3,1,5,.72);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+}
+#themeLibraryModal.open{display:flex}
+.theme-library-card{
+  width:min(100%,620px);max-height:88vh;overflow:auto;
+  border:1px solid rgba(242,205,104,.92);
+  border-radius:26px 26px 0 0;
+  padding:20px 16px 28px;
+  background:linear-gradient(180deg,rgba(26,10,31,.98),rgba(7,3,10,.99));
+  box-shadow:0 -10px 35px rgba(0,0,0,.55),0 0 22px rgba(226,181,62,.18);
+}
+.theme-library-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.theme-library-head h2{margin:0;color:#ffe293;font-size:27px}
+.theme-library-close{min-width:46px}
+.theme-library-sub{margin:8px 0 16px;color:#fff1c6;font-size:14px;line-height:1.4}
+.theme-collection-title{
+  margin:18px 0 10px;color:#f6d475;font-weight:800;
+  letter-spacing:.08em;text-transform:uppercase;font-size:13px;
+}
+.theme-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.theme-card{
+  min-height:112px;border:1px solid rgba(238,197,83,.68);border-radius:18px;
+  padding:14px 12px;display:flex;flex-direction:column;justify-content:flex-end;
+  background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(0,0,0,.28));
+  color:#fff7db;text-align:left;box-shadow:inset 0 0 18px rgba(255,219,113,.035);
+}
+.theme-card strong{font-size:17px;color:#ffe29a}
+.theme-card small{margin-top:5px;opacity:.82}
+.theme-card.active{
+  border-color:var(--my365-theme-accent);
+  box-shadow:0 0 15px var(--my365-theme-accent),inset 0 0 0 1px var(--my365-theme-accent);
+}
+.theme-card.locked-theme{opacity:.48}
+
+
+/* Engine6 temporary direct theme buttons are retained internally as fallback,
+   but customer now uses Theme Library. */
+#themeSetting .quick-row{display:none !important}
+#openThemeLibrary{width:100%}
+
+
+/* THEME LIBRARY v2 — VISUAL PREVIEW CARDS */
+.theme-card{
+  min-height:172px !important;
+  position:relative;overflow:hidden;
+  justify-content:flex-end !important;
+  background-size:cover !important;
+  background-position:center !important;
+  isolation:isolate;
+}
+.theme-card::before{
+  content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(180deg,rgba(5,2,7,.03) 25%,rgba(5,2,7,.90) 100%);
+}
+.theme-card strong,.theme-card small{
+  position:relative;z-index:1;
+  text-shadow:0 2px 7px rgba(0,0,0,.9);
+}
+
+
+.theme-card.locked-theme{display:none !important}
+
+
+/* =========================================================
+   MY365 BLANK ENGINE — NO THEME ARTWORK
+   Core calendar/interface/functions only.
+   Theme artwork is added later as separate standardized layers.
+   ========================================================= */
+.app{background:#050208 !important;background-image:none !important;}
+body[data-my365-theme="blank_base"] .brand .kicker::after{content:"" !important;}
+
+
+.library-theme[data-library-theme="blank_base"]{background:linear-gradient(180deg,#141016,#080609) !important;}
+
+/* HAWAIIAN BUILD 2 — reliable dedicated artwork layer */
+.my365-theme-art{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  object-position:center top;
+  z-index:0;
+  pointer-events:none;
+  display:none;
+}
+.app>.scrim,.app>.shell,.app>.layer-gold-shimmer{position:relative;z-index:1}
+body[data-my365-theme^="hawaiian_"] .my365-theme-art,
+body[data-my365-theme^="dog_"] .my365-theme-art,
+body[data-my365-theme^="country_"] .my365-theme-art,
+body[data-my365-theme^="armed_forces_"] .my365-theme-art,
+body[data-my365-theme^="zodiac_celestial_"] .my365-theme-art{display:block}
+body[data-my365-theme^="hawaiian_"] .app,
+body[data-my365-theme^="dog_"] .app,
+body[data-my365-theme^="country_"] .app,
+body[data-my365-theme^="armed_forces_"] .app{
+  background:#050208 !important;
+  background-image:none !important;
+}
+body[data-my365-theme^="hawaiian_"] .scrim,
+body[data-my365-theme^="dog_"] .scrim,
+body[data-my365-theme^="country_"] .scrim,
+body[data-my365-theme^="armed_forces_"] .scrim{
+  background:linear-gradient(180deg,rgba(0,0,0,.02),rgba(0,0,0,.06) 35%,rgba(0,0,0,.28));
+}
+body[data-my365-theme^="hawaiian_"] .calendar-card{
+  background:linear-gradient(180deg,rgba(5,5,8,.56),rgba(5,5,8,.44)) !important;
+  backdrop-filter:blur(4px);
+  -webkit-backdrop-filter:blur(4px);
+  border-color:rgba(242,212,122,.62) !important;
+}
+.library-theme[data-library-theme="hawaiian_iwa"]{
+  background-size:cover !important;
+  background-position:center center !important;
+}
+
+
+/* ===== EMPEROR PLAY / CALENDAR / NAVIGATION REDESIGN — 2026-09-03 ===== */
+.theme-depth-layer{position:fixed;inset:0;max-width:760px;margin:auto;z-index:0;pointer-events:none;opacity:.62;mix-blend-mode:soft-light;background:radial-gradient(circle at 18% 12%,rgba(255,236,170,.20),transparent 26%),radial-gradient(circle at 82% 34%,rgba(164,73,204,.18),transparent 32%),repeating-linear-gradient(118deg,rgba(255,255,255,.025) 0 1px,transparent 1px 5px);filter:contrast(1.08)}
+body[data-my365-theme="blank_base"] .theme-depth-layer{opacity:.28;mix-blend-mode:normal;background:radial-gradient(circle at 50% 0,rgba(214,169,67,.12),transparent 42%),repeating-linear-gradient(135deg,rgba(255,255,255,.018) 0 1px,transparent 1px 7px)}
+.app>.theme-depth-layer{position:fixed;z-index:0}.app>.scrim,.app>.shell,.app>.layer-gold-shimmer{z-index:1}
+.calendar-card{background:linear-gradient(155deg,rgba(8,4,12,.48),rgba(3,1,6,.34))!important;border:1px solid rgba(245,211,116,.62)!important;backdrop-filter:blur(2px) saturate(1.12)!important;-webkit-backdrop-filter:blur(2px) saturate(1.12)!important;box-shadow:0 22px 55px rgba(0,0,0,.64),inset 0 0 42px rgba(222,170,61,.10),0 0 0 1px rgba(255,242,188,.08),0 0 24px rgba(213,155,48,.18)!important}
+.calendar-card:before{inset:5px!important;border:0!important;border-radius:20px!important;background:linear-gradient(90deg,rgba(255,225,137,.78),rgba(121,76,16,.18),rgba(255,231,150,.72)) top/100% 1px no-repeat,linear-gradient(90deg,rgba(255,225,137,.62),rgba(121,76,16,.12),rgba(255,231,150,.58)) bottom/100% 1px no-repeat,linear-gradient(180deg,rgba(255,225,137,.62),transparent 38%,rgba(255,231,150,.55)) left/1px 100% no-repeat,linear-gradient(180deg,rgba(255,225,137,.62),transparent 38%,rgba(255,231,150,.55)) right/1px 100% no-repeat;box-shadow:inset 0 0 18px rgba(246,209,109,.08)}
+.calendar-card:after{content:"◆";position:absolute;left:50%;top:1px;transform:translateX(-50%);color:rgba(255,226,135,.84);font-size:10px;text-shadow:0 0 9px rgba(255,202,70,.7);pointer-events:none}
+#settingsTop{display:none!important}
+/* Borderless cinematic Play My Year */
+#playView>.panel{background:transparent!important;border:0!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;overflow:visible;padding:6px 0 16px}
+#playView>.panel:before{display:none}
+.carousel-stage{position:relative;height:min(54vh,470px);min-height:300px;display:grid;place-items:center;perspective:1100px;overflow:visible;margin:0 -8px 8px;isolation:isolate}
+.carousel-photo{position:absolute;inset:0;margin:auto;max-width:96%;max-height:100%;width:auto;height:auto;object-fit:contain;border:0;border-radius:0;box-shadow:0 24px 55px rgba(0,0,0,.56),0 0 26px rgba(244,213,123,.10);opacity:0;transform:translate3d(12%,0,-80px) rotateY(-10deg) scale(.93);transition:opacity .95s ease,transform 1.05s cubic-bezier(.2,.7,.2,1),filter .95s ease;filter:brightness(.68) saturate(.9);display:block!important;pointer-events:none}
+.carousel-photo.active{opacity:1;transform:translate3d(0,0,0) rotateY(0) scale(1);filter:brightness(1) saturate(1)}
+.carousel-photo.outgoing{opacity:0;transform:translate3d(-12%,0,-90px) rotateY(10deg) scale(.92);filter:brightness(.55) saturate(.82)}
+.player-empty{width:90%;height:240px;background:rgba(5,2,8,.38);backdrop-filter:blur(2px)}
+.player-meta{min-height:58px;padding:0 12px}.player-controls,.speed-row,#playView .quick-row{position:relative;z-index:5}
+.finale-particle{position:fixed;z-index:9998;left:50%;top:50%;width:82px;height:82px;object-fit:cover;border:0;pointer-events:none;transform:translate(-50%,-50%) scale(.18);opacity:1;animation:my365Burst 1.25s cubic-bezier(.16,.78,.28,1) forwards;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+.carousel-stage.finale .carousel-photo.active{transition:transform .72s cubic-bezier(.4,0,.2,1),opacity .18s .68s;transform:translate3d(0,0,0) scale(.06);opacity:0}
+@keyframes my365Burst{to{transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) rotate(var(--rot)) scale(var(--scale));opacity:0}}
+@media(prefers-reduced-motion:reduce){.carousel-photo{transition:opacity .2s linear!important;transform:none!important}.carousel-photo.active{transform:none!important}.finale-particle{display:none!important}.carousel-stage.finale .carousel-photo.active{transition:opacity .2s!important;transform:none!important}}
+
+
+
+/* ===== EMPEROR VISUAL CORRECTION — 2026-09-04 =====
+   Presentation-only correction. Customer storage/data/theme artwork/wrapper logic unchanged. */
+:root{--ui-gold:#e6c66e;--ui-champagne:#f3dfab;--ui-ivory:#fff6dc;--ui-neutral:#b8aa8d}
+/* Refined integrated header: restrained scale, no purple glow, no gaudy ornament */
+.brand{padding:8px 48px 12px}
+.brand .kicker{font-size:9px;letter-spacing:.24em;color:rgba(236,209,137,.86);text-shadow:0 1px 4px rgba(0,0,0,.72)}
+.brand h1{margin:3px 0 0;font-size:clamp(27px,7.6vw,42px);line-height:1.02;font-weight:500;letter-spacing:.015em;color:#f5dfa0;text-shadow:0 1px 2px rgba(0,0,0,.86),0 0 8px rgba(205,160,58,.18)}
+.brand h1 em{display:inline;font-size:.72em;margin-left:.16em;color:#fff0c7;text-shadow:none;font-style:italic;font-weight:400}
+
+/* Theme depth: subtle material atmosphere only, no purple/magenta cast */
+.theme-depth-layer{opacity:.34;mix-blend-mode:soft-light;background:radial-gradient(circle at 18% 12%,rgba(255,236,170,.14),transparent 28%),radial-gradient(circle at 82% 34%,rgba(193,153,68,.08),transparent 34%),repeating-linear-gradient(118deg,rgba(255,255,255,.018) 0 1px,transparent 1px 6px);filter:contrast(1.03)}
+body[data-my365-theme="blank_base"] .theme-depth-layer{opacity:.20;background:radial-gradient(circle at 50% 0,rgba(214,169,67,.09),transparent 44%),repeating-linear-gradient(135deg,rgba(255,255,255,.012) 0 1px,transparent 1px 8px)}
+
+/* Calendar: cleaner, substantially more transparent, restrained dimensional gold */
+.calendar-card,
+body[data-my365-theme^="hawaiian_"] .calendar-card{background:linear-gradient(160deg,rgba(8,6,7,.25),rgba(3,3,4,.16))!important;border:1px solid rgba(232,198,103,.46)!important;backdrop-filter:blur(.6px) saturate(1.02)!important;-webkit-backdrop-filter:blur(.6px) saturate(1.02)!important;box-shadow:0 14px 34px rgba(0,0,0,.38),inset 0 0 18px rgba(236,198,91,.035),0 0 0 1px rgba(255,246,213,.025)!important}
+.calendar-card:before{inset:7px!important;border-radius:18px!important;background:linear-gradient(90deg,transparent,rgba(246,218,137,.58) 18%,rgba(171,126,39,.20) 50%,rgba(246,218,137,.58) 82%,transparent) top/100% 1px no-repeat,linear-gradient(90deg,transparent,rgba(225,188,91,.32) 25%,rgba(225,188,91,.32) 75%,transparent) bottom/100% 1px no-repeat,linear-gradient(180deg,rgba(246,218,137,.42),transparent 28%,transparent 72%,rgba(225,188,91,.28)) left/1px 100% no-repeat,linear-gradient(180deg,rgba(246,218,137,.42),transparent 28%,transparent 72%,rgba(225,188,91,.28)) right/1px 100% no-repeat!important;box-shadow:none!important}
+.calendar-card:after{content:""!important;position:absolute;inset:11px;pointer-events:none;border-radius:15px;background:radial-gradient(circle at 0 0,rgba(255,231,157,.22),transparent 30px),radial-gradient(circle at 100% 0,rgba(255,231,157,.22),transparent 30px),radial-gradient(circle at 0 100%,rgba(255,231,157,.12),transparent 30px),radial-gradient(circle at 100% 100%,rgba(255,231,157,.12),transparent 30px)}
+.monthbar{border-bottom-color:rgba(230,198,110,.28)}
+.monthtitle{color:#f5dfa0;text-shadow:0 1px 4px rgba(0,0,0,.75)}
+.week{color:rgba(255,238,196,.78);text-shadow:none}
+.day{color:#fff6dc;border-bottom-color:rgba(222,190,101,.10);text-shadow:0 1px 2px rgba(0,0,0,.78)}
+.day.today{box-shadow:inset 0 0 0 1px rgba(231,196,101,.70),0 0 8px rgba(206,159,56,.10)}
+.day.selected{background:radial-gradient(circle,rgba(225,190,92,.24),rgba(90,69,29,.10));box-shadow:inset 0 0 0 1px rgba(240,209,126,.82),0 0 10px rgba(211,167,66,.16);color:#fff8e8}
+.day.has:after{background:#e8c76c;box-shadow:0 0 5px rgba(232,199,108,.48)}
+
+/* Controlled interface palette: gold/champagne/ivory/neutral only */
+.jewel-btn,.gold-btn{border-color:rgba(218,177,77,.76);background:linear-gradient(180deg,rgba(18,15,13,.90),rgba(5,5,5,.92));color:#e8c86e;box-shadow:inset 0 0 0 1px rgba(255,245,210,.04),0 5px 14px rgba(0,0,0,.32)}
+.jewel-btn{box-shadow:inset 0 0 10px rgba(220,177,71,.10),0 4px 12px rgba(0,0,0,.36)}
+.gold-btn:active,.jewel-btn:active{box-shadow:inset 0 0 0 1px rgba(249,220,139,.70),0 2px 8px rgba(0,0,0,.30)!important}
+.searchbox:focus,textarea:focus{border-color:#d9b85e;box-shadow:0 0 0 2px rgba(217,184,94,.13)}
+.section-title{color:#f4dda0;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+.sheet{background:linear-gradient(180deg,rgba(15,13,11,.98),rgba(5,5,5,.99));border-color:rgba(210,169,70,.72)}
+.sheet-head h2{color:#f4dda0}
+.toast{background:rgba(13,11,9,.94);color:#f6dfa0;border-color:rgba(181,136,50,.75)}
+
+/* Light integrated phone navigation */
+.nav{background:linear-gradient(180deg,rgba(8,7,6,.52),rgba(4,4,4,.78));border-top:1px solid rgba(213,172,72,.38);padding:5px 4px calc(5px + env(safe-area-inset-bottom));backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);box-shadow:0 -8px 22px rgba(0,0,0,.20)}
+.nav button{color:rgba(218,205,171,.66);padding:4px 1px;font-size:9px;font-weight:650}
+.nav button.active{color:#f1d889;text-shadow:0 0 6px rgba(210,165,60,.22)}
+.nav .ico{font-size:17px;margin-bottom:2px}
+
+/* Neutralize legacy customer-accent bleed in the core UI while preserving stored setting/data */
+.calendar-card .day.selected,.calendar-card .day.has:after,.nav button.active,.searchbox:focus,textarea:focus,.jewel-btn,.gold-btn{--accent:#d9b85e!important;--purple:#d9b85e!important;--my365-theme-accent:#d9b85e!important}
+
+/* Keep Play Year borderless and controls visually detached */
+#playView>.panel{padding-top:2px}
+.carousel-photo{box-shadow:0 20px 46px rgba(0,0,0,.42),0 0 18px rgba(230,198,110,.07)}
+.player-meta h3{color:#f4dda0;text-shadow:0 1px 3px rgba(0,0,0,.65)}
+.player-controls,.speed-row,#playView .quick-row{filter:none}
+
+
+
+/* ============================================================
+   RAFP EMPEROR LUXURY ARCHITECTURE — DOM-BOUND CORRECTION 20260904
+   Verified actual DOM:
+   .app > #my365ThemeArt.my365-theme-art
+   .app > .theme-depth-layer
+   .app > .layer-gold-shimmer
+   #calendarView > .calendar-card
+   nav.nav
+   header.brand
+   ============================================================ */
+
+:root{
+  --rafp-gold:#d6b35a;
+  --rafp-champagne:#ead9aa;
+  --rafp-ivory:#fff8e8;
+}
+
+/* BACKGROUND — actual approved theme artwork element */
+#my365ThemeArt.my365-theme-art{
+  opacity:1 !important;
+  filter:none !important;
+}
+
+/* LAYER 1 — actual depth/texture layer */
+.app > .theme-depth-layer{
+  opacity:.52 !important;
+  background:
+    radial-gradient(ellipse at 50% 18%, rgba(255,248,232,.10), transparent 36%),
+    linear-gradient(180deg, rgba(6,6,7,.05) 0%, rgba(6,6,7,.12) 58%, rgba(6,6,7,.24) 100%) !important;
+  mix-blend-mode:normal !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  pointer-events:none !important;
+}
+
+/* LAYER 2 / finishing — actual gold shimmer layer */
+.app > .layer-gold-shimmer{
+  opacity:.34 !important;
+  background:
+    linear-gradient(116deg, transparent 0 43%, rgba(234,217,170,.055) 49%, transparent 55%),
+    radial-gradient(circle at 50% 2%, rgba(214,179,90,.09), transparent 28%) !important;
+  pointer-events:none !important;
+}
+
+/* Keep scrim light enough for theme artwork to remain alive */
+.app > .scrim{
+  background:linear-gradient(180deg,rgba(0,0,0,.06),rgba(0,0,0,.14) 62%,rgba(0,0,0,.22)) !important;
+}
+
+/* TOP BRANDING — verified header.brand */
+header.brand{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+  padding:10px 16px 8px !important;
+}
+header.brand .kicker{
+  color:rgba(255,248,232,.74) !important;
+  letter-spacing:.22em !important;
+  font-size:.62rem !important;
+  font-weight:600 !important;
+}
+header.brand h1{
+  color:var(--rafp-champagne) !important;
+  font-size:clamp(1.30rem,5vw,1.80rem) !important;
+  line-height:1.05 !important;
+  letter-spacing:.025em !important;
+  text-shadow:0 1px 0 rgba(255,255,255,.06),0 6px 18px rgba(0,0,0,.22) !important;
+}
+header.brand h1 em{
+  color:var(--rafp-ivory) !important;
+  text-shadow:none !important;
+}
+header.brand h1::after{
+  content:"";
+  display:block;
+  width:44px;
+  height:1px;
+  margin:8px auto 0;
+  background:linear-gradient(90deg,transparent,var(--rafp-gold),transparent);
+}
+
+/* CALENDAR — verified live element: #calendarView > .calendar-card */
+#calendarView > .calendar-card{
+  position:relative !important;
+  isolation:isolate !important;
+  overflow:visible !important;
+  background:rgba(8,8,9,.16) !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:0 16px 34px rgba(0,0,0,.18) !important;
+  backdrop-filter:blur(1.5px) saturate(1.04) !important;
+  -webkit-backdrop-filter:blur(1.5px) saturate(1.04) !important;
+}
+
+/* shaped luxury corners, not a generic outlined rectangle */
+#calendarView > .calendar-card::before{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  z-index:-1;
+  pointer-events:none;
+  background:
+    linear-gradient(var(--rafp-gold),var(--rafp-gold)) left 10px top/30px 1px no-repeat,
+    linear-gradient(var(--rafp-gold),var(--rafp-gold)) right 10px top/30px 1px no-repeat,
+    linear-gradient(var(--rafp-gold),var(--rafp-gold)) left 10px bottom/30px 1px no-repeat,
+    linear-gradient(var(--rafp-gold),var(--rafp-gold)) right 10px bottom/30px 1px no-repeat,
+    linear-gradient(var(--rafp-gold),var(--rafp-gold)) left top 10px/1px 26px no-repeat,
+    linear-gradient(var(--rafp-gold),var(--rafp-gold)) right top 10px/1px 26px no-repeat,
+    linear-gradient(var(--rafp-gold),var(--rafp-gold)) left bottom 10px/1px 26px no-repeat,
+    linear-gradient(var(--rafp-gold),var(--rafp-gold)) right bottom 10px/1px 26px no-repeat;
+  opacity:.72;
+  filter:drop-shadow(0 1px 3px rgba(0,0,0,.32));
+}
+#calendarView > .calendar-card::after{
+  content:"";
+  position:absolute;
+  inset:4px;
+  z-index:-2;
+  pointer-events:none;
+  clip-path:polygon(18px 0,calc(100% - 18px) 0,100% 18px,100% calc(100% - 18px),calc(100% - 18px) 100%,18px 100%,0 calc(100% - 18px),0 18px);
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 28%,rgba(0,0,0,.04)),
+    rgba(9,9,10,.11);
+  box-shadow:inset 0 1px rgba(255,255,255,.08);
+}
+
+/* Actual calendar descendants */
+#calendarView .monthbar,
+#calendarView .week,
+#calendarView #days,
+#calendarView .termline,
+#calendarView .quick-row{
+  background:transparent !important;
+}
+#calendarView .day{
+  border-color:rgba(234,217,170,.14) !important;
+  box-shadow:none !important;
+}
+#calendarView .day:hover{
+  border-color:rgba(214,179,90,.46) !important;
+  background:rgba(214,179,90,.08) !important;
+}
+#calendarView .day.selected,
+#calendarView .day.today{
+  color:var(--rafp-ivory) !important;
+  background:linear-gradient(180deg,rgba(214,179,90,.17),rgba(214,179,90,.06)) !important;
+  border-color:rgba(214,179,90,.68) !important;
+  box-shadow:inset 0 0 0 1px rgba(255,248,232,.07) !important;
+}
+#calendarView .day.has::after{
+  background:var(--rafp-gold) !important;
+  box-shadow:0 0 5px rgba(214,179,90,.42) !important;
+}
+
+/* PRIMARY NAV — verified actual element nav.nav */
+nav.nav{
+  background:linear-gradient(180deg,rgba(8,8,9,.18),rgba(8,8,9,.40)) !important;
+  border:0 !important;
+  border-top:1px solid rgba(214,179,90,.20) !important;
+  box-shadow:0 -8px 22px rgba(0,0,0,.10) !important;
+  backdrop-filter:blur(8px) !important;
+  -webkit-backdrop-filter:blur(8px) !important;
+  padding:5px 4px calc(5px + env(safe-area-inset-bottom)) !important;
+}
+nav.nav > button{
+  background:transparent !important;
+  border:0 !important;
+  box-shadow:none !important;
+  color:rgba(255,248,232,.70) !important;
+}
+nav.nav > button.active{
+  color:var(--rafp-champagne) !important;
+  background:linear-gradient(180deg,rgba(214,179,90,.09),transparent) !important;
+  text-shadow:none !important;
+}
+nav.nav > button.active::before{
+  content:"";
+  display:block;
+  width:22px;
+  height:1px;
+  margin:0 auto 5px;
+  background:var(--rafp-gold);
+}
+
+/* Restrained interface focus language */
+button:focus-visible,
+a:focus-visible,
+[tabindex]:focus-visible{
+  outline:1px solid rgba(214,179,90,.80) !important;
+  outline-offset:2px !important;
+  box-shadow:none !important;
+}
+
+@media (max-width:600px){
+  #calendarView > .calendar-card{
+    margin-inline:4px !important;
+  }
+  header.brand{
+    padding-inline:12px !important;
+  }
+}
+
+
+/* ============================================================
+   EMPEROR PHONE VISUAL CORRECTION — 20260904
+   Real DOM + real runtime implementation.
+   ============================================================ */
+
+/* Theme stays SHARP. Depth must not become blur. */
+#my365ThemeArt.my365-theme-art{
+  opacity:1 !important;
+  filter:none !important;
+}
+.app > .theme-depth-layer{
+  opacity:.30 !important;
+  filter:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  mix-blend-mode:soft-light !important;
+  background:
+    radial-gradient(ellipse at 14% 16%,rgba(255,244,204,.10),transparent 32%),
+    radial-gradient(ellipse at 84% 30%,rgba(208,168,77,.08),transparent 34%),
+    repeating-linear-gradient(120deg,rgba(255,255,255,.014) 0 1px,transparent 1px 8px) !important;
+}
+.app > .scrim{
+  background:linear-gradient(180deg,rgba(0,0,0,.025),rgba(0,0,0,.08) 58%,rgba(0,0,0,.17)) !important;
+}
+.app > .layer-gold-shimmer{
+  opacity:.26 !important;
+  filter:none !important;
+  background:
+    linear-gradient(112deg,transparent 0 42%,rgba(247,224,158,.07) 49%,transparent 56%) !important;
+}
+.app > .layer-gold-shimmer::after{
+  content:none !important; display:none !important;
+}
+
+/* Premium integrated branding — actual header.brand */
+header.brand{
+  padding:9px 14px 11px !important;
+  background:linear-gradient(180deg,rgba(7,6,5,.20),transparent) !important;
+  border:0 !important;
+  box-shadow:none !important;
+}
+header.brand .kicker{
+  color:rgba(255,246,215,.72) !important;
+  font-size:.60rem !important;
+  letter-spacing:.25em !important;
+  text-shadow:0 1px 3px rgba(0,0,0,.55) !important;
+}
+header.brand h1{
+  margin:3px 0 0 !important;
+  color:#f2d78e !important;
+  font-size:clamp(1.38rem,5.8vw,2rem) !important;
+  font-weight:500 !important;
+  letter-spacing:.018em !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.62) !important;
+  background:none !important;
+  -webkit-text-fill-color:initial !important;
+}
+header.brand h1 em{
+  display:inline !important;
+  margin-left:.18em !important;
+  color:#fff4d2 !important;
+  font-size:.70em !important;
+  text-shadow:none !important;
+}
+header.brand h1::after{
+  content:"";
+  display:block;
+  width:56px;height:1px;margin:9px auto 0;
+  background:linear-gradient(90deg,transparent,rgba(230,194,100,.25),#e5c366,rgba(230,194,100,.25),transparent);
+}
+
+/* Calendar = translucent luxury object, no blur, no generic rounded black box */
+#calendarView > .calendar-card{
+  position:relative !important;
+  overflow:visible !important;
+  background:
+    linear-gradient(155deg,rgba(255,255,255,.055),rgba(0,0,0,.045) 36%,rgba(0,0,0,.10)) !important;
+  border:0 !important;
+  border-radius:0 !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  box-shadow:
+    0 18px 40px rgba(0,0,0,.20),
+    inset 0 1px rgba(255,255,255,.09),
+    inset 0 -1px rgba(198,151,48,.10) !important;
+  clip-path:polygon(16px 0,calc(100% - 16px) 0,100% 16px,100% calc(100% - 16px),calc(100% - 16px) 100%,16px 100%,0 calc(100% - 16px),0 16px);
+}
+#calendarView > .calendar-card::before{
+  content:"" !important;
+  position:absolute !important;
+  inset:0 !important;
+  pointer-events:none !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:
+    linear-gradient(90deg,#8d6924,#f1d17b 25%,#fff1b7 50%,#d7aa47 75%,#76531a) top/100% 2px no-repeat,
+    linear-gradient(90deg,#73511c,#c99b3c 28%,#eed27e 50%,#b8862d 72%,#684617) bottom/100% 1px no-repeat,
+    linear-gradient(180deg,#e2bd68,transparent 22%,transparent 78%,#b88932) left/1px 100% no-repeat,
+    linear-gradient(180deg,#e2bd68,transparent 22%,transparent 78%,#b88932) right/1px 100% no-repeat !important;
+  opacity:.82 !important;
+  box-shadow:none !important;
+}
+#calendarView > .calendar-card::after{
+  content:"" !important;
+  position:absolute !important;
+  inset:5px !important;
+  pointer-events:none !important;
+  border-radius:0 !important;
+  background:
+    radial-gradient(circle at 0 0,rgba(255,238,180,.28),transparent 38px),
+    radial-gradient(circle at 100% 0,rgba(255,238,180,.24),transparent 38px),
+    radial-gradient(circle at 0 100%,rgba(218,175,74,.15),transparent 38px),
+    radial-gradient(circle at 100% 100%,rgba(218,175,74,.15),transparent 38px),
+    linear-gradient(135deg,transparent 0 8px,rgba(236,202,111,.16) 9px,transparent 10px) !important;
+}
+#calendarView .monthbar{border-bottom-color:rgba(235,205,125,.18) !important}
+#calendarView .day{
+  background:rgba(3,3,3,.025) !important;
+  border-bottom-color:rgba(235,205,125,.08) !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.68) !important;
+}
+#calendarView .day.today,
+#calendarView .day.selected{
+  background:radial-gradient(circle,rgba(233,203,118,.18),rgba(0,0,0,.03)) !important;
+  border-color:rgba(232,198,106,.58) !important;
+  box-shadow:inset 0 0 0 1px rgba(255,242,194,.09) !important;
+}
+
+/* Moments/Search use luxury layered rows, not bulky rounded dark cards */
+#momentsView > .panel,
+#searchView > .panel{
+  background:transparent !important;
+  border:0 !important;
+  border-radius:0 !important;
+  box-shadow:none !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+  padding-inline:2px !important;
+}
+#momentsView > .panel::before,
+#searchView > .panel::before{display:none !important}
+.memory{
+  position:relative !important;
+  overflow:hidden !important;
+  min-height:88px !important;
+  padding:11px 12px !important;
+  background:
+    linear-gradient(100deg,rgba(6,6,6,.30),rgba(14,12,8,.14) 58%,rgba(235,202,111,.055)) !important;
+  border:0 !important;
+  border-left:2px solid rgba(222,185,86,.66) !important;
+  border-radius:0 !important;
+  box-shadow:0 9px 22px rgba(0,0,0,.14),inset 0 1px rgba(255,255,255,.045) !important;
+  clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));
+}
+.memory::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(115deg,transparent 0 58%,rgba(239,207,122,.07) 70%,transparent 82%);
+}
+.memory img{
+  width:76px !important;height:76px !important;object-fit:cover !important;
+  border:0 !important;border-radius:0 !important;
+  box-shadow:0 6px 16px rgba(0,0,0,.34),0 0 0 1px rgba(232,198,105,.22) !important;
+}
+
+/* Real three-position Play Year carousel */
+#playView > .panel{
+  background:transparent !important;border:0 !important;box-shadow:none !important;
+  backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+  overflow:visible !important;padding:3px 0 18px !important;
+}
+#playView > .panel::before{display:none !important}
+.carousel-stage{
+  position:relative !important;
+  height:min(57vh,500px) !important;
+  min-height:320px !important;
+  perspective:1200px !important;
+  overflow:hidden !important;
+  margin:0 -14px 10px !important;
+  isolation:isolate !important;
+}
+.carousel-photo{
+  position:absolute !important;
+  top:50% !important;left:50% !important;
+  width:auto !important;height:auto !important;
+  max-width:76% !important;max-height:94% !important;
+  object-fit:contain !important;
+  border:0 !important;border-radius:0 !important;
+  display:block !important;
+  pointer-events:none !important;
+  transition:
+    transform .88s cubic-bezier(.22,.70,.18,1),
+    opacity .78s ease,
+    filter .78s ease !important;
+  box-shadow:0 24px 54px rgba(0,0,0,.42),0 0 22px rgba(226,191,97,.05) !important;
+  will-change:transform,opacity !important;
+}
+.carousel-photo.prev{
+  z-index:1 !important;
+  opacity:.28 !important;
+  filter:brightness(.60) saturate(.82) !important;
+  transform:translate(-104%,-50%) translateZ(-130px) rotateY(18deg) scale(.78) !important;
+}
+.carousel-photo.current{
+  z-index:3 !important;
+  opacity:1 !important;
+  filter:brightness(1.04) saturate(1) !important;
+  transform:translate(-50%,-50%) translateZ(0) rotateY(0) scale(1) !important;
+}
+.carousel-photo.next{
+  z-index:2 !important;
+  opacity:.34 !important;
+  filter:brightness(.67) saturate(.86) !important;
+  transform:translate(4%,-50%) translateZ(-110px) rotateY(-18deg) scale(.80) !important;
+}
+.carousel-photo.off-left{
+  z-index:0 !important;opacity:0 !important;
+  transform:translate(-160%,-50%) translateZ(-190px) rotateY(25deg) scale(.68) !important;
+}
+.carousel-photo.off-right{
+  z-index:0 !important;opacity:0 !important;
+  transform:translate(60%,-50%) translateZ(-190px) rotateY(-25deg) scale(.68) !important;
+}
+.player-empty{
+  background:rgba(5,5,5,.16) !important;
+  border:1px dashed rgba(226,191,97,.38) !important;
+  border-radius:0 !important;
+  backdrop-filter:none !important;
+}
+.player-meta{min-height:60px !important}
+.player-controls,.speed-row,#playView .quick-row{
+  position:relative !important;z-index:10 !important;
+  transform:none !important;opacity:1 !important;filter:none !important;
+}
+.carousel-stage.finale .carousel-photo.current{
+  transition:transform .78s cubic-bezier(.4,0,.2,1),opacity .14s .72s !important;
+  transform:translate(-50%,-50%) scale(.035) !important;
+  opacity:0 !important;
+}
+.finale-particle{
+  border-radius:0 !important;
+  box-shadow:0 8px 22px rgba(0,0,0,.36) !important;
+}
+
+/* Integrated lightweight nav — actual nav.nav */
+nav.nav{
+  background:linear-gradient(180deg,rgba(6,6,6,.18),rgba(6,6,6,.48)) !important;
+  border:0 !important;
+  border-top:1px solid rgba(225,190,96,.18) !important;
+  box-shadow:0 -10px 24px rgba(0,0,0,.10) !important;
+  backdrop-filter:none !important;
+  -webkit-backdrop-filter:none !important;
+}
+nav.nav > button{
+  background:transparent !important;border:0 !important;box-shadow:none !important;
+  color:rgba(239,224,184,.66) !important;text-shadow:none !important;
+}
+nav.nav > button.active{
+  color:#f3d98d !important;
+  background:linear-gradient(180deg,rgba(226,190,95,.07),transparent) !important;
+  text-shadow:none !important;
+}
+nav.nav > button.active::before{
+  content:"";display:block;width:18px;height:1px;margin:0 auto 4px;background:#ddb95d;
+}
+
+@media (prefers-reduced-motion:reduce){
+  .carousel-photo{transition:opacity .18s linear !important;transform:translate(-50%,-50%) !important}
+  .carousel-photo.prev,.carousel-photo.next{opacity:0 !important}
+  .carousel-photo.current{opacity:1 !important}
+  .finale-particle{display:none !important}
+  .carousel-stage.finale .carousel-photo.current{transform:translate(-50%,-50%) !important;opacity:0 !important}
+}
+
+</style>
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="application-name" content="MY365">
+<meta name="mobile-web-app-capable" content="yes">
+</head>
+<body>
+<div class="app">
+<img id="my365ThemeArt" class="my365-theme-art" src="" alt="" aria-hidden="true">
+<div class="theme-depth-layer" aria-hidden="true"></div>
+<div class="layer-gold-shimmer" aria-hidden="true"></div>
+<div class="scrim"></div>
+<div class="shell">
+  <div class="top-actions"><span></span><button class="jewel-btn" id="settingsTop" title="Settings">⚙</button></div>
+  <header class="brand"><div class="kicker">Random AF Publishing</div><h1>My 365 <em>Moments</em></h1></header>
+
+  <section id="calendarView" class="view active">
+    <div class="calendar-card">
+      <div class="monthbar"><button id="prevMonth">‹</button><div id="monthTitle" class="monthtitle"></div><button id="nextMonth">›</button></div>
+      <div class="week"><div>SUN</div><div>MON</div><div>TUE</div><div>WED</div><div>THU</div><div>FRI</div><div>SAT</div></div>
+      <div id="days" class="days"></div>
+      <div id="termLine" class="termline"></div>
+      <div class="quick-row"><button class="gold-btn" id="todayBtn">TODAY</button><button class="gold-btn" id="openTodayBtn">+ TODAY'S MOMENT</button></div>
+    </div>
+  </section>
+
+  <section id="momentsView" class="view"><div class="panel"><h2 class="section-title">My Moments</h2><div id="momentsList" class="moment-list"></div></div></section>
+
+  <section id="playView" class="view"><div class="panel"><h2 class="section-title">Play My Year</h2>
+    <div id="carouselStage" class="carousel-stage">
+      <img id="playerImagePrev" class="carousel-photo prev" alt="">
+      <img id="playerImage" class="carousel-photo current" alt="">
+      <img id="playerImageNext" class="carousel-photo next" alt="">
+      <div id="playerEmpty" class="player-empty">Add photos to your days and they will appear here.</div>
+    </div>
+    <div class="player-meta"><h3 id="playerDate"></h3><p id="playerCaption"></p></div>
+    <div class="player-controls"><button class="gold-btn" id="playerPrev">◀</button><button class="gold-btn" id="playerPlay">▶</button><button class="gold-btn" id="playerNext">▶|</button><button class="gold-btn" id="playerRandom">⤨</button></div>
+    <div class="speed-row"><button class="gold-btn speed" data-speed="3000">1×</button><button class="gold-btn speed" data-speed="1800">1.5×</button><button class="gold-btn speed" data-speed="1000">2×</button></div>
+
+    <div class="quick-row" style="margin-top:10px">
+      <button class="gold-btn" id="addMusicBtn">ADD MUSIC</button>
+      <button class="gold-btn hidden" id="removeMusicBtn">REMOVE MUSIC</button>
+    </div>
+    <input id="musicInput" type="file" accept="audio/*" hidden>
+    <audio id="yearAudio" preload="metadata"></audio>
+
+  </div></section>
+
+  <section id="searchView" class="view"><div class="panel"><h2 class="section-title">Search</h2><input id="searchBox" class="searchbox" placeholder="Search captions or dates..."><div id="searchList" class="moment-list" style="margin-top:10px"></div></div></section>
+
+  <section id="moreView" class="view"><div class="panel"><h2 class="section-title">More</h2>
+    <div class="stats"><div class="stat"><strong id="statDays">0</strong>Saved Days</div><div class="stat"><strong id="statPhotos">0</strong>Photos</div><div class="stat"><strong id="statCaptions">0</strong>Captions</div><div class="stat"><strong id="statRemain">365</strong>Days Remaining</div></div>
+    <div class="quick-row"><button class="gold-btn" id="reopenPrivacy">HOW THIS WORKS</button></div>
+<div class="quick-row"><button class="gold-btn" id="backupBtn">BACKUP</button><button class="gold-btn" id="restoreBtn">RESTORE</button></div>
+    <input type="file" id="restoreInput" accept=".json,application/json" hidden>
+    
+    <div class="help"><p><b>How it works:</b> Tap any available date to open that day's Moment. Add or change one photo, write a caption, and it autosaves locally on this device. Backup regularly so your year can be restored if needed.</p><p>Your year starts the first time this calendar is opened and runs for 365 days. Changing the visual accent does not change your saved Moments.</p></div>
+  </div></section>
+</div>
+
+<nav class="nav">
+ <button class="active" data-view="calendarView"><span class="ico">▦</span>CALENDAR</button>
+ <button data-view="momentsView"><span class="ico">♥</span>MOMENTS</button>
+ <button data-view="playView"><span class="ico">▶</span>PLAY YEAR</button>
+ <button data-view="searchView"><span class="ico">⌕</span>SEARCH</button>
+ <button id="themesNav" data-action="themes"><span class="ico">✦</span>THEMES</button>
+</nav>
+
+<div id="momentModal" class="modal">
+ <div class="sheet">
+  <div class="sheet-head"><button class="jewel-btn" id="closeMoment">×</button><h2 id="momentDate"></h2><button class="jewel-btn" id="removeMoment" title="Clear day">⌫</button></div>
+  <div class="photoBox"><img id="momentPhoto"><div id="emptyPhoto" class="emptyPhoto">Tap below to add a photo for this day.</div></div>
+  <div class="quick-row"><button class="gold-btn" id="addPhotoBtn">ADD / CHANGE PHOTO</button><button class="gold-btn" id="removePhotoBtn">REMOVE PHOTO</button></div>
+  <input id="photoInput" type="file" accept="image/*" hidden>
+  <textarea id="caption" placeholder="Write the memory you want to keep..."></textarea>
+  <div id="saveState" class="save-state">Autosave is ON.</div>
+ </div>
+</div>
+
+<div id="settingsModal" class="modal">
+ <div class="sheet">
+  <div class="sheet-head">
+   <button class="jewel-btn" id="closeSettings">×</button>
+   <h2>Themes</h2>
+   <span style="width:42px"></span>
+  </div>
+
+  
+  <div class="setting" id="themeSetting">
+   <label>Theme</label>
+   <button class="gold-btn" id="openThemeLibrary">OPEN THEME LIBRARY</button>
+   <div class="quick-row"><button class="gold-btn theme-choice" data-theme-choice="blank_base">BLANK</button></div>
+   <div id="activeThemeName" class="save-state" style="margin-top:8px"></div>
+  </div>
+
+<div class="setting">
+   <label>Accent Color</label>
+   <div class="swatches" id="settingsSwatches">
+    <button class="swatch" data-accent="#c24eff" style="background:#c24eff" aria-label="Purple"></button>
+    <button class="swatch" data-accent="#f255a8" style="background:#f255a8" aria-label="Pink"></button>
+    <button class="swatch" data-accent="#43b7ff" style="background:#43b7ff" aria-label="Blue"></button>
+    <button class="swatch" data-accent="#42e0c0" style="background:#42e0c0" aria-label="Teal"></button>
+    <button class="swatch" data-accent="#f2d47a" style="background:#f2d47a" aria-label="Gold"></button>
+   </div>
+  </div>
+
+  <div class="quick-row" style="margin-top:14px"><button class="gold-btn" id="openUtilities">TOOLS &amp; HELP</button></div>
+  <div class="help">
+   <p><b>Themes</b> changes the look of MY365. Your saved photos, captions, and Moments stay the same. Backup, Restore, stats, and How This Works remain available under Tools &amp; Help.</p>
+  </div>
+ </div>
+</div>
+
+
+<div id="privacyWelcome" role="dialog" aria-modal="true" aria-labelledby="privacyWelcomeTitle">
+ <div class="welcome-card">
+  <h2 id="privacyWelcomeTitle">Your Memories Stay Yours</h2>
+  <p>Your photos, captions, music, and memories are stored locally on your device.</p>
+  <p class="privacy-strong">Random AF Publishing does not receive, view, collect, or store your personal MY365 content.</p>
+  <p>Because we do not store your memories for you, you are responsible for keeping your backup safe. Clearing browser/app data, deleting stored MY365 data, or losing your device may result in lost memories.</p>
+  <p>MY365 is for your personal use. You can reopen this information anytime from <b>More → How This Works</b>.</p>
+  <label class="dont-show"><input type="checkbox" id="privacyDontShow"> Don’t show this again</label>
+  <button class="gold-btn got-it" id="privacyGotIt">GOT IT</button>
+ </div>
+</div>
+
+
+<div id="themeLibraryModal" role="dialog" aria-modal="true" aria-labelledby="themeLibraryTitle">
+ <div class="theme-library-card">
+  <div class="theme-library-head">
+   <h2 id="themeLibraryTitle">Theme Library</h2>
+   <button class="gold-btn theme-library-close" id="closeThemeLibrary">✕</button>
+  </div>
+  <p class="theme-library-sub">Change your look anytime. Your dates, photos, captions, memories, music, and progress stay with you.</p>
+
+  <div class="theme-collection-title">Engine Base</div>
+  <div class="theme-grid">
+   <button class="theme-card library-theme" data-library-theme="blank_base">
+    <strong>BLANK</strong><small>No theme artwork</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_iwa">
+    <strong>ʻIwa Bird</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_puakenikeni">
+    <strong>Puakenikeni</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_kalo">
+    <strong>Kalo / Taro</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_ahuula">
+    <strong>ʻAhuʻula / Hawaiian Feather Cloak</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_lehua">
+    <strong>Lehua Blossoms</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_fish_hooks">
+    <strong>Fish Scales + Fish Hooks</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_kapa">
+    <strong>Kapa / Tapa</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_hula">
+    <strong>Hula</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_tahitian">
+    <strong>Tahitian</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_pohaku">
+    <strong>Pōhaku Kuʻi ʻAi</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_hae">
+    <strong>Hae Hawaiʻi</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_ferns">
+    <strong>Ferns</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_lauhala">
+    <strong>Lauhala</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_ipu">
+    <strong>Ipu / Hawaiian Gourd</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_awapuhi">
+    <strong>ʻAwapuhi</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_weapons">
+    <strong>Hawaiian Weapons</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_upena">
+    <strong>ʻUpena</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_spearfishing">
+    <strong>Spearfishing</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_hokulea">
+    <strong>Hōkūleʻa</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_boar_jaw">
+    <strong>Boar Jaw</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_opihi">
+    <strong>ʻOpihi</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_quilt">
+    <strong>Hawaiian Quilt Patterns</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_pu">
+    <strong>Pū / Conch Shell</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_hammah">
+    <strong>HAMMAH</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+   <button class="theme-card library-theme" data-library-theme="hawaiian_hula_instruments">
+    <strong>Hula Instruments</strong><small>Hawaiian Luxury Collection</small>
+   </button>
+  </div>
+  <div class="theme-collection-title">Dog Luxury Collection</div>
+  <div class="theme-grid">
+<button class="theme-card library-theme" data-library-theme="dog_golden_retriever"><strong>Golden Retriever</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_miniature_pinscher"><strong>Miniature Pinscher</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_red_labrador"><strong>Red Labrador — Blue Eyes</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_rottweiler"><strong>Rottweiler — Golden Eyes</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_german_shepherd"><strong>German Shepherd</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_blue_pitbull"><strong>Blue Pitbull — White Eyes</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_cane_corso"><strong>Cane Corso — Gray Eyes</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_black_bullmastiff"><strong>Black Bullmastiff — Blue Eyes</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_chocolate_doberman"><strong>Chocolate Doberman</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_alaskan_malamute"><strong>Alaskan Malamute</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_siberian_husky"><strong>Siberian Husky</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_great_dane"><strong>Great Dane</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_belgian_malinois"><strong>Belgian Malinois</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_american_bully"><strong>American Bully</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_boxer"><strong>Boxer</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_akita"><strong>Akita</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_great_pyrenees"><strong>Great Pyrenees</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_dalmatian"><strong>Dalmatian</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_saint_bernard"><strong>Saint Bernard</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_bernese"><strong>Bernese Mountain Dog</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_english_bulldog"><strong>English Bulldog</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_australian_shepherd"><strong>Australian Shepherd</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_pomeranian"><strong>Pomeranian</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_corgi"><strong>Corgi</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="dog_newfoundland"><strong>Newfoundland</strong><small>Dog Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_luxury_estate"><strong>Country Luxury Estate</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_golden_estate"><strong>Golden Country Estate</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_midnight_leather_boots"><strong>Midnight Leather Boots</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_turquoise_tooled_leather"><strong>Turquoise & Tooled Leather</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_pearl_western_saddle"><strong>Pearl Western Saddle</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_ruby_western_buckle"><strong>Ruby Western Buckle</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_sage_leather_gear"><strong>Sage Leather Gear</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_copper_spurs_leather"><strong>Copper Spurs & Leather</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_rustic_guitar_leather"><strong>Rustic Guitar & Leather</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_silver_horseshoe"><strong>Silver Horseshoe</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_denim_leather"><strong>Denim & Leather</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_emerald_western_trunk"><strong>Emerald Western Trunk</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_mountain_ranch_overlook"><strong>Mountain Ranch Overlook</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_porch_sunset"><strong>Country Porch Sunset</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_rainy_barn_door"><strong>Rainy Country Barn Door</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_music_porch"><strong>Country Music Porch</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_cowboy_fence_blue_hour"><strong>Cowboy Fence at Blue Hour</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_desert_ranch_sunrise"><strong>Desert Ranch Sunrise</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_mountain_cowboy_morning"><strong>Mountain Cowboy Morning</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_texas_longhorn"><strong>Texas Longhorn</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_canyon_ranch_horse"><strong>Canyon Ranch Horse</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_bull_cowboy_ranch_gear"><strong>Bull & Cowboy Ranch Gear</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_horse_cowboy_tack"><strong>Horse & Cowboy Tack</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_black_horse_stable"><strong>Black Horse at the Stable</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="country_rafp_black_tie_cowboy"><strong>RAFP Black-Tie Cowboy Finale</strong><small>Country Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_army_obsidian_field_gear"><strong>Army Obsidian Field Gear</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_navy_carrier_blue_hour"><strong>Navy Carrier at Blue Hour</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_air_force_fighter_hangar"><strong>Air Force Fighter Hangar</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_marine_corps_dress_blues"><strong>Marine Corps Dress Blues</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_coast_guard_cutter_rough_seas"><strong>Coast Guard Cutter in Rough Seas</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_space_force_orbital_operations"><strong>Space Force Orbital Operations</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_army_main_battle_tank"><strong>Army Main Battle Tank</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_navy_submarine_dawn"><strong>Navy Submarine at Dawn</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_air_force_bomber_runway"><strong>Air Force Bomber Runway</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_marine_corps_desert_field_kit"><strong>Marine Corps Desert Field Kit</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_army_black_hawk_mountain_landing"><strong>Army Black Hawk Mountain Landing</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_navy_deep_sea_diver"><strong>Navy Deep Sea Diver</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_air_force_pilot_ready_room"><strong>Air Force Pilot Ready Room</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_marine_corps_amphibious_training"><strong>Marine Corps Amphibious Training</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_coast_guard_rescue_helicopter"><strong>Coast Guard Rescue Helicopter</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_space_force_night_operations"><strong>Space Force Night Operations</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_army_mountain_humvee"><strong>Army Mountain Humvee</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_navy_anchor_naval_chain"><strong>Navy Anchor and Naval Chain</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_air_force_cargo_aircraft"><strong>Air Force Cargo Aircraft</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_marine_corps_ceremonial_sword"><strong>Marine Corps Ceremonial Sword</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_coast_guard_search_rescue_station"><strong>Coast Guard Search and Rescue Station</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_space_force_guardian_uniform_operations"><strong>Space Force Guardian Uniform Operations</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_navy_special_operations_heritage"><strong>Navy Special Operations Heritage</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_military_medical_medevac"><strong>Military Medical Medevac</strong><small>Armed Forces Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="armed_forces_us_luxury_finale"><strong>US Armed Forces Luxury Finale</strong><small>Armed Forces Luxury Collection</small></button>
+  </div>
+  <div class="theme-grid">
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_aries"><strong>Aries</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_taurus"><strong>Taurus</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_gemini"><strong>Gemini</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_cancer"><strong>Cancer</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_leo"><strong>Leo</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_virgo"><strong>Virgo</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_libra"><strong>Libra</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_scorpio"><strong>Scorpio</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_sagittarius"><strong>Sagittarius</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_capricorn"><strong>Capricorn</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_aquarius"><strong>Aquarius</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_pisces"><strong>Pisces</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_diamond_galaxy"><strong>Diamond Galaxy</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_golden_lunar_eclipse"><strong>Golden Lunar Eclipse</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_saturn_above_the_clouds"><strong>Saturn Above the Clouds</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_emerald_nebula"><strong>Emerald Nebula</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_moonlit_cosmic_ocean_image_2"><strong>Moonlit Cosmic Ocean IMAGE 2</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_crystal_ice_planet_image_2"><strong>Crystal Ice Planet IMAGE 2</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_rose_gold_star_birth"><strong>Rose Gold Star Birth</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_meteor_shower_canyon"><strong>Meteor Shower Canyon</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_twin_moons_image_2"><strong>Twin Moons IMAGE 2</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_celestial_aurora"><strong>Celestial Aurora</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_black_hole_luxury"><strong>Black Hole Luxury</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_cosmic_waterfall"><strong>Cosmic Waterfall</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+   <button class="theme-card library-theme" data-library-theme="zodiac_celestial_rafp_celestial_finale_edge_of_the_universe"><strong>RAFP Celestial Finale Edge of the Universe</strong><small>Zodiac + Celestial Luxury Collection</small></button>
+  </div>
+ </div>
+</div>
+
+<div id="toast" class="toast"></div>
+</div>
+
+<script>
+(()=>{
+'use strict';
+const META_KEY='my365_master_meta_v1';
+const ENTRY_KEY='my365_master_entries_v1';
+const CUSTOMER_DB_NAME='my365_customer_db_v1';
+const CUSTOMER_DB_VERSION=1;
+const MOMENTS_STORE='moments';
+const MIGRATION_STORE='migration';
+const LEGACY_MIGRATION_ID='legacy_entries_to_idb_v1';
+let meta, entries={}, legacyEntries={};
+let momentDB=null,momentStorageReady=false;
+try{meta=JSON.parse(localStorage.getItem(META_KEY)||'null')}catch(e){}
+if(!meta){meta={startDate:new Date().toISOString().slice(0,10),accent:'#c24eff'};localStorage.setItem(META_KEY,JSON.stringify(meta))}
+try{legacyEntries=JSON.parse(localStorage.getItem(ENTRY_KEY)||'{}')||{}}catch(e){legacyEntries={}}
+document.documentElement.style.setProperty('--purple',meta.accent||'#c24eff');document.documentElement.style.setProperty('--accent',meta.accent||'#c24eff');
+
+
+/* =========================================================
+   MY365 MASTER THEME ENGINE v2
+   One app engine. Unlimited visual theme definitions.
+   Customer memories remain in the same shared data store.
+   ========================================================= */
+const MY365_THEME_KEY='my365_selected_theme_v2';
+
+/*
+  IMPORTANT:
+  Add future customer themes here.
+  A theme can override only what it needs.
+  Functional code must NOT be copied into a theme.
+*/
+const MY365_THEMES={
+  blank_base:{
+    id:'blank_base',
+    name:'BLANK',
+    accent:meta.accent||'#c24eff',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_iwa:{
+    id:'hawaiian_iwa',
+    name:'ʻIwa Bird',
+    collection:'Hawaiian Luxury',
+    accent:'#d9ad3b',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_puakenikeni:{
+    id:'hawaiian_puakenikeni',
+    name:'Puakenikeni',
+    collection:'Hawaiian Luxury',
+    accent:'#f0dfb0',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_kalo:{
+    id:'hawaiian_kalo',
+    name:'Kalo / Taro',
+    collection:'Hawaiian Luxury',
+    accent:'#63b77b',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_ahuula:{
+    id:'hawaiian_ahuula',
+    name:'ʻAhuʻula / Hawaiian Feather Cloak',
+    collection:'Hawaiian Luxury',
+    accent:'#d54b3e',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_lehua:{
+    id:'hawaiian_lehua',
+    name:'Lehua Blossoms',
+    collection:'Hawaiian Luxury',
+    accent:'#d93c42',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_fish_hooks:{
+    id:'hawaiian_fish_hooks',
+    name:'Fish Scales + Fish Hooks',
+    collection:'Hawaiian Luxury',
+    accent:'#35b8b1',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_kapa:{
+    id:'hawaiian_kapa',
+    name:'Kapa / Tapa',
+    collection:'Hawaiian Luxury',
+    accent:'#c58b52',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_hula:{
+    id:'hawaiian_hula',
+    name:'Hula',
+    collection:'Hawaiian Luxury',
+    accent:'#708b54',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_tahitian:{
+    id:'hawaiian_tahitian',
+    name:'Tahitian',
+    collection:'Hawaiian Luxury',
+    accent:'#c93638',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_pohaku:{
+    id:'hawaiian_pohaku',
+    name:'Pōhaku Kuʻi ʻAi',
+    collection:'Hawaiian Luxury',
+    accent:'#8b8178',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_hae:{
+    id:'hawaiian_hae',
+    name:'Hae Hawaiʻi',
+    collection:'Hawaiian Luxury',
+    accent:'#4169b2',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_ferns:{
+    id:'hawaiian_ferns',
+    name:'Ferns',
+    collection:'Hawaiian Luxury',
+    accent:'#4f9961',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_lauhala:{
+    id:'hawaiian_lauhala',
+    name:'Lauhala',
+    collection:'Hawaiian Luxury',
+    accent:'#c89450',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_ipu:{
+    id:'hawaiian_ipu',
+    name:'Ipu / Hawaiian Gourd',
+    collection:'Hawaiian Luxury',
+    accent:'#b97b3e',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_awapuhi:{
+    id:'hawaiian_awapuhi',
+    name:'ʻAwapuhi',
+    collection:'Hawaiian Luxury',
+    accent:'#c74747',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_weapons:{
+    id:'hawaiian_weapons',
+    name:'Hawaiian Weapons',
+    collection:'Hawaiian Luxury',
+    accent:'#8a7047',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_upena:{
+    id:'hawaiian_upena',
+    name:'ʻUpena',
+    collection:'Hawaiian Luxury',
+    accent:'#35aeb5',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_spearfishing:{
+    id:'hawaiian_spearfishing',
+    name:'Spearfishing',
+    collection:'Hawaiian Luxury',
+    accent:'#258ca8',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_hokulea:{
+    id:'hawaiian_hokulea',
+    name:'Hōkūleʻa',
+    collection:'Hawaiian Luxury',
+    accent:'#315c94',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_boar_jaw:{
+    id:'hawaiian_boar_jaw',
+    name:'Boar Jaw',
+    collection:'Hawaiian Luxury',
+    accent:'#817158',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_opihi:{
+    id:'hawaiian_opihi',
+    name:'ʻOpihi',
+    collection:'Hawaiian Luxury',
+    accent:'#5576a9',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_quilt:{
+    id:'hawaiian_quilt',
+    name:'Hawaiian Quilt Patterns',
+    collection:'Hawaiian Luxury',
+    accent:'#8b3548',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_pu:{
+    id:'hawaiian_pu',
+    name:'Pū / Conch Shell',
+    collection:'Hawaiian Luxury',
+    accent:'#7d5aa6',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_hammah:{
+    id:'hawaiian_hammah',
+    name:'HAMMAH',
+    collection:'Hawaiian Luxury',
+    accent:'#b99a35',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  hawaiian_hula_instruments:{
+    id:'hawaiian_hula_instruments',
+    name:'Hula Instruments',
+    collection:'Hawaiian Luxury',
+    accent:'#a86f39',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  dog_golden_retriever:{id:'dog_golden_retriever',name:'Golden Retriever',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_miniature_pinscher:{id:'dog_miniature_pinscher',name:'Miniature Pinscher',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_red_labrador:{id:'dog_red_labrador',name:'Red Labrador — Blue Eyes',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_rottweiler:{id:'dog_rottweiler',name:'Rottweiler — Golden Eyes',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_german_shepherd:{id:'dog_german_shepherd',name:'German Shepherd',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_blue_pitbull:{id:'dog_blue_pitbull',name:'Blue Pitbull — White Eyes',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_cane_corso:{id:'dog_cane_corso',name:'Cane Corso — Gray Eyes',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_black_bullmastiff:{id:'dog_black_bullmastiff',name:'Black Bullmastiff — Blue Eyes',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_chocolate_doberman:{id:'dog_chocolate_doberman',name:'Chocolate Doberman',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_alaskan_malamute:{id:'dog_alaskan_malamute',name:'Alaskan Malamute',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_siberian_husky:{id:'dog_siberian_husky',name:'Siberian Husky',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_great_dane:{id:'dog_great_dane',name:'Great Dane',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_belgian_malinois:{id:'dog_belgian_malinois',name:'Belgian Malinois',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_american_bully:{id:'dog_american_bully',name:'American Bully',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_boxer:{id:'dog_boxer',name:'Boxer',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_akita:{id:'dog_akita',name:'Akita',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_great_pyrenees:{id:'dog_great_pyrenees',name:'Great Pyrenees',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_dalmatian:{id:'dog_dalmatian',name:'Dalmatian',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_saint_bernard:{id:'dog_saint_bernard',name:'Saint Bernard',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_bernese:{id:'dog_bernese',name:'Bernese Mountain Dog',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_english_bulldog:{id:'dog_english_bulldog',name:'English Bulldog',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_australian_shepherd:{id:'dog_australian_shepherd',name:'Australian Shepherd',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_pomeranian:{id:'dog_pomeranian',name:'Pomeranian',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_corgi:{id:'dog_corgi',name:'Corgi',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  dog_newfoundland:{id:'dog_newfoundland',name:'Newfoundland',collection:'Dog Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_luxury_estate:{id:'country_luxury_estate',name:"Country Luxury Estate",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_golden_estate:{id:'country_golden_estate',name:"Golden Country Estate",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_midnight_leather_boots:{id:'country_midnight_leather_boots',name:"Midnight Leather Boots",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_turquoise_tooled_leather:{id:'country_turquoise_tooled_leather',name:"Turquoise & Tooled Leather",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_pearl_western_saddle:{id:'country_pearl_western_saddle',name:"Pearl Western Saddle",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_ruby_western_buckle:{id:'country_ruby_western_buckle',name:"Ruby Western Buckle",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_sage_leather_gear:{id:'country_sage_leather_gear',name:"Sage Leather Gear",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_copper_spurs_leather:{id:'country_copper_spurs_leather',name:"Copper Spurs & Leather",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_rustic_guitar_leather:{id:'country_rustic_guitar_leather',name:"Rustic Guitar & Leather",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_silver_horseshoe:{id:'country_silver_horseshoe',name:"Silver Horseshoe",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_denim_leather:{id:'country_denim_leather',name:"Denim & Leather",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_emerald_western_trunk:{id:'country_emerald_western_trunk',name:"Emerald Western Trunk",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_mountain_ranch_overlook:{id:'country_mountain_ranch_overlook',name:"Mountain Ranch Overlook",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_porch_sunset:{id:'country_porch_sunset',name:"Country Porch Sunset",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_rainy_barn_door:{id:'country_rainy_barn_door',name:"Rainy Country Barn Door",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_music_porch:{id:'country_music_porch',name:"Country Music Porch",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_cowboy_fence_blue_hour:{id:'country_cowboy_fence_blue_hour',name:"Cowboy Fence at Blue Hour",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_desert_ranch_sunrise:{id:'country_desert_ranch_sunrise',name:"Desert Ranch Sunrise",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_mountain_cowboy_morning:{id:'country_mountain_cowboy_morning',name:"Mountain Cowboy Morning",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_texas_longhorn:{id:'country_texas_longhorn',name:"Texas Longhorn",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_canyon_ranch_horse:{id:'country_canyon_ranch_horse',name:"Canyon Ranch Horse",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_bull_cowboy_ranch_gear:{id:'country_bull_cowboy_ranch_gear',name:"Bull & Cowboy Ranch Gear",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_horse_cowboy_tack:{id:'country_horse_cowboy_tack',name:"Horse & Cowboy Tack",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_black_horse_stable:{id:'country_black_horse_stable',name:"Black Horse at the Stable",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  country_rafp_black_tie_cowboy:{id:'country_rafp_black_tie_cowboy',name:"RAFP Black-Tie Cowboy Finale",collection:'Country Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_army_obsidian_field_gear:{id:'armed_forces_army_obsidian_field_gear',name:"Army Obsidian Field Gear",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_navy_carrier_blue_hour:{id:'armed_forces_navy_carrier_blue_hour',name:"Navy Carrier at Blue Hour",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_air_force_fighter_hangar:{id:'armed_forces_air_force_fighter_hangar',name:"Air Force Fighter Hangar",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_marine_corps_dress_blues:{id:'armed_forces_marine_corps_dress_blues',name:"Marine Corps Dress Blues",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_coast_guard_cutter_rough_seas:{id:'armed_forces_coast_guard_cutter_rough_seas',name:"Coast Guard Cutter in Rough Seas",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_space_force_orbital_operations:{id:'armed_forces_space_force_orbital_operations',name:"Space Force Orbital Operations",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_army_main_battle_tank:{id:'armed_forces_army_main_battle_tank',name:"Army Main Battle Tank",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_navy_submarine_dawn:{id:'armed_forces_navy_submarine_dawn',name:"Navy Submarine at Dawn",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_air_force_bomber_runway:{id:'armed_forces_air_force_bomber_runway',name:"Air Force Bomber Runway",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_marine_corps_desert_field_kit:{id:'armed_forces_marine_corps_desert_field_kit',name:"Marine Corps Desert Field Kit",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_army_black_hawk_mountain_landing:{id:'armed_forces_army_black_hawk_mountain_landing',name:"Army Black Hawk Mountain Landing",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_navy_deep_sea_diver:{id:'armed_forces_navy_deep_sea_diver',name:"Navy Deep Sea Diver",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_air_force_pilot_ready_room:{id:'armed_forces_air_force_pilot_ready_room',name:"Air Force Pilot Ready Room",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_marine_corps_amphibious_training:{id:'armed_forces_marine_corps_amphibious_training',name:"Marine Corps Amphibious Training",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_coast_guard_rescue_helicopter:{id:'armed_forces_coast_guard_rescue_helicopter',name:"Coast Guard Rescue Helicopter",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_space_force_night_operations:{id:'armed_forces_space_force_night_operations',name:"Space Force Night Operations",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_army_mountain_humvee:{id:'armed_forces_army_mountain_humvee',name:"Army Mountain Humvee",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_navy_anchor_naval_chain:{id:'armed_forces_navy_anchor_naval_chain',name:"Navy Anchor and Naval Chain",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_air_force_cargo_aircraft:{id:'armed_forces_air_force_cargo_aircraft',name:"Air Force Cargo Aircraft",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_marine_corps_ceremonial_sword:{id:'armed_forces_marine_corps_ceremonial_sword',name:"Marine Corps Ceremonial Sword",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_coast_guard_search_rescue_station:{id:'armed_forces_coast_guard_search_rescue_station',name:"Coast Guard Search and Rescue Station",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_space_force_guardian_uniform_operations:{id:'armed_forces_space_force_guardian_uniform_operations',name:"Space Force Guardian Uniform Operations",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_navy_special_operations_heritage:{id:'armed_forces_navy_special_operations_heritage',name:"Navy Special Operations Heritage",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_military_medical_medevac:{id:'armed_forces_military_medical_medevac',name:"Military Medical Medevac",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  armed_forces_us_luxury_finale:{id:'armed_forces_us_luxury_finale',name:"US Armed Forces Luxury Finale",collection:'Armed Forces Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_aries:{
+    id:'zodiac_celestial_aries',
+    name:'Aries',
+    collection:'Zodiac + Celestial Luxury',
+    accent:'#d9ad3b',
+    gold:'#f2d47a',
+    gold2:'#b9872b',
+    ivory:'#fff5d2',
+    backgroundPosition:'center top'
+  },
+  zodiac_celestial_taurus:{id:'zodiac_celestial_taurus',name:'Taurus',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_gemini:{id:'zodiac_celestial_gemini',name:'Gemini',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_cancer:{id:'zodiac_celestial_cancer',name:'Cancer',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_leo:{id:'zodiac_celestial_leo',name:'Leo',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_virgo:{id:'zodiac_celestial_virgo',name:'Virgo',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_libra:{id:'zodiac_celestial_libra',name:'Libra',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_scorpio:{id:'zodiac_celestial_scorpio',name:'Scorpio',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_sagittarius:{id:'zodiac_celestial_sagittarius',name:'Sagittarius',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_capricorn:{id:'zodiac_celestial_capricorn',name:'Capricorn',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_aquarius:{id:'zodiac_celestial_aquarius',name:'Aquarius',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_pisces:{id:'zodiac_celestial_pisces',name:'Pisces',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_diamond_galaxy:{id:'zodiac_celestial_diamond_galaxy',name:'Diamond Galaxy',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_golden_lunar_eclipse:{id:'zodiac_celestial_golden_lunar_eclipse',name:'Golden Lunar Eclipse',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_saturn_above_the_clouds:{id:'zodiac_celestial_saturn_above_the_clouds',name:'Saturn Above the Clouds',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_emerald_nebula:{id:'zodiac_celestial_emerald_nebula',name:'Emerald Nebula',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_moonlit_cosmic_ocean_image_2:{id:'zodiac_celestial_moonlit_cosmic_ocean_image_2',name:'Moonlit Cosmic Ocean IMAGE 2',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_crystal_ice_planet_image_2:{id:'zodiac_celestial_crystal_ice_planet_image_2',name:'Crystal Ice Planet IMAGE 2',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_rose_gold_star_birth:{id:'zodiac_celestial_rose_gold_star_birth',name:'Rose Gold Star Birth',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_meteor_shower_canyon:{id:'zodiac_celestial_meteor_shower_canyon',name:'Meteor Shower Canyon',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_twin_moons_image_2:{id:'zodiac_celestial_twin_moons_image_2',name:'Twin Moons IMAGE 2',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_celestial_aurora:{id:'zodiac_celestial_celestial_aurora',name:'Celestial Aurora',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_black_hole_luxury:{id:'zodiac_celestial_black_hole_luxury',name:'Black Hole Luxury',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_cosmic_waterfall:{id:'zodiac_celestial_cosmic_waterfall',name:'Cosmic Waterfall',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'},
+  zodiac_celestial_rafp_celestial_finale_edge_of_the_universe:{id:'zodiac_celestial_rafp_celestial_finale_edge_of_the_universe',name:'RAFP Celestial Finale Edge of the Universe',collection:'Zodiac + Celestial Luxury',accent:'#d9ad3b',gold:'#f2d47a',gold2:'#b9872b',ivory:'#fff5d2',backgroundPosition:'center top'}
+};
+
+function applyMy365Theme(themeId,save=true){
+  const theme=MY365_THEMES[themeId]||MY365_THEMES.blank_base;
+  document.body.dataset.my365Theme=theme.id;
+  document.documentElement.style.setProperty('--my365-theme-accent',theme.accent||'#c24eff');
+  document.documentElement.style.setProperty('--my365-theme-gold',theme.gold||'#f2d47a');
+  document.documentElement.style.setProperty('--my365-theme-gold2',theme.gold2||'#b9872b');
+  document.documentElement.style.setProperty('--my365-theme-ivory',theme.ivory||'#fff5d2');
+  document.documentElement.style.setProperty('--my365-theme-bg-position',theme.backgroundPosition||'center top');
+
+  /* Preserve the existing approved accent behavior. */
+  document.documentElement.style.setProperty('--accent',theme.accent||meta.accent||'#c24eff');
+  document.documentElement.style.setProperty('--purple',theme.accent||meta.accent||'#c24eff');
+
+  if(save)localStorage.setItem(MY365_THEME_KEY,theme.id);
+  return theme;
+}
+
+function registerMy365Theme(theme){
+  if(!theme||!theme.id)throw new Error('Theme requires an id');
+  MY365_THEMES[theme.id]=theme;
+}
+
+/* Shared-memory proof helpers:
+   switching themes never changes entries, start date, photos, captions, music, or backup data. */
+function getMy365ThemeList(){
+  return Object.values(MY365_THEMES).map(t=>({id:t.id,name:t.name}));
+}
+
+applyMy365Theme(localStorage.getItem(MY365_THEME_KEY)||'blank_base',false);
+
+const $=id=>document.getElementById(id);
+const pad=n=>String(n).padStart(2,'0');
+const keyOf=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const dateFromKey=k=>{const [y,m,d]=k.split('-').map(Number);return new Date(y,m-1,d)};
+const start=dateFromKey(meta.startDate);
+const end=new Date(start);end.setDate(end.getDate()+364);
+let view=new Date(start.getFullYear(),start.getMonth(),1);
+let selectedKey=keyOf(start),playIndex=0,playTimer=null,playDelay=3000;
+
+function notify(t){const x=$('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1600)}
+
+/* CUSTOMER MOMENT STORAGE — CONTROLLED MIGRATION TEST CANDIDATE
+   Legacy localStorage is COPY-ONLY and remains intact in this candidate. */
+function openCustomerDB(){
+ return new Promise((resolve,reject)=>{
+   const req=indexedDB.open(CUSTOMER_DB_NAME,CUSTOMER_DB_VERSION);
+   req.onupgradeneeded=()=>{
+     const db=req.result;
+     if(!db.objectStoreNames.contains(MOMENTS_STORE))db.createObjectStore(MOMENTS_STORE,{keyPath:'dateKey'});
+     if(!db.objectStoreNames.contains(MIGRATION_STORE))db.createObjectStore(MIGRATION_STORE,{keyPath:'id'});
+   };
+   req.onsuccess=()=>resolve(req.result);
+   req.onerror=()=>reject(req.error);
+ });
+}
+function idbGet(storeName,key){
+ return new Promise((resolve,reject)=>{
+   const tx=momentDB.transaction(storeName,'readonly'),req=tx.objectStore(storeName).get(key);
+   req.onsuccess=()=>resolve(req.result||null);req.onerror=()=>reject(req.error);
+ });
+}
+function idbPut(storeName,value){
+ return new Promise((resolve,reject)=>{
+   const tx=momentDB.transaction(storeName,'readwrite');tx.objectStore(storeName).put(value);
+   tx.oncomplete=()=>resolve(value);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('IndexedDB transaction aborted'));
+ });
+}
+function idbDelete(storeName,key){
+ return new Promise((resolve,reject)=>{
+   const tx=momentDB.transaction(storeName,'readwrite');tx.objectStore(storeName).delete(key);
+   tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('IndexedDB transaction aborted'));
+ });
+}
+function idbGetAll(storeName){
+ return new Promise((resolve,reject)=>{
+   const tx=momentDB.transaction(storeName,'readonly'),req=tx.objectStore(storeName).getAll();
+   req.onsuccess=()=>resolve(req.result||[]);req.onerror=()=>reject(req.error);
+ });
+}
+function dataURLToBlob(dataURL){
+ const parts=String(dataURL||'').split(','),head=parts[0]||'',body=parts[1]||'';
+ const m=head.match(/^data:([^;]+);base64$/i);if(!m)throw new Error('Unsupported legacy photo data URL');
+ const binary=atob(body),bytes=new Uint8Array(binary.length);
+ for(let i=0;i<binary.length;i++)bytes[i]=binary.charCodeAt(i);
+ return new Blob([bytes],{type:m[1]||'image/jpeg'});
+}
+function blobDimensions(blob){
+ return new Promise((resolve,reject)=>{
+   const url=URL.createObjectURL(blob),im=new Image();
+   im.onload=()=>{const out={width:im.naturalWidth||im.width||0,height:im.naturalHeight||im.height||0};URL.revokeObjectURL(url);resolve(out)};
+   im.onerror=()=>{URL.revokeObjectURL(url);reject(new Error('Stored photo could not be decoded'))};im.src=url;
+ });
+}
+async function sha256Blob(blob){
+ const buf=await blob.arrayBuffer(),hash=await crypto.subtle.digest('SHA-256',buf);
+ return Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');
+}
+function legacyHasEntry(e){return !!(e&&((e.caption||'').trim()||e.photo))}
+async function verifyMigratedMoment(dateKey,legacy,stored){
+ if(!stored||stored.dateKey!==dateKey)return false;
+ if((stored.caption||'')!==(legacy.caption||''))return false;
+ const hadPhoto=!!legacy.photo,hasBlob=stored.photoBlob instanceof Blob;
+ if(hadPhoto!==hasBlob)return false;
+ if(!hadPhoto)return true;
+ const sourceBlob=dataURLToBlob(legacy.photo);
+ if(stored.photoByteSize!==sourceBlob.size||stored.photoType!==sourceBlob.type)return false;
+ const [a,b]=await Promise.all([sha256Blob(sourceBlob),sha256Blob(stored.photoBlob)]);
+ return a===b;
+}
+async function buildMigratedMoment(dateKey,legacy,existing){
+ const now=new Date().toISOString();let blob=null,dims={width:0,height:0};
+ if(legacy.photo){blob=dataURLToBlob(legacy.photo);dims=await blobDimensions(blob)}
+ return {
+   dateKey,
+   caption:legacy.caption||'',
+   photoBlob:blob,
+   photoType:blob?blob.type:'',
+   photoWidth:blob?dims.width:0,
+   photoHeight:blob?dims.height:0,
+   photoByteSize:blob?blob.size:0,
+   createdAt:(existing&&existing.createdAt)||now,
+   updatedAt:now
+ };
+}
+async function setMigrationState(patch){
+ const prev=await idbGet(MIGRATION_STORE,LEGACY_MIGRATION_ID)||{id:LEGACY_MIGRATION_ID,status:'not_started',verifiedCount:0};
+ const next=Object.assign({},prev,patch,{id:LEGACY_MIGRATION_ID,updatedAt:new Date().toISOString()});
+ await idbPut(MIGRATION_STORE,next);return next;
+}
+async function migrateLegacyEntriesCopyOnly(){
+ const legacyKeys=Object.keys(legacyEntries).filter(k=>legacyHasEntry(legacyEntries[k])).sort();
+ let state=await idbGet(MIGRATION_STORE,LEGACY_MIGRATION_ID);
+ if(state&&state.status==='complete')return state;
+ const startedAt=(state&&state.startedAt)||new Date().toISOString();
+ state=await setMigrationState({status:'copying',startedAt,totalLegacy:legacyKeys.length,verifiedCount:(state&&state.verifiedCount)||0,lastDateKey:(state&&state.lastDateKey)||null,completedAt:null});
+ let verifiedCount=0;
+ for(const dateKey of legacyKeys){
+   const legacy=legacyEntries[dateKey];let stored=await idbGet(MOMENTS_STORE,dateKey);
+   let verified=false;
+   if(stored)verified=await verifyMigratedMoment(dateKey,legacy,stored);
+   if(!verified){
+     const record=await buildMigratedMoment(dateKey,legacy,stored);
+     await idbPut(MOMENTS_STORE,record);
+     stored=await idbGet(MOMENTS_STORE,dateKey);
+     verified=await verifyMigratedMoment(dateKey,legacy,stored);
+   }
+   if(!verified)throw new Error('Migration verification failed for '+dateKey);
+   verifiedCount++;
+   await setMigrationState({status:'copying',startedAt,totalLegacy:legacyKeys.length,verifiedCount,lastDateKey:dateKey,completedAt:null});
+ }
+ return setMigrationState({status:'complete',startedAt,totalLegacy:legacyKeys.length,verifiedCount,completedAt:new Date().toISOString()});
+}
+function momentMeta(record){return record?{caption:record.caption||'',hasPhoto:record.photoBlob instanceof Blob,photoType:record.photoType||'',photoWidth:record.photoWidth||0,photoHeight:record.photoHeight||0,photoByteSize:record.photoByteSize||0,createdAt:record.createdAt||'',updatedAt:record.updatedAt||''}:null}
+async function loadMomentIndex(){
+ const all=await idbGetAll(MOMENTS_STORE),next={};
+ all.forEach(r=>{if(r&&r.dateKey&&((r.caption||'').trim()||r.photoBlob instanceof Blob))next[r.dateKey]=momentMeta(r)});entries=next;
+}
+async function getMomentRecord(k){return idbGet(MOMENTS_STORE,k)}
+const momentWriteQueues=new Map();
+function queueMomentWrite(k,work){
+ const prior=momentWriteQueues.get(k)||Promise.resolve();
+ const next=prior.catch(()=>{}).then(work).finally(()=>{if(momentWriteQueues.get(k)===next)momentWriteQueues.delete(k)});
+ momentWriteQueues.set(k,next);return next;
+}
+async function saveCaptionForDate(k,caption){
+ return queueMomentWrite(k,async()=>{
+   const old=await getMomentRecord(k),now=new Date().toISOString();
+   if(!caption.trim()&&!(old&&old.photoBlob instanceof Blob)){
+     await idbDelete(MOMENTS_STORE,k);delete entries[k];return;
+   }
+   const record={
+     dateKey:k,caption,
+     photoBlob:old&&old.photoBlob instanceof Blob?old.photoBlob:null,
+     photoType:old&&old.photoBlob instanceof Blob?(old.photoType||old.photoBlob.type||'image/jpeg'):'',
+     photoWidth:old&&old.photoBlob instanceof Blob?(old.photoWidth||0):0,
+     photoHeight:old&&old.photoBlob instanceof Blob?(old.photoHeight||0):0,
+     photoByteSize:old&&old.photoBlob instanceof Blob?(old.photoByteSize||old.photoBlob.size||0):0,
+     createdAt:(old&&old.createdAt)||now,updatedAt:now
+   };
+   await idbPut(MOMENTS_STORE,record);entries[k]=momentMeta(record);
+ });
+}
+async function savePhotoForDate(k,blob,width,height){
+ return queueMomentWrite(k,async()=>{
+   const old=await getMomentRecord(k),now=new Date().toISOString(),caption=(entries[k]&&entries[k].caption)||(old&&old.caption)||'';
+   const record={dateKey:k,caption,photoBlob:blob,photoType:blob.type||'image/jpeg',photoWidth:width||0,photoHeight:height||0,photoByteSize:blob.size,createdAt:(old&&old.createdAt)||now,updatedAt:now};
+   await idbPut(MOMENTS_STORE,record);entries[k]=momentMeta(record);return record;
+ });
+}
+async function removePhotoForDate(k){
+ return queueMomentWrite(k,async()=>{
+   const old=await getMomentRecord(k);if(!old)return;
+   const caption=(entries[k]&&entries[k].caption)||(old.caption||'');
+   if(!caption.trim()){await idbDelete(MOMENTS_STORE,k);delete entries[k];return}
+   const record={dateKey:k,caption,photoBlob:null,photoType:'',photoWidth:0,photoHeight:0,photoByteSize:0,createdAt:old.createdAt||new Date().toISOString(),updatedAt:new Date().toISOString()};
+   await idbPut(MOMENTS_STORE,record);entries[k]=momentMeta(record);
+ });
+}
+async function removeMomentForDate(k){return queueMomentWrite(k,async()=>{await idbDelete(MOMENTS_STORE,k);delete entries[k]})}
+function getEntry(k){if(!entries[k])entries[k]={caption:'',hasPhoto:false,photoType:'',photoWidth:0,photoHeight:0,photoByteSize:0,createdAt:'',updatedAt:''};return entries[k]}
+function hasEntry(k){const e=entries[k];return !!(e&&((e.caption||'').trim()||e.hasPhoto))}
+function inTerm(d){const t=new Date(d.getFullYear(),d.getMonth(),d.getDate());return t>=start&&t<=end}
+function pretty(k){return dateFromKey(k).toLocaleDateString(undefined,{weekday:'long',month:'long',day:'numeric',year:'numeric'})}
+
+let calendarPhotoURLs=[],currentMomentPhotoURL=null,playerPhotoURL=null,playerPreviousURL=null,playerSlot=0,playerFinaleRunning=false,momentsThumbURLs=[],searchThumbURLs=[];
+function revokeURL(url){if(url)try{URL.revokeObjectURL(url)}catch(e){}}
+function clearURLList(list){list.forEach(revokeURL);list.length=0}
+async function photoURLForDate(k){const r=await getMomentRecord(k);return r&&r.photoBlob instanceof Blob?URL.createObjectURL(r.photoBlob):null}
+async function hydrateCalendarPhotos(){
+ clearURLList(calendarPhotoURLs);
+ const nodes=Array.from(document.querySelectorAll('[data-photo-date]'));
+ for(const node of nodes){
+   const k=node.dataset.photoDate;if(!k)continue;const url=await photoURLForDate(k);if(!url||!node.isConnected){revokeURL(url);continue}
+   calendarPhotoURLs.push(url);node.style.setProperty('background',`linear-gradient(rgba(5,2,8,.28),rgba(5,2,8,.42)),url("${url}") center/cover no-repeat`,'important');
+ }
+}
+function renderCalendar(){
+ $('monthTitle').textContent=view.toLocaleString(undefined,{month:'long',year:'numeric'}).toUpperCase();
+ const y=view.getFullYear(),m=view.getMonth(),first=new Date(y,m,1).getDay(),last=new Date(y,m+1,0).getDate(),prevLast=new Date(y,m,0).getDate();
+ let out='';
+ for(let i=first-1;i>=0;i--)out+=`<div class="day off">${prevLast-i}</div>`;
+ const todayK=keyOf(new Date());
+ for(let d=1;d<=last;d++){
+   const dt=new Date(y,m,d),k=keyOf(dt),allowed=inTerm(dt),photo=!!(entries[k]&&entries[k].hasPhoto);
+   out+=`<button class="day${k===todayK?' today':''}${k===selectedKey?' selected':''}${hasEntry(k)?' has':''}${photo?' has-photo':''}${allowed?'':' locked'}" ${allowed?'':'disabled'} data-date="${k}"${photo?` data-photo-date="${k}"`:''}><span>${d}</span></button>`;
+ }
+ const trail=(7-(first+last)%7)%7;for(let d=1;d<=trail;d++)out+=`<div class="day off">${d}</div>`;
+ $('days').innerHTML=out;
+ document.querySelectorAll('[data-date]').forEach(b=>b.onclick=()=>openMoment(b.dataset.date));
+ hydrateCalendarPhotos().catch(()=>{});
+ const done=Math.min(365,Math.max(1,Math.floor((new Date()-start)/86400000)+1));
+ $('termLine').textContent=`YOUR 365 • ${meta.startDate} → ${keyOf(end)} • DAY ${done} OF 365`;
+}
+async function openMoment(k){
+ selectedKey=k;$('momentDate').textContent=pretty(k);const e=entries[k]||{caption:'',hasPhoto:false};$('caption').value=e.caption||'';
+ revokeURL(currentMomentPhotoURL);currentMomentPhotoURL=null;
+ if(e.hasPhoto){
+   const url=await photoURLForDate(k);if(url){currentMomentPhotoURL=url;$('momentPhoto').src=url;$('momentPhoto').style.display='block';$('emptyPhoto').style.display='none'}
+   else{$('momentPhoto').removeAttribute('src');$('momentPhoto').style.display='none';$('emptyPhoto').style.display='block'}
+ }else{$('momentPhoto').removeAttribute('src');$('momentPhoto').style.display='none';$('emptyPhoto').style.display='block'}
+ $('saveState').textContent='Autosave is ON.';$('momentModal').classList.add('open');renderCalendar();
+}
+$('closeMoment').onclick=()=>{revokeURL(currentMomentPhotoURL);currentMomentPhotoURL=null;$('momentModal').classList.remove('open');refreshAll()}
+$('momentModal').onclick=e=>{if(e.target===$('momentModal'))$('closeMoment').click()}
+$('caption').oninput=()=>{
+ const e=getEntry(selectedKey);e.caption=$('caption').value;
+ if(!e.caption.trim()&&!e.hasPhoto)delete entries[selectedKey];
+ $('saveState').textContent='Saving...';renderCalendar();refreshStats();
+ saveCaptionForDate(selectedKey,$('caption').value).then(()=>{$('saveState').textContent='Saved locally ✓'}).catch(()=>{$('saveState').textContent='Moment could not be saved.'});
+}
+$('addPhotoBtn').onclick=()=>{$('photoInput').value='';$('photoInput').click()}
+function compressImage(file){
+ return new Promise((resolve,reject)=>{
+   const r=new FileReader();r.onerror=reject;r.onload=()=>{
+    const im=new Image();im.onerror=reject;im.onload=()=>{
+      const MAX=900;let w=im.width,h=im.height;
+      if(w>MAX||h>MAX){const s=Math.min(MAX/w,MAX/h);w=Math.round(w*s);h=Math.round(h*s)}
+      const c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(im,0,0,w,h);
+      resolve({dataURL:c.toDataURL('image/jpeg',.68),width:w,height:h});
+    };im.src=r.result;
+   };r.readAsDataURL(file);
+ });
+}
+$('photoInput').onchange=async()=>{
+ const f=$('photoInput').files&&$('photoInput').files[0];if(!f)return;$('saveState').textContent='Loading photo...';
+ try{const processed=await compressImage(f),blob=dataURLToBlob(processed.dataURL);await savePhotoForDate(selectedKey,blob,processed.width,processed.height);$('saveState').textContent='Saved locally ✓';await openMoment(selectedKey);refreshAll()}
+ catch(e){$('saveState').textContent='That photo could not be loaded.'}
+}
+$('removePhotoBtn').onclick=async()=>{try{await removePhotoForDate(selectedKey);await openMoment(selectedKey);refreshAll()}catch(e){$('saveState').textContent='Moment could not be saved.'}}
+$('removeMoment').onclick=async()=>{if(confirm('Clear this day’s photo and caption?')){try{await removeMomentForDate(selectedKey);await openMoment(selectedKey);refreshAll()}catch(e){$('saveState').textContent='Moment could not be cleared.'}}}
+
+$('prevMonth').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()-1,1);renderCalendar()}
+$('nextMonth').onclick=()=>{view=new Date(view.getFullYear(),view.getMonth()+1,1);renderCalendar()}
+$('todayBtn').onclick=()=>{const t=new Date();view=new Date(t.getFullYear(),t.getMonth(),1);renderCalendar()}
+$('openTodayBtn').onclick=()=>{const t=new Date();openMoment(inTerm(t)?keyOf(t):meta.startDate)}
+
+function rows(){return Object.entries(entries).filter(([k,e])=>hasEntry(k)).sort((a,b)=>a[0].localeCompare(b[0]))}
+function safe(s){return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function memoryHTML([k,e]){return `<div class="memory" data-open="${k}">${e.hasPhoto?`<img data-moment-thumb="${k}" alt="">`:''}<b>${safe(pretty(k))}</b><p>${safe(e.caption||'(photo only)')}</p></div>`}
+function hydrateMemoryThumbnails(container,urlList){
+ clearURLList(urlList);const imgs=Array.from(container.querySelectorAll('[data-moment-thumb]'));
+ const load=async img=>{if(img.dataset.loaded)return;img.dataset.loaded='1';const url=await photoURLForDate(img.dataset.momentThumb);if(!url||!img.isConnected){revokeURL(url);return}urlList.push(url);img.src=url};
+ if('IntersectionObserver'in window){const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){obs.unobserve(e.target);load(e.target).catch(()=>{})}}),{rootMargin:'180px'});imgs.forEach(img=>obs.observe(img))}
+ else imgs.forEach(img=>load(img).catch(()=>{}));
+}
+function renderMoments(){const r=rows();$('momentsList').innerHTML=r.length?r.slice().reverse().map(memoryHTML).join(''):'<div class="memory">Your saved Moments will appear here.</div>';wireMemory();hydrateMemoryThumbnails($('momentsList'),momentsThumbURLs)}
+function wireMemory(){document.querySelectorAll('[data-open]').forEach(x=>x.onclick=()=>openMoment(x.dataset.open))}
+function renderSearch(){
+ const q=($('searchBox').value||'').toLowerCase().trim();
+ const r=rows().filter(([k,e])=>!q||k.includes(q)||(e.caption||'').toLowerCase().includes(q)||pretty(k).toLowerCase().includes(q));
+ $('searchList').innerHTML=r.length?r.slice().reverse().map(memoryHTML).join(''):'<div class="memory">No matching Moments.</div>';wireMemory();hydrateMemoryThumbnails($('searchList'),searchThumbURLs)
+}
+$('searchBox').oninput=renderSearch;
+function refreshStats(){
+ const r=rows(),today=new Date();const elapsed=Math.max(0,Math.floor((today-start)/86400000)+1);
+ $('statDays').textContent=r.length;$('statPhotos').textContent=r.filter(([k,e])=>e.hasPhoto).length;$('statCaptions').textContent=r.filter(([k,e])=>(e.caption||'').trim()).length;$('statRemain').textContent=Math.max(0,365-elapsed);
+}
+function playRows(){return rows().filter(([k,e])=>e.hasPhoto)}
+function playerSlots(){return [$('playerImagePrev'),$('playerImage'),$('playerImageNext')]}
+let carouselRoles={prev:0,current:1,next:2},carouselSlotURLs=[null,null,null],carouselInitialized=false,carouselAnimating=false;
+function carouselIndex(i,n){return ((i%n)+n)%n}
+function setCarouselRole(slot,role){
+ const el=playerSlots()[slot];
+ el.classList.remove('prev','current','next','off-left','off-right');
+ el.classList.add(role);
+}
+async function loadCarouselSlot(slot,rowIndex,role,r){
+ const el=playerSlots()[slot];
+ if(!r.length){el.removeAttribute('src');el.style.display='none';return}
+ const idx=carouselIndex(rowIndex,r.length),[k]=r[idx],url=await photoURLForDate(k);
+ const old=carouselSlotURLs[slot];
+ if(url){
+   el.src=url;el.style.display='block';setCarouselRole(slot,role);carouselSlotURLs[slot]=url;
+   if(old&&old!==url)setTimeout(()=>revokeURL(old),1200);
+ }else{
+   el.removeAttribute('src');el.style.display='none';
+   if(old)revokeURL(old);carouselSlotURLs[slot]=null;
+ }
+}
+function updatePlayerMeta(r){
+ if(!r.length){$('playerDate').textContent='';$('playerCaption').textContent='';return}
+ const [k,e]=r[carouselIndex(playIndex,r.length)];
+ $('playerDate').textContent=pretty(k);$('playerCaption').textContent=e.caption||'';
+}
+async function resetCarousel(){
+ const r=playRows();
+ carouselAnimating=false;
+ if(!r.length){
+   playerSlots().forEach((x,i)=>{x.removeAttribute('src');x.style.display='none';x.classList.remove('prev','current','next','off-left','off-right');if(carouselSlotURLs[i])revokeURL(carouselSlotURLs[i]);carouselSlotURLs[i]=null});
+   $('playerEmpty').style.display='grid';carouselInitialized=false;updatePlayerMeta(r);return;
+ }
+ if(playIndex>=r.length)playIndex=0;if(playIndex<0)playIndex=r.length-1;
+ $('playerEmpty').style.display='none';
+ carouselRoles={prev:0,current:1,next:2};
+ await Promise.all([
+   loadCarouselSlot(0,playIndex-1,'prev',r),
+   loadCarouselSlot(1,playIndex,'current',r),
+   loadCarouselSlot(2,playIndex+1,'next',r)
+ ]);
+ if(r.length===1){playerSlots()[0].style.display='none';playerSlots()[2].style.display='none'}
+ else if(r.length===2){playerSlots()[0].style.display='none'}
+ carouselInitialized=true;updatePlayerMeta(r);
+}
+async function rotateCarousel(direction){
+ const r=playRows();
+ if(!r.length||carouselAnimating||playerFinaleRunning)return;
+ if(!carouselInitialized){await resetCarousel();return}
+ if(r.length===1){updatePlayerMeta(r);return}
+ carouselAnimating=true;
+ const slots=playerSlots();
+ const prev=carouselRoles.prev,current=carouselRoles.current,next=carouselRoles.next;
+ if(direction>0){
+   setCarouselRole(prev,'off-left');
+   setCarouselRole(current,'prev');
+   setCarouselRole(next,'current');
+   playIndex=carouselIndex(playIndex+1,r.length);
+   carouselRoles={prev:current,current:next,next:prev};
+   updatePlayerMeta(r);
+   setTimeout(async()=>{
+     await loadCarouselSlot(carouselRoles.next,playIndex+1,'next',playRows());
+     if(playRows().length===2)slots[carouselRoles.prev].style.display='none';
+     carouselAnimating=false;
+   },920);
+ }else{
+   setCarouselRole(next,'off-right');
+   setCarouselRole(current,'next');
+   setCarouselRole(prev,'current');
+   playIndex=carouselIndex(playIndex-1,r.length);
+   carouselRoles={prev:next,current:prev,next:current};
+   updatePlayerMeta(r);
+   setTimeout(async()=>{
+     await loadCarouselSlot(carouselRoles.prev,playIndex-1,'prev',playRows());
+     carouselAnimating=false;
+   },920);
+ }
+}
+async function renderPlayer(){await resetCarousel()}
+function stopPlay(){if(playTimer){clearInterval(playTimer);playTimer=null}$('playerPlay').textContent='▶';if($('yearAudio'))$('yearAudio').pause()}
+function currentCarouselImage(){return playerSlots()[carouselRoles.current]}
+function runYearFinale(){
+ if(playerFinaleRunning)return;playerFinaleRunning=true;stopPlay();const stage=$('carouselStage'),active=currentCarouselImage();
+ if(!active||!active.src){playerFinaleRunning=false;return}
+ const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;stage.classList.add('finale');
+ if(!reduced){
+   for(let i=0;i<18;i++){
+     const p=document.createElement('img');p.className='finale-particle';p.src=active.src;
+     const a=(Math.PI*2*i/18)+((i%3)-1)*.08,d=150+(i%6)*46;
+     p.style.setProperty('--dx',`${Math.cos(a)*d}px`);
+     p.style.setProperty('--dy',`${Math.sin(a)*d}px`);
+     p.style.setProperty('--rot',`${(i-9)*27}deg`);
+     p.style.setProperty('--scale',`${.48+(i%5)*.11}`);
+     document.body.appendChild(p);setTimeout(()=>p.remove(),1450);
+   }
+ }
+ setTimeout(async()=>{
+   stage.classList.remove('finale');playIndex=0;carouselInitialized=false;await resetCarousel();playerFinaleRunning=false;
+ },reduced?280:1550);
+}
+$('playerPlay').onclick=()=>{
+ if(playTimer){stopPlay();return}
+ const r=playRows();if(!r.length||playerFinaleRunning)return;
+ if(!carouselInitialized)resetCarousel().catch(()=>{});
+ playTimer=setInterval(()=>{
+   const rr=playRows();if(!rr.length){stopPlay();return}
+   if(playIndex>=rr.length-1){runYearFinale();return}
+   rotateCarousel(1).catch(()=>{});
+ },playDelay);
+ $('playerPlay').textContent='❚❚';if($('yearAudio').src){$('yearAudio').play().catch(()=>{})}
+}
+$('playerPrev').onclick=()=>{stopPlay();if(playerFinaleRunning)return;rotateCarousel(-1).catch(()=>{})}
+$('playerNext').onclick=()=>{stopPlay();if(playerFinaleRunning)return;const r=playRows();if(r.length&&playIndex>=r.length-1){runYearFinale()}else rotateCarousel(1).catch(()=>{})}
+$('playerRandom').onclick=()=>{stopPlay();if(playerFinaleRunning)return;const r=playRows();if(r.length){playIndex=Math.floor(Math.random()*r.length);carouselInitialized=false;resetCarousel().catch(()=>{})}}
+document.querySelectorAll('.speed').forEach(b=>b.onclick=()=>{playDelay=+b.dataset.speed;if(playTimer){stopPlay();$('playerPlay').click()}notify(`Playback speed ${b.textContent}`)})
+
+async function initializeMomentStorage(){
+ momentDB=await openCustomerDB();
+ await migrateLegacyEntriesCopyOnly();
+ legacyEntries={};
+ await loadMomentIndex();
+ momentStorageReady=true;
+}
+
+function blobToDataURL(blob){
+ return new Promise((resolve,reject)=>{
+   const r=new FileReader();r.onload=()=>resolve(r.result);r.onerror=()=>reject(r.error||new Error('Photo could not be read'));r.readAsDataURL(blob);
+ });
+}
+async function flushMomentWrites(){
+ const pending=Array.from(momentWriteQueues.values());if(pending.length)await Promise.all(pending);
+}
+function replaceAllMoments(records){
+ return new Promise((resolve,reject)=>{
+   const tx=momentDB.transaction(MOMENTS_STORE,'readwrite'),store=tx.objectStore(MOMENTS_STORE);
+   store.clear();records.forEach(record=>store.put(record));
+   tx.oncomplete=()=>resolve();tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error||new Error('Restore transaction aborted'));
+ });
+}
+async function backup(){
+ if(!momentStorageReady){notify('Storage is still loading');return}
+ const btn=$('backupBtn'),oldText=btn.textContent;btn.disabled=true;btn.textContent='PREPARING BACKUP…';
+ try{
+   await flushMomentWrites();
+   const stored=(await idbGetAll(MOMENTS_STORE)).filter(r=>r&&r.dateKey).sort((a,b)=>a.dateKey.localeCompare(b.dateKey));
+   const moments=[],backupEntries={};
+   for(const record of stored){
+     let photoData=null,photoSha256=null;
+     if(record.photoBlob instanceof Blob){
+       photoData=await blobToDataURL(record.photoBlob);
+       photoSha256=await sha256Blob(record.photoBlob);
+     }
+     const item={
+       dateKey:record.dateKey,caption:record.caption||'',photoData,
+       photoType:record.photoBlob instanceof Blob?(record.photoType||record.photoBlob.type||'image/jpeg'):'',
+       photoWidth:record.photoWidth||0,photoHeight:record.photoHeight||0,
+       photoByteSize:record.photoBlob instanceof Blob?(record.photoByteSize||record.photoBlob.size||0):0,
+       photoSha256,createdAt:record.createdAt||'',updatedAt:record.updatedAt||''
+     };
+     moments.push(item);
+     backupEntries[record.dateKey]={caption:item.caption,hasPhoto:!!photoData,photoType:item.photoType,photoWidth:item.photoWidth,photoHeight:item.photoHeight,photoByteSize:item.photoByteSize,createdAt:item.createdAt,updatedAt:item.updatedAt};
+   }
+   const payload={product:'My 365 Moments',version:2,storage:'indexeddb-moments-v1',meta,entries:backupEntries,moments,createdAt:new Date().toISOString()};
+   const blob=new Blob([JSON.stringify(payload)],{type:'application/json'}),a=document.createElement('a'),url=URL.createObjectURL(blob);
+   a.href=url;a.download=`MY365 BACKUP ${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);notify(`Backup exported • ${moments.length} Moments`);
+ }catch(e){console.error(e);notify('Backup failed — nothing was changed')}
+ finally{btn.disabled=false;btn.textContent=oldText}
+}
+$('backupBtn').onclick=()=>{backup()};
+$('restoreBtn').onclick=()=>{$('restoreInput').value='';$('restoreInput').click()}
+$('restoreInput').onchange=async()=>{
+ const f=$('restoreInput').files&&$('restoreInput').files[0];if(!f)return;
+ const btn=$('restoreBtn'),oldText=btn.textContent;btn.disabled=true;btn.textContent='CHECKING BACKUP…';
+ try{
+   const p=JSON.parse(await f.text());
+   if(!p||p.product!=='My 365 Moments')throw new Error('Not a MY365 backup');
+   if(!Array.isArray(p.moments)){
+     const claimsPhotos=p.entries&&Object.values(p.entries).some(e=>e&&e.hasPhoto);
+     if(claimsPhotos)throw new Error('This older backup lists photos but does not contain the photo files');
+     throw new Error('This backup uses the older metadata-only format');
+   }
+   const restored=[];
+   for(const item of p.moments){
+     if(!item||typeof item.dateKey!=='string')throw new Error('Invalid Moment record');
+     let photoBlob=null;
+     if(item.photoData){
+       photoBlob=dataURLToBlob(item.photoData);
+       if(item.photoByteSize&&photoBlob.size!==item.photoByteSize)throw new Error('Photo size verification failed for '+item.dateKey);
+       if(item.photoSha256&&await sha256Blob(photoBlob)!==item.photoSha256)throw new Error('Photo verification failed for '+item.dateKey);
+     }
+     restored.push({
+       dateKey:item.dateKey,caption:item.caption||'',photoBlob,
+       photoType:photoBlob?(item.photoType||photoBlob.type||'image/jpeg'):'',
+       photoWidth:photoBlob?(item.photoWidth||0):0,photoHeight:photoBlob?(item.photoHeight||0):0,
+       photoByteSize:photoBlob?photoBlob.size:0,createdAt:item.createdAt||new Date().toISOString(),updatedAt:item.updatedAt||new Date().toISOString()
+     });
+   }
+   if(!confirm(`Restore ${restored.length} MY365 Moments? This will replace the Moments currently saved on this device.`)){notify('Restore cancelled');return}
+   btn.textContent='RESTORING…';
+   await flushMomentWrites();
+   await replaceAllMoments(restored);
+   if(p.meta&&typeof p.meta==='object'){meta=p.meta;localStorage.setItem(META_KEY,JSON.stringify(meta))}
+   await loadMomentIndex();
+   notify(`Backup restored • ${restored.length} Moments`);setTimeout(()=>location.reload(),500);
+ }catch(e){console.error(e);alert(e&&e.message?`Restore stopped: ${e.message}`:'Restore failed. Nothing was restored.');notify('Restore stopped')}
+ finally{btn.disabled=false;btn.textContent=oldText}
+}
+if($('settingsTop'))$('settingsTop').onclick=()=>{$('settingsModal').classList.add('open')};
+$('themesNav').onclick=()=>{document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b===$('themesNav')));$('settingsModal').classList.add('open')};
+$('openUtilities').onclick=()=>{$('settingsModal').classList.remove('open');switchView('moreView')};
+$('closeSettings').onclick=()=>{$('settingsModal').classList.remove('open')};
+$('settingsModal').onclick=e=>{if(e.target===$('settingsModal'))$('settingsModal').classList.remove('open')};
+function applyAccent(color){
+ const currentThemeId=localStorage.getItem(MY365_THEME_KEY)||'blank_base';
+ if(MY365_THEMES[currentThemeId])MY365_THEMES[currentThemeId].accent=color;
+ document.documentElement.style.setProperty('--my365-theme-accent',color);
+ meta.accent=color;
+ localStorage.setItem(META_KEY,JSON.stringify(meta));
+ document.documentElement.style.setProperty('--accent',color);
+ document.documentElement.style.setProperty('--purple',color);
+ document.querySelectorAll('.swatch').forEach(x=>x.classList.toggle('active',x.dataset.accent.toLowerCase()===color.toLowerCase()));
+ notify('Accent changed');
+}
+document.querySelectorAll('.swatch').forEach(s=>s.onclick=()=>applyAccent(s.dataset.accent));
+applyAccent(meta.accent||'#c24eff');
+
+
+/* PLAY MY YEAR — LOCAL MUSIC */
+const audioDBName='my365_audio_db_v1';
+function openAudioDB(){
+  return new Promise((resolve,reject)=>{
+    const req=indexedDB.open(audioDBName,1);
+    req.onupgradeneeded=()=>{const db=req.result;if(!db.objectStoreNames.contains('audio'))db.createObjectStore('audio')};
+    req.onsuccess=()=>resolve(req.result);
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function saveAudioBlob(blob,name){
+  const db=await openAudioDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction('audio','readwrite');
+    tx.objectStore('audio').put({blob,name},'yearMusic');
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+async function loadAudioBlob(){
+  const db=await openAudioDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction('audio','readonly');
+    const req=tx.objectStore('audio').get('yearMusic');
+    req.onsuccess=()=>resolve(req.result||null);
+    req.onerror=()=>reject(req.error);
+  });
+}
+async function deleteAudioBlob(){
+  const db=await openAudioDB();
+  return new Promise((resolve,reject)=>{
+    const tx=db.transaction('audio','readwrite');
+    tx.objectStore('audio').delete('yearMusic');
+    tx.oncomplete=()=>resolve();
+    tx.onerror=()=>reject(tx.error);
+  });
+}
+let currentAudioURL=null;
+function setMusicUI(name){
+  $('addMusicBtn').textContent=name?'CHANGE MUSIC':'ADD MUSIC';
+  $('removeMusicBtn').classList.toggle('hidden',!name);
+}
+async function restoreSavedMusic(){
+  try{
+    const saved=await loadAudioBlob();
+    if(saved&&saved.blob){
+      if(currentAudioURL)URL.revokeObjectURL(currentAudioURL);
+      currentAudioURL=URL.createObjectURL(saved.blob);
+      $('yearAudio').src=currentAudioURL;
+      $('yearAudio').loop=true;
+      setMusicUI(saved.name||'Music');
+    }else setMusicUI('');
+  }catch(e){setMusicUI('')}
+}
+$('addMusicBtn').onclick=()=>{$('musicInput').value='';$('musicInput').click()};
+$('musicInput').onchange=async()=>{
+  const f=$('musicInput').files&&$('musicInput').files[0];
+  if(!f)return;
+  try{
+    await saveAudioBlob(f,f.name);
+    if(currentAudioURL)URL.revokeObjectURL(currentAudioURL);
+    currentAudioURL=URL.createObjectURL(f);
+    $('yearAudio').src=currentAudioURL;
+    $('yearAudio').loop=true;
+    setMusicUI(f.name);
+    notify('Music added');
+  }catch(e){notify('Music could not be saved')}
+};
+$('removeMusicBtn').onclick=async()=>{
+  try{
+    $('yearAudio').pause();
+    $('yearAudio').removeAttribute('src');
+    if(currentAudioURL){URL.revokeObjectURL(currentAudioURL);currentAudioURL=null}
+    await deleteAudioBlob();
+    setMusicUI('');
+    notify('Music removed');
+  }catch(e){notify('Music could not be removed')}
+};
+restoreSavedMusic();
+
+
+/* FIRST-OPEN PRIVACY ACKNOWLEDGMENT */
+const PRIVACY_ACK_KEY='my365_privacy_welcome_hidden_v1';
+function openPrivacyWelcome(){
+  $('privacyWelcome').classList.add('open');
+}
+function closePrivacyWelcome(){
+  if($('privacyDontShow').checked)localStorage.setItem(PRIVACY_ACK_KEY,'1');
+  $('privacyWelcome').classList.remove('open');
+}
+$('privacyGotIt').onclick=closePrivacyWelcome;
+if($('reopenPrivacy'))$('reopenPrivacy').onclick=()=>{ $('privacyDontShow').checked=false; openPrivacyWelcome(); };
+if(localStorage.getItem(PRIVACY_ACK_KEY)!=='1'){
+  setTimeout(openPrivacyWelcome,120);
+}
+
+
+/* ENGINE 3 — THEME SELECTOR */
+function refreshThemeChoiceUI(){
+  const current=localStorage.getItem(MY365_THEME_KEY)||'blank_base';
+  document.querySelectorAll('.theme-choice').forEach(btn=>{
+    btn.style.boxShadow=btn.dataset.themeChoice===current
+      ? '0 0 14px var(--my365-theme-accent), inset 0 0 0 1px var(--my365-theme-accent)'
+      : '';
+  });
+  const t=MY365_THEMES[current]||MY365_THEMES.blank_base;
+  if($('activeThemeName'))$('activeThemeName').textContent='Current theme: '+t.name;
+}
+document.querySelectorAll('.theme-choice').forEach(btn=>{
+  btn.onclick=()=>{
+    const id=btn.dataset.themeChoice;
+    applyMy365Theme(id,true);
+    refreshThemeChoiceUI();
+    notify('Theme changed');
+  };
+});
+refreshThemeChoiceUI();
+
+
+/* THEME LIBRARY CUSTOMER CONTROLS */
+function refreshThemeLibraryUI(){
+  const current=localStorage.getItem(MY365_THEME_KEY)||'blank_base';
+  document.querySelectorAll('.library-theme').forEach(btn=>{
+    btn.classList.toggle('active',btn.dataset.libraryTheme===current);
+  });
+  refreshThemeChoiceUI();
+}
+function openThemeLibrary(){
+  refreshThemeLibraryUI();
+  $('themeLibraryModal').classList.add('open');
+}
+function closeThemeLibrary(){
+  $('themeLibraryModal').classList.remove('open');
+}
+$('openThemeLibrary').onclick=openThemeLibrary;
+$('closeThemeLibrary').onclick=closeThemeLibrary;
+$('themeLibraryModal').onclick=e=>{
+  if(e.target===$('themeLibraryModal'))closeThemeLibrary();
+};
+document.querySelectorAll('.library-theme').forEach(btn=>{
+  btn.onclick=()=>{
+    applyMy365Theme(btn.dataset.libraryTheme,true);
+    refreshThemeLibraryUI();
+    notify('Theme changed');
+    closeThemeLibrary();
+  };
+});
+refreshThemeLibraryUI();
+
+/* BUILD 8: COMPLETE Hawaiian Luxury Collection — 25 themes */
+const MY365_HAWAIIAN_ART={
+  'hawaiian_iwa':'themes/hawaiian/01_iwa.png',
+  'hawaiian_puakenikeni':'themes/hawaiian/02_puakenikeni.png',
+  'hawaiian_kalo':'themes/hawaiian/03_kalo.png',
+  'hawaiian_ahuula':'themes/hawaiian/04_ahuula.png',
+  'hawaiian_lehua':'themes/hawaiian/05_lehua.png',
+  'hawaiian_fish_hooks':'themes/hawaiian/06_fish_hooks.png',
+  'hawaiian_kapa':'themes/hawaiian/07_kapa.png',
+  'hawaiian_hula':'themes/hawaiian/08_hula.png',
+  'hawaiian_tahitian':'themes/hawaiian/09_tahitian.png',
+  'hawaiian_pohaku':'themes/hawaiian/10_pohaku.png',
+  'hawaiian_hae':'themes/hawaiian/11_hae.png',
+  'hawaiian_ferns':'themes/hawaiian/12_ferns.png',
+  'hawaiian_lauhala':'themes/hawaiian/13_lauhala.png',
+  'hawaiian_ipu':'themes/hawaiian/14_ipu.png',
+  'hawaiian_awapuhi':'themes/hawaiian/15_awapuhi.png',
+  'hawaiian_weapons':'themes/hawaiian/16_weapons.png',
+  'hawaiian_upena':'themes/hawaiian/17_upena.png',
+  'hawaiian_spearfishing':'themes/hawaiian/18_spearfishing.png',
+  'hawaiian_hokulea':'themes/hawaiian/19_hokulea.png',
+  'hawaiian_boar_jaw':'themes/hawaiian/20_boar_jaw.png',
+  'hawaiian_opihi':'themes/hawaiian/21_opihi.png',
+  'hawaiian_quilt':'themes/hawaiian/22_quilt.png',
+  'hawaiian_pu':'themes/hawaiian/23_pu.png',
+  'hawaiian_hammah':'themes/hawaiian/24_hammah.png',
+  'hawaiian_hula_instruments':'themes/hawaiian/25_hula_instruments.png'
+};
+const MY365_DOG_ART={
+  'dog_golden_retriever':'themes/dog/01_golden_retriever.png',
+  'dog_miniature_pinscher':'themes/dog/02_miniature_pinscher.png',
+  'dog_red_labrador':'themes/dog/03_red_labrador.png',
+  'dog_rottweiler':'themes/dog/04_rottweiler.png',
+  'dog_german_shepherd':'themes/dog/05_german_shepherd.png',
+  'dog_blue_pitbull':'themes/dog/06_blue_pitbull.png',
+  'dog_cane_corso':'themes/dog/07_cane_corso.png',
+  'dog_black_bullmastiff':'themes/dog/08_black_bullmastiff.png',
+  'dog_chocolate_doberman':'themes/dog/09_chocolate_doberman.png',
+  'dog_alaskan_malamute':'themes/dog/10_alaskan_malamute.png',
+  'dog_siberian_husky':'themes/dog/11_siberian_husky.png',
+  'dog_great_dane':'themes/dog/12_great_dane.png',
+  'dog_belgian_malinois':'themes/dog/13_belgian_malinois.png',
+  'dog_american_bully':'themes/dog/14_american_bully.png',
+  'dog_boxer':'themes/dog/15_boxer.png',
+  'dog_akita':'themes/dog/16_akita.png',
+  'dog_great_pyrenees':'themes/dog/17_great_pyrenees.png',
+  'dog_dalmatian':'themes/dog/18_dalmatian.png',
+  'dog_saint_bernard':'themes/dog/19_saint_bernard.png',
+  'dog_bernese':'themes/dog/20_bernese.png',
+  'dog_english_bulldog':'themes/dog/21_english_bulldog.png',
+  'dog_australian_shepherd':'themes/dog/22_australian_shepherd.png',
+  'dog_pomeranian':'themes/dog/23_pomeranian.png',
+  'dog_corgi':'themes/dog/24_corgi.png',
+  'dog_newfoundland':'themes/dog/25_newfoundland.png'
+};
+const MY365_COUNTRY_ART={
+  'country_luxury_estate':'themes/country/01_Country_Luxury_Estate.png',
+  'country_golden_estate':'themes/country/02_Golden_Country_Estate.png',
+  'country_midnight_leather_boots':'themes/country/03_Midnight_Leather_Boots.png',
+  'country_turquoise_tooled_leather':'themes/country/04_Turquoise_and_Tooled_Leather.png',
+  'country_pearl_western_saddle':'themes/country/05_Pearl_Western_Saddle.png',
+  'country_ruby_western_buckle':'themes/country/06_Ruby_Western_Buckle.png',
+  'country_sage_leather_gear':'themes/country/07_Sage_Leather_Gear.png',
+  'country_copper_spurs_leather':'themes/country/08_Copper_Spurs_and_Leather.png',
+  'country_rustic_guitar_leather':'themes/country/09_Rustic_Guitar_and_Leather.png',
+  'country_silver_horseshoe':'themes/country/10_Silver_Horseshoe.png',
+  'country_denim_leather':'themes/country/11_Denim_and_Leather.png',
+  'country_emerald_western_trunk':'themes/country/12_Emerald_Western_Trunk.png',
+  'country_mountain_ranch_overlook':'themes/country/13_Mountain_Ranch_Overlook.png',
+  'country_porch_sunset':'themes/country/14_Country_Porch_Sunset.png',
+  'country_rainy_barn_door':'themes/country/15_Rainy_Country_Barn_Door.png',
+  'country_music_porch':'themes/country/16_Country_Music_Porch.png',
+  'country_cowboy_fence_blue_hour':'themes/country/17_Cowboy_Fence_at_Blue_Hour.png',
+  'country_desert_ranch_sunrise':'themes/country/18_Desert_Ranch_Sunrise.png',
+  'country_mountain_cowboy_morning':'themes/country/19_Mountain_Cowboy_Morning.png',
+  'country_texas_longhorn':'themes/country/20_Texas_Longhorn.png',
+  'country_canyon_ranch_horse':'themes/country/21_Canyon_Ranch_Horse.png',
+  'country_bull_cowboy_ranch_gear':'themes/country/22_Bull_and_Cowboy_Ranch_Gear.png',
+  'country_horse_cowboy_tack':'themes/country/23_Horse_and_Cowboy_Tack.png',
+  'country_black_horse_stable':'themes/country/24_Black_Horse_at_the_Stable.png',
+  'country_rafp_black_tie_cowboy':'themes/country/25_RAFP_Black-Tie_Cowboy_Finale.png'
+};
+const MY365_ARMED_FORCES_ART={
+  'armed_forces_army_obsidian_field_gear':'themes/armed-forces/01_Army_Obsidian_Field_Gear.png',
+  'armed_forces_navy_carrier_blue_hour':'themes/armed-forces/02_Navy_Carrier_at_Blue_Hour.png',
+  'armed_forces_air_force_fighter_hangar':'themes/armed-forces/03_Air_Force_Fighter_Hangar.png',
+  'armed_forces_marine_corps_dress_blues':'themes/armed-forces/04_Marine_Corps_Dress_Blues.png',
+  'armed_forces_coast_guard_cutter_rough_seas':'themes/armed-forces/05_Coast_Guard_Cutter_in_Rough_Seas.png',
+  'armed_forces_space_force_orbital_operations':'themes/armed-forces/06_Space_Force_Orbital_Operations.png',
+  'armed_forces_army_main_battle_tank':'themes/armed-forces/07_Army_Main_Battle_Tank.png',
+  'armed_forces_navy_submarine_dawn':'themes/armed-forces/08_Navy_Submarine_at_Dawn.png',
+  'armed_forces_air_force_bomber_runway':'themes/armed-forces/09_Air_Force_Bomber_Runway.png',
+  'armed_forces_marine_corps_desert_field_kit':'themes/armed-forces/10_Marine_Corps_Desert_Field_Kit.png',
+  'armed_forces_army_black_hawk_mountain_landing':'themes/armed-forces/11_Army_Black_Hawk_Mountain_Landing.png',
+  'armed_forces_navy_deep_sea_diver':'themes/armed-forces/12_Navy_Deep_Sea_Diver.png',
+  'armed_forces_air_force_pilot_ready_room':'themes/armed-forces/13_Air_Force_Pilot_Ready_Room.png',
+  'armed_forces_marine_corps_amphibious_training':'themes/armed-forces/14_Marine_Corps_Amphibious_Training.png',
+  'armed_forces_coast_guard_rescue_helicopter':'themes/armed-forces/15_Coast_Guard_Rescue_Helicopter.png',
+  'armed_forces_space_force_night_operations':'themes/armed-forces/16_Space_Force_Night_Operations.png',
+  'armed_forces_army_mountain_humvee':'themes/armed-forces/17_Army_Mountain_Humvee.png',
+  'armed_forces_navy_anchor_naval_chain':'themes/armed-forces/18_Navy_Anchor_and_Naval_Chain.png',
+  'armed_forces_air_force_cargo_aircraft':'themes/armed-forces/19_Air_Force_Cargo_Aircraft.png',
+  'armed_forces_marine_corps_ceremonial_sword':'themes/armed-forces/20_Marine_Corps_Ceremonial_Sword.png',
+  'armed_forces_coast_guard_search_rescue_station':'themes/armed-forces/21_Coast_Guard_Search_and_Rescue_Station.png',
+  'armed_forces_space_force_guardian_uniform_operations':'themes/armed-forces/22_Space_Force_Guardian_Uniform_Operations.png',
+  'armed_forces_navy_special_operations_heritage':'themes/armed-forces/23_Navy_Special_Operations_Heritage.png',
+  'armed_forces_military_medical_medevac':'themes/armed-forces/24_Military_Medical_Medevac.png',
+  'armed_forces_us_luxury_finale':'themes/armed-forces/25_US_Armed_Forces_Luxury_Finale.png'
+};
+const MY365_ZODIAC_CELESTIAL_ART={
+  'zodiac_celestial_aries':'./themes/zodiac-celestial/01_Aries.png',
+  'zodiac_celestial_taurus':'./themes/zodiac-celestial/02_Taurus.png',
+  'zodiac_celestial_gemini':'./themes/zodiac-celestial/03_Gemini.png',
+  'zodiac_celestial_cancer':'./themes/zodiac-celestial/04_Cancer.png',
+  'zodiac_celestial_leo':'./themes/zodiac-celestial/05_Leo.png',
+  'zodiac_celestial_virgo':'./themes/zodiac-celestial/06_Virgo.png',
+  'zodiac_celestial_libra':'./themes/zodiac-celestial/07_Libra.png',
+  'zodiac_celestial_scorpio':'./themes/zodiac-celestial/08_Scorpio.png',
+  'zodiac_celestial_sagittarius':'./themes/zodiac-celestial/09_Sagittarius.png',
+  'zodiac_celestial_capricorn':'./themes/zodiac-celestial/10_Capricorn.png',
+  'zodiac_celestial_aquarius':'./themes/zodiac-celestial/11_Aquarius.png',
+  'zodiac_celestial_pisces':'./themes/zodiac-celestial/12_Pisces.png',
+  'zodiac_celestial_diamond_galaxy':'./themes/zodiac-celestial/13_Diamond_Galaxy.png',
+  'zodiac_celestial_golden_lunar_eclipse':'./themes/zodiac-celestial/14_Golden_Lunar_Eclipse.png',
+  'zodiac_celestial_saturn_above_the_clouds':'./themes/zodiac-celestial/15_Saturn_Above_the_Clouds.png',
+  'zodiac_celestial_emerald_nebula':'./themes/zodiac-celestial/16_Emerald_Nebula.png',
+  'zodiac_celestial_moonlit_cosmic_ocean_image_2':'./themes/zodiac-celestial/17_Moonlit_Cosmic_Ocean_IMAGE_2.png',
+  'zodiac_celestial_crystal_ice_planet_image_2':'./themes/zodiac-celestial/18_Crystal_Ice_Planet_IMAGE_2.png',
+  'zodiac_celestial_rose_gold_star_birth':'./themes/zodiac-celestial/19_Rose_Gold_Star_Birth.png',
+  'zodiac_celestial_meteor_shower_canyon':'./themes/zodiac-celestial/20_Meteor_Shower_Canyon.png',
+  'zodiac_celestial_twin_moons_image_2':'./themes/zodiac-celestial/21_Twin_Moons_IMAGE_2.png',
+  'zodiac_celestial_celestial_aurora':'./themes/zodiac-celestial/22_Celestial_Aurora.png',
+  'zodiac_celestial_black_hole_luxury':'./themes/zodiac-celestial/23_Black_Hole_Luxury.png',
+  'zodiac_celestial_cosmic_waterfall':'./themes/zodiac-celestial/24_Cosmic_Waterfall.png',
+  'zodiac_celestial_rafp_celestial_finale_edge_of_the_universe':'./themes/zodiac-celestial/25_RAFP_Celestial_Finale_Edge_of_the_Universe.png'
+};
+function syncMy365ThemeArtwork(){
+  const id=document.body.dataset.my365Theme||'blank_base';
+  const art=$('my365ThemeArt');
+  if(!art)return;
+  art.src=MY365_HAWAIIAN_ART[id]||MY365_DOG_ART[id]||MY365_COUNTRY_ART[id]||MY365_ARMED_FORCES_ART[id]||MY365_ZODIAC_CELESTIAL_ART[id]||'';
+}
+const MY365_ALL_THEME_ART=Object.assign({},MY365_HAWAIIAN_ART,MY365_DOG_ART,MY365_COUNTRY_ART,MY365_ARMED_FORCES_ART,MY365_ZODIAC_CELESTIAL_ART);
+Object.entries(MY365_ALL_THEME_ART).forEach(([id,uri])=>{
+  const card=document.querySelector('.library-theme[data-library-theme="'+id+'"]');
+  if(card){
+    card.style.setProperty('background-image',
+      'linear-gradient(180deg,rgba(5,2,7,.03) 25%,rgba(5,2,7,.90) 100%), url("'+uri+'")',
+      'important');
+  }
+});
+const _applyMy365ThemeBuild3=applyMy365Theme;
+applyMy365Theme=function(themeId,save=true){
+  _applyMy365ThemeBuild3(themeId,save);
+  syncMy365ThemeArtwork();
+};
+syncMy365ThemeArtwork();
+if($('themeLibraryModal')){
+  $('themeLibraryModal').addEventListener('click',e=>{
+    const btn=e.target.closest('.library-theme');
+    if(!btn)return;
+    e.preventDefault();
+    e.stopPropagation();
+    const id=btn.dataset.libraryTheme;
+    applyMy365Theme(id,true);
+    refreshThemeLibraryUI();
+    notify('Theme changed');
+    closeThemeLibrary();
+  },true);
+}
+
+function switchView(id){
+ document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.id===id));document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));
+ if(id==='momentsView')renderMoments();if(id==='searchView')renderSearch();if(id==='playView'){stopPlay();renderPlayer()}if(id==='moreView')refreshStats();window.scrollTo({top:0,behavior:'smooth'})
+}
+document.querySelectorAll('.nav button[data-view]').forEach(b=>b.onclick=()=>switchView(b.dataset.view));
+function refreshAll(){renderMoments();renderSearch();refreshStats();renderPlayer().catch(()=>{})}
+initializeMomentStorage().then(()=>{renderCalendar();refreshAll()}).catch(err=>{
+ console.error('MY365 customer storage initialization failed:',err);
+ $('saveState').textContent='Customer storage could not be opened.';
+});
+})();
+</script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('./sw.js').catch(function (err) {
+      console.error('MY365 production service worker registration failed:', err);
+    });
+  });
+}
+</script>
+
+</body>
+</html>
